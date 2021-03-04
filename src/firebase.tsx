@@ -3,6 +3,7 @@ import "firebase/auth";
 import "firebase/firestore";
 import "firebase/functions";
 import "firebase/storage";
+import { UsersCollection } from "./helpers/collections";
 
 const firebaseConfig = {
     apiKey: process.env.REACT_APP_API_KEY,
@@ -30,7 +31,7 @@ export const signInWithGoogle = () => {
 
 export const generateUserDocument = async (user: any, additionalData: any) => {
   if (!user) return;
-  const userRef = firestore.doc(`users/${user.uid}`);
+  const userRef = UsersCollection.doc(user.uid);
   const snapshot = await userRef.get();
   if (!snapshot.exists) {
     const { email, displayName, photoURL } = user;
@@ -51,7 +52,7 @@ export const generateUserDocument = async (user: any, additionalData: any) => {
 const getUserDocument = async (uid: string) => {
   if (!uid) return null;
   try {
-    const userDocument = await firestore.doc(`users/${uid}`).get();
+    const userDocument = await UsersCollection.doc(uid).get();
     return {
       uid,
       ...userDocument.data()
