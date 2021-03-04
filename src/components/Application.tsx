@@ -1,19 +1,16 @@
-import React, { useContext, useState } from 'react';
-import { BrowserRouter as Router, Redirect, Switch, useHistory } from 'react-router-dom';
-import SignIn from './Login/SignIn';
-import SignUp from './Login/SignUp';
+import React, { useContext } from 'react';
+import { BrowserRouter as Router, Redirect, Switch } from 'react-router-dom';
+import SignIn from './Authentication/SignIn';
+import SignUp from './Authentication/SignUp';
 import MainLayout from './Layouts/MainLayout';
 import RouteWithLayout from './Layouts/RouteWithLayout';
 import PanelAdmin from './PanelAdmin/PanelAdmin';
 import Home from './Home/Home';
-// import { authenticationService } from '../services/authentication';
-// import { UserContext } from './UserProvider';
+import { UserContext } from './Authentication/UserProvider';
 
 function Application() {
   // Get user context here:
-  // const user = useContext(UserContext);
-  const user = "User"
-  console.log(user);
+  const { user } = useContext(UserContext);
   return (
     <Router>
       {user ? (

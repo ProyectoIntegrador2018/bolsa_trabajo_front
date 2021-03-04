@@ -1,15 +1,13 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Button } from 'antd';
-// import { browserHistory } from 'react-router';
 
 import styled from '@emotion/styled';
 import logo from '../../logo.svg';
 import { LogoutOutlined, } from '@ant-design/icons';
-import Swal from 'sweetalert2';
 import { Link } from 'react-router-dom';
-import { getNotImplementedOptions, isAdmin } from '../../helpers/utils/utility';
-// import { authenticationService } from '../services/authentication';
-// import { UserContext } from '../components/UserProvider';
+import { isAdmin } from '../../helpers/utils/utility';
+import { UserContext } from '../Authentication/UserProvider';
+import { authenticationService } from '../../services/authentication';
 
 export const StyledSmallLogo = styled.img`
   width: 100px;
@@ -33,13 +31,6 @@ const StyledSearch = styled.div`
   margin-bottom: 20px;
 `;
 
-const StyledSearchFragment = styled.div`
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
-`;
-
 const StyledNavContent = styled.div`
   width: 100%;
   display: flex;
@@ -53,13 +44,10 @@ const StyledDashboardWrapper = styled.div`
 `;
 
 function MainLayout({navExtraInfo = <></>, children,}: any) {
-  // User context: get user context here (logged in/out??)
-  // const user = useContext(UserContext);
-  const user = "User";
+  const { user } = useContext(UserContext);
 
-  const logout = () => {
-    // authenticationService.logout();
-    Swal.fire(getNotImplementedOptions('Logout'));
+  const logout = async () => {
+    await authenticationService.logout();
   }
 
   return (
@@ -73,23 +61,23 @@ function MainLayout({navExtraInfo = <></>, children,}: any) {
         </StyledSearch>
         <StyledNavContent>
           <Link to="/">
-            <Button type="primary" style={{ marginRight: '10px' }}>
+            <Button type="primary">
               Home
             </Button>
           </Link>
           <Link to="/lugar-2">
-            <Button type="primary" style={{ marginRight: '10px' }}>
+            <Button type="primary">
              Lugar 2 
             </Button>
           </Link>
           <Link to="/lugar-3">
-            <Button type="primary" style={{ marginRight: '10px' }}>
+            <Button type="primary">
              Lugar 3
             </Button>
           </Link>
           {isAdmin(user) && (
             <Link to="/admin">
-              <Button type="primary" style={{ marginRight: '10px' }}>
+              <Button type="primary">
                 Panel Admin
               </Button>
             </Link>
