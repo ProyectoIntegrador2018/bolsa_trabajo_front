@@ -1,25 +1,29 @@
 import React from 'react';
 import { Form, Input, Button } from 'antd';
-import Swal from 'sweetalert2';
-import { Link } from 'react-router-dom';
-import { getNotImplementedOptions } from '../../helpers/utils/utility';
+import { Link, useHistory } from 'react-router-dom';
+import { authenticationService, RegisterData } from '../../services/authentication';
+import { UserType } from '../../model/Users';
 
 const SignUp = () => {
+
+  const history = useHistory();
   
   const createUserWithEmailAndPasswordHandler = async ({ name, email, password}: any) => {
-    Swal.fire(getNotImplementedOptions("SignUp"));
+    const type: UserType = {type: 'employee'};
+    const data: RegisterData = {name, email, password, type};
+    try {
+      await authenticationService.register(data);
+      history.push('/'); // redirect to login
+    } catch (error) {
+      console.error(error);
+    }
   }; 
-
-  const onFinishFailed = () => {
-    console.log('Logging in failed');
-  };
 
   return (
     <div>
       <Form
         name="basic"
         onFinish={createUserWithEmailAndPasswordHandler}
-        onFinishFailed={onFinishFailed}
       >
         <Form.Item
           label="Nombre"

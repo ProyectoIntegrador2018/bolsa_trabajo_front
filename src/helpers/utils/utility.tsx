@@ -1,9 +1,10 @@
 import { SweetAlertOptions } from "sweetalert2";
 
-export function createErrorOptions(error: Error): SweetAlertOptions {
+export function createErrorOptions(error: any): SweetAlertOptions {
+  const msg = error.code ? `[${error.code}] ${error.message}` : error.message
   return {
     title: error.name,
-    text: error.message,
+    text: msg,
     icon: 'error',
     confirmButtonText: 'Ok',
   };
