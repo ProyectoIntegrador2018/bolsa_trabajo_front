@@ -3,7 +3,7 @@ import "firebase/auth";
 import "firebase/firestore";
 import "firebase/functions";
 import "firebase/storage";
-import { UsersCollection } from "./helpers/collections";
+import { UserType } from "./model/Users";
 
 const firebaseConfig = {
     apiKey: process.env.REACT_APP_API_KEY,
@@ -17,7 +17,7 @@ const firebaseConfig = {
   };
 
 firebase.initializeApp(firebaseConfig);
-firebase.analytics();
+// firebase.analytics();
 
 export const auth = firebase.auth();
 export const firestore = firebase.firestore();
@@ -29,18 +29,28 @@ export const signInWithGoogle = () => {
   auth.signInWithPopup(provider);
 };
 
-export const generateUserDocument = async (user: any, additionalData: any) => {
+interface AdditionalUserData {
+  name: string,
+  type: UserType, 
+};
+
+// If we don't declare it locally, we get an unitialized firebase error (ONLY IN THIS FILE)
+const UsersCollection = firestore.collection('users');
+
+export const generateUserDocument = async (user: any, additionalData?: AdditionalUserData) => {
   if (!user) return;
   const userRef = UsersCollection.doc(user.uid);
   const snapshot = await userRef.get();
-  if (!snapshot.exists) {
-    const { email, displayName, photoURL } = user;
+  // TODO(important): Feels unsafe imo, move it to backend, and change security rules to not allow writes firestore
+  //                  only reads. Or find way to amke it strict af.
+  if (!snapshot.exists && additionalData) {
+    const { email } = user;
+    const { name, type } = additionalData;
     try {
       await userRef.set({
-        displayName,
         email,
-        photoURL,
-        ...additionalData
+        name,
+        type: type.type,
       });
     } catch (error) {
       console.error("Error creating user document", error);
