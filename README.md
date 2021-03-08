@@ -41,9 +41,9 @@ Aplicación para conectar a la fuerza laboral que es adulto mayor con empleadore
 ### Technology Stack
 | Technology    | Version      |
 | ------------- | -------------|
-| Technology 1  | ##.##.##     |
-| Technology 2  | ##.##.##     |
-| Technology 3  | ##.##.##     |
+| Firebase      | 8.2.9        |
+| React         | 17.0.1       |
+| Typescript    | 4.1.2        |
 
 ### Management tools
 
