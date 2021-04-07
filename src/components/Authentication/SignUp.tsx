@@ -40,10 +40,10 @@ const SignUp = () => {
                   <Input type="password" id="password" name="password"></Input>
                 </FormGroup>
                 <FormGroup>
-                    <Button type="submit" value="submit" color="primary" className="mr-4">Crear Usuario</Button>
-                    <Link to="/">
-                      <Button color="light" className="mr-4">Iniciar Sesión</Button>
-                    </Link>
+                    <Button type="submit" value="submit" color="primary" className="mr-4">Crear Usuario</Button>  
+                </FormGroup>
+                <FormGroup>
+                    <Link to="/">Iniciar Sesión</Link>
                 </FormGroup>
               </Form>
             </Col>

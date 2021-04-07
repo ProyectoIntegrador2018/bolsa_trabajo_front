@@ -67,9 +67,9 @@ function SignIn() {
                 </FormGroup>
                 <FormGroup>
                     <Button type="submit" value="submit" color="primary" className="mr-4">Iniciar Sesion</Button>
-                    <Link to="/register">
-                      <Button color="light" className="mr-4">Registrarse</Button>
-                    </Link>
+                </FormGroup>
+                <FormGroup>
+                    <Link to="/register">Registrarse</Link>
                 </FormGroup>
               </Form>
             </Col>
