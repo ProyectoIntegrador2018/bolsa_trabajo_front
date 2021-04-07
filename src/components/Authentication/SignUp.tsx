@@ -7,8 +7,16 @@ import { UserType } from '../../model/Users';
 const SignUp = () => {
 
   const history = useHistory();
-  
-  const createUserWithEmailAndPasswordHandler = async ({ name, email, password}: any) => {
+
+  const createUserWithEmailAndPasswordHandler = async (e: any) => {
+    // TODO check this, workaround for getting inputs is kind of sketchy
+    // Check binding in Form onSubmit call to this function on how
+    // to send the inputs in a better way.
+    e.preventDefault();
+    let name = e.target[0].value;
+    let email = e.target[1].value;
+    let password = e.target[2].value;
+    console.log(name, email, password);
     const type: UserType = {type: 'employee'};
     const data: RegisterData = {name, email, password, type};
     try {
@@ -17,7 +25,7 @@ const SignUp = () => {
     } catch (error) {
       console.error(error);
     }
-  }; 
+  };
 
   return (
     <React.Fragment>
@@ -26,7 +34,7 @@ const SignUp = () => {
           </Jumbotron>
           <Row className="mx-auto">
             <Col md={{size: 4, offset: 4}} sm={{size: 12}}>
-              <Form onSubmit={createUserWithEmailAndPasswordHandler}>
+              <Form onSubmit={(e) => createUserWithEmailAndPasswordHandler(e)}>
               <FormGroup>
                   <Label htmlFor="name" >Nombre</Label>
                   <Input type="text" id="name" name="name"></Input>
@@ -40,7 +48,7 @@ const SignUp = () => {
                   <Input type="password" id="password" name="password"></Input>
                 </FormGroup>
                 <FormGroup>
-                    <Button type="submit" value="submit" color="primary" className="mr-4">Crear Usuario</Button>  
+                    <Button type="submit" value="submit" color="primary" className="mr-4">Crear Usuario</Button>
                 </FormGroup>
                 <FormGroup>
                     <Link to="/">Iniciar Sesión</Link>

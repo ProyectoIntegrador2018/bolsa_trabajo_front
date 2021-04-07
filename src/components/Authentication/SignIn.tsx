@@ -9,8 +9,14 @@ import { authenticationService } from '../../services/authentication';
 function SignIn() {
   const history = useHistory();
 
-  const signInWithEmailAndPasswordHandler = async ({ email, password }: any) => {
+  const signInWithEmailAndPasswordHandler = async (e: any) => {
+    // TODO check this, workaround for getting inputs is kind of sketchy
+    // Check binding in Form onSubmit call to this function on how
+    // to send the inputs in a better way.
     try {
+      e.preventDefault();
+      let email = e.target[0].value;
+      let password = e.target[1].value;
       await authenticationService.login({email, password});
       history.push('/');
     } catch (error) {
@@ -18,45 +24,14 @@ function SignIn() {
     }
   };
 
-  return (/*
-    <div>
-      <Form
-        
-      >
-        <Form.Item
-          label="Email"
-          name="email"
-          rules={[{ required: true, message: 'Enter a valid email' }]}
-        >
-          <Input />
-        </Form.Item>
-
-        <Form.Item
-          label="Password"
-          name="password"
-          rules={[{ required: true, message: 'Enter a valid password' }]}
-        >
-          <Input.Password />
-        </Form.Item>
-
-          <Link to="/register">
-            <Button type="primary">
-              Register 
-            </Button>
-          </Link>
-          <Form.Item>
-            <Button type="primary" htmlType="submit">
-              Iniciar sesión
-            </Button>
-          </Form.Item>
-      </Form>*/
+  return (
       <React.Fragment>
           <Jumbotron color="primary">
             <h1>Bienvenido a la bolsa de trabajo del Instituto del Adulto Mayor</h1>
           </Jumbotron>
           <Row className="mx-auto">
             <Col md={{size: 4, offset: 4}} sm={{size: 12}}>
-              <Form onSubmit={signInWithEmailAndPasswordHandler}>
+              <Form onSubmit={(e) => signInWithEmailAndPasswordHandler(e)}>
                 <FormGroup>
                   <Label htmlFor="email" >Email</Label>
                   <Input type="text" id="email" name="email"></Input>
