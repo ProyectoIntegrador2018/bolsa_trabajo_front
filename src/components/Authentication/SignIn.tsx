@@ -1,6 +1,5 @@
 import React from 'react';
-import { Input, Button } from 'antd';
-import { Form } from 'antd';
+import { Form, Row, Col, Button, Input, Jumbotron, Label, FormGroup } from "reactstrap";
 import Swal from 'sweetalert2';
 import { Link, useHistory } from 'react-router-dom';
 import { createErrorOptions } from '../../helpers/utils/utility';
@@ -19,11 +18,10 @@ function SignIn() {
     }
   };
 
-  return (
+  return (/*
     <div>
       <Form
-        name="basic"
-        onFinish={signInWithEmailAndPasswordHandler}
+        
       >
         <Form.Item
           label="Email"
@@ -51,8 +49,32 @@ function SignIn() {
               Iniciar sesión
             </Button>
           </Form.Item>
-      </Form>
-    </div>
+      </Form>*/
+      <React.Fragment>
+          <Jumbotron color="primary">
+            <h1>Bienvenido a la bolsa de trabajo del Instituto del Adulto Mayor</h1>
+          </Jumbotron>
+          <Row className="mx-auto">
+            <Col md={{size: 4, offset: 4}} sm={{size: 12}}>
+              <Form onSubmit={signInWithEmailAndPasswordHandler}>
+                <FormGroup>
+                  <Label htmlFor="email" >Email</Label>
+                  <Input type="text" id="email" name="email"></Input>
+                </FormGroup>
+                <FormGroup>
+                  <Label htmlFor="password" >Contraseña</Label>
+                  <Input type="password" id="password" name="password"></Input>
+                </FormGroup>
+                <FormGroup>
+                    <Button type="submit" value="submit" color="primary" className="mr-4">Iniciar Sesion</Button>
+                    <Link to="/register">
+                      <Button color="light" className="mr-4">Registrarse</Button>
+                    </Link>
+                </FormGroup>
+              </Form>
+            </Col>
+          </Row>
+      </React.Fragment>
   );
 };
 
