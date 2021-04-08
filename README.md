@@ -64,7 +64,17 @@ $ git clone https://github.com/ProyectoIntegrador2018/bolsa_trabajo_front.git
 
 ### Running the stack for Development
 
-TBD
+After cloning the repository, the user must first install all the necessary dependencies using the following command while on the root folder:
+
+```bash
+$ npm install
+```
+
+Then the user may run the project using the command:
+
+```bash
+$ npm start
+```
 
 
 ### Stop the project
