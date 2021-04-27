@@ -1,0 +1,67 @@
+[
+  {
+    "id": 1,
+    "nombre": "David Acevedo",
+    "direccion_actual": "Abasolo",
+    "fecha_de_nacimiento": "31/12/1945",
+    "lugar_de_nacimiento": "Brasilia",
+    "telefono_casa": "81897324823",
+    "telefono_celular": "818182913",
+    "secciones": {
+      "ultimo_empleo_o_actividad": {
+        "empresa": "FEMSA",
+        "puesto": "Desarrollador",
+        "responsabilidad": "-",
+        "ultimo_anio": "FEMSA",
+        "ultimos_tres_anios": "Google, Facebook, Twitter"
+      },
+      "tus_habilidades_son": ["habilidad0","habilidad1","habilidad2"],
+      "nivel_de_estudios": {
+        "primaria": {
+          "fechas": null,
+          "institucion": null
+        },
+        "secundaria": {
+          "fechas": null,
+          "institucion": null
+        },
+        "tecnica_o_bachillerato": {
+          "fechas": null,
+          "institucion": null
+        },
+        "profesional": {
+          "fechas": null,
+          "institucion": null
+        },
+        "maestria_o_doctorado": {
+          "fechas": null,
+          "institucion": null
+        }
+      },
+      "actividad_deseada": {
+        "capacitación_o_entrenamiento": "Operativa",
+        "coaching": "Operativa",
+        "consultoria": "Ejecutiva",
+        "funcion": "Contable",
+        "jornada_de_trabajo": "Completa"
+      },
+      "comentarios": {
+        "porque_quieres_trabajo": "Para trabajar"
+      }
+    }
+  },
+  {
+    "id": 2,
+    "nombre": "Luis Felipe Miranda",
+    "direccion_actual": "Agualeguas",
+    "fecha_de_nacimiento": "01/10/1957",
+    "lugar_de_nacimiento": "Munich"
+  },
+  {
+    "id": 3,
+    "nombre": "Ricardo Lozano",
+    "direccion_actual": "Allende",
+    "fecha_de_nacimiento": "19/07/1964",
+    "lugar_de_nacimiento": "Tokyo"
+  }
+]
