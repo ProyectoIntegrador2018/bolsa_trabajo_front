@@ -1,81 +1,53 @@
 import React from 'react';
-import { Button, Col, Jumbotron, Row, Table } from 'reactstrap';
+import { Switch } from 'react-router';
+import { useRouteMatch } from 'react-router-dom';
+import AdminLayout from '../Layouts/AdminLayout';
+import RouteWithLayout from '../Layouts/RouteWithLayout';
+import AdminHome from './AdminHome';
+import ManageAdmins from './ManageAdmins';
+import RegisterAdmins from './RegisterAdmins';
+import UserAccept from './UserAccept';
+import UserDetails from './UserDetail';
 
 function PanelAdmin() {
 
-  const users = [
-    {
-      id: 1,
-      name: "Ricardo Lozano",
-      dateApplied: new Date(Date.now() - 86400000), // that is: 24 * 60 * 60 * 1000
-      age: 70,
-      city: "Monterrey"
-    },
-    {
-      id: 2,
-      name: "Luis Felipe Miranda",
-      dateApplied: new Date(Date.now() - (86400000 * 2)), // that is: 24 * 60 * 60 * 1000
-      age: 70,
-      city: "Santiago"
-    },
-    {
-      id: 3,
-      name: "David Acevedo",
-      dateApplied: new Date(Date.now() - (86400000 * 3)), // that is: 24 * 60 * 60 * 1000
-      age: 70,
-      city: "Mina"
-    },
-  ]
-
-  let applications = [];
-  users.forEach(user => {
-    applications.push(
-
-    )
-  })
+  let match = useRouteMatch();
 
   return (
     <React.Fragment>
-      <Jumbotron>
-        <h1>Autorización de Usuarios</h1>
-      </Jumbotron>
-      <Row>
-        <Col>
-          <h3>Usuarios esperando autorización:</h3>
-        </Col>
-      </Row>
-      <Row>
-        <Col>
-          <Table>
-            <thead>
-              <tr>
-                <th>Nombre</th>
-                <th>Edad</th>
-                <th>Municipio</th>
-                <th>Fecha de Aplicación</th>
-                <th></th>
-              </tr>
-            </thead>
-            <tbody>
-
-              {users.map((user, index) => {
-                return (
-                  <tr key={index}>
-                    <td>{user.name}</td>
-                    <td>{user.age}</td>
-                    <td>{user.city}</td>
-                    <td>{user.dateApplied.toDateString()}</td>
-                    <td>
-                      <Button color="primary">Ver Usuario</Button>
-                    </td>
-                  </tr>
-                )
-              })}
-            </tbody>
-          </Table>
-        </Col>
-      </Row>
-    </React.Fragment >
+      <Switch>
+        <RouteWithLayout
+          layout={AdminLayout}
+          exact path={`${match.path}`}
+          layoutProps={null}
+          component={AdminHome}
+        />
+        <RouteWithLayout
+          layout={AdminLayout}
+          exact path={`${match.path}/accept-users`}
+          layoutProps={null}
+          component={UserAccept}
+        />
+        <RouteWithLayout
+          layout={AdminLayout}
+          exact path={`${match.path}/accept-users/:userId`}
+          layoutProps={null}
+          component={UserDetails}
+        />
+        <RouteWithLayout
+          layout={AdminLayout}
+          exact path={`${match.path}/register-admins`}
+          layoutProps={null}
+          component={RegisterAdmins}
+        />
+        <RouteWithLayout
+          layout={AdminLayout}
+          exact path={`${match.path}/manage-admins`}
+          layoutProps={null}
+          component={ManageAdmins}
+        />
+      </Switch>
+    </React.Fragment>
   );
 };
 

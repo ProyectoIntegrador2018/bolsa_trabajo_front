@@ -24,7 +24,7 @@ function Application() {
           />
           <RouteWithLayout
             layout={MainLayout}
-            exact path="/admin"
+            path="/admin"
             layoutProps={null}
             component={PanelAdmin}
           />
