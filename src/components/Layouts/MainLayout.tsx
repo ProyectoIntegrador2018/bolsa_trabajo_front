@@ -50,6 +50,8 @@ function MainLayout({navExtraInfo = <></>, children,}: any) {
     await authenticationService.logout();
   }
 
+  console.log(isAdmin(user));
+
   return (
     <StyledDashboardWrapper>
       <StyledNav>
@@ -65,14 +67,9 @@ function MainLayout({navExtraInfo = <></>, children,}: any) {
               Home
             </Button>
           </Link>
-          <Link to="/lugar-2">
+          <Link to="/postulantes">
             <Button type="primary">
-             Lugar 2 
-            </Button>
-          </Link>
-          <Link to="/lugar-3">
-            <Button type="primary">
-             Lugar 3
+             ExplorarPostulantes
             </Button>
           </Link>
           {isAdmin(user) && (
