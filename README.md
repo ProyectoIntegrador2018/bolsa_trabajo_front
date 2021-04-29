@@ -64,8 +64,13 @@ $ git clone https://github.com/ProyectoIntegrador2018/bolsa_trabajo_front.git
 
 ### Running the stack for Development
 
-TBD
+```bash
+$ npm install
+```
 
+```bash
+$ npm run start
+```
 
 ### Stop the project
 
