@@ -2,6 +2,8 @@ import React, { useContext } from 'react';
 import { BrowserRouter as Router, Redirect, Switch } from 'react-router-dom';
 import SignIn from './Authentication/SignIn';
 import SignUp from './Authentication/SignUp';
+import FormEmployee from "./Forms/FormEmployee";
+import FormOrganization from "./Forms/FormOrganization";
 import MainLayout from './Layouts/MainLayout';
 import RouteWithLayout from './Layouts/RouteWithLayout';
 import PanelAdmin from './PanelAdmin/PanelAdmin';
@@ -39,6 +41,12 @@ function Application() {
           <SignUp 
           // @ts-ignore
           exact path="/register" />
+          <FormEmployee 
+          // @ts-ignore
+          exact path="/form-employee" />
+          <FormOrganization
+          // @ts-ignore
+          exact path="/form-organization" />
           <Redirect to="/" />
         </Switch>
         </>

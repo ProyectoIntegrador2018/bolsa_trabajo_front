@@ -35,7 +35,7 @@ function SignIn() {
           </Jumbotron>
           <Row className="mx-auto">
             <Col md={{size: 4, offset: 4}} sm={{size: 12}}>
-              <Form gionSubmit={formik.handleSubmit}>
+              <Form onSubmit={formik.handleSubmit}>
                 <FormGroup>
                   <Label htmlFor="email" >Email</Label>
                   <Input type="text" id="email" name="email" onChange={formik.handleChange} value={formik.values.email}></Input>

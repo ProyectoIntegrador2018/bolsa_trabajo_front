@@ -39,7 +39,7 @@ const SignUp = () => {
           <Row className="mx-auto">
             <Col md={{size: 4, offset: 4}} sm={{size: 12}}>
               <Form onSubmit={formik.handleSubmit}>
-              <FormGroup>
+                <FormGroup>
                   <Label htmlFor="name" >Nombre</Label>
                   <Input type="text" id="name" name="name" onChange={formik.handleChange} value={formik.values.name}></Input>
                 </FormGroup>
