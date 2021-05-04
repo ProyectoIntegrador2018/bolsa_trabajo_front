@@ -1,8 +1,9 @@
 import React from 'react';
-import { Form, Row, Col, Button, Input, Jumbotron, Label, FormGroup, Container } from "reactstrap";
+import { Form, Row, Col, Button, Input, Navbar, Label, FormGroup, Container } from "reactstrap";
 import { Formik,Field } from "formik";
 import municipios from "../../shared/municipios";
 import * as Yup from 'yup';
+import { Header } from 'antd/lib/layout/layout';
 
 //Esquema de validación
 const validEmployeeInfoSchema = Yup.object().shape({
@@ -45,9 +46,14 @@ const validEmployeeInfoSchema = Yup.object().shape({
 
 const FormEmployee = () => (
         <React.Fragment>
-          <Jumbotron color="primary">
-            <h1>Formulario Postulante</h1>
-          </Jumbotron>  
+          <Navbar>
+            <img src="logoIEPAM_Blanco.png" height="55" width="90"/>
+          </Navbar>
+          <Container>
+            <Row className='my-5'>
+              <h1>Formato para registro de postulante</h1>
+            </Row>
+          </Container>
           <Formik
             initialValues={{
               name: '',
@@ -103,7 +109,7 @@ const FormEmployee = () => (
               handleBlur,
               handleSubmit,
               isSubmitting,
-             }) => (
+            }) => (
               <Form onSubmit={handleSubmit}>
                 <Container id='personalData'>
                   <h3>Datos Personales</h3>

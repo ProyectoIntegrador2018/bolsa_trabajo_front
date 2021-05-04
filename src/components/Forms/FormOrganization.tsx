@@ -1,5 +1,5 @@
 import React from 'react';
-import { Form, Row, Col, Button, Input, Jumbotron, Label, FormGroup, Container } from "reactstrap";
+import { Form, Row, Col, Button, Input, Navbar, Label, FormGroup, Container } from "reactstrap";
 import { Formik,Field } from "formik";
 import municipios from "../../shared/municipios";
 import * as Yup from 'yup';
@@ -28,9 +28,14 @@ const validPositionInfoSchema = Yup.object().shape({
 
 const FormPosition = () => (
         <React.Fragment>
-          <Jumbotron color="primary">
-            <h1>Formulario Puesto</h1>
-          </Jumbotron>  
+          <Navbar>
+            <img src="logoIEPAM_Blanco.png" height="55" width="90"/>
+          </Navbar>
+          <Container>
+            <Row className='my-5'>
+              <h1>Formato para registro de puesto</h1>
+            </Row>
+          </Container>
           <Formik
             initialValues={{
               organizationName: '',

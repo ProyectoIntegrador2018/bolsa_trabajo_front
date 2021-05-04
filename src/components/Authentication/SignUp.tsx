@@ -33,8 +33,10 @@ const SignUp = () => {
 
   return (
     <React.Fragment>
-          <Jumbotron color="primary">
-            <h1>Bienvenido a la bolsa de trabajo del Instituto del Adulto Mayor</h1>
+          <Jumbotron>
+            <Row className="justify-content-center">
+              <img src="logoIEPAM_Blanco.png" height="110" width="180"/>
+            </Row>
           </Jumbotron>
           <Row className="mx-auto">
             <Col md={{size: 4, offset: 4}} sm={{size: 12}}>
