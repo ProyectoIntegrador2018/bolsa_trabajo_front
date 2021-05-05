@@ -20,5 +20,5 @@ export function getNotImplementedOptions(msg: string): SweetAlertOptions {
 }
 
 export function isAdmin(user: any) {
-  return true;
+  return (user.type == 'admin');
 }
