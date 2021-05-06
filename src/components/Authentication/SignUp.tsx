@@ -33,7 +33,7 @@ const SignUp = () => {
 
   return (
     <React.Fragment>
-          <Jumbotron>
+          <Jumbotron className="main-jumbotron">
             <Row className="justify-content-center">
               <img src="logoIEPAM_Blanco.png" height="110" width="180"/>
             </Row>
@@ -57,7 +57,7 @@ const SignUp = () => {
                     <Button type="submit" value="submit" color="primary" className="mr-4">Crear Usuario</Button>
                 </FormGroup>
                 <FormGroup>
-                    <Link to="/">Iniciar Sesión</Link>
+                    ¿Ya te registraste? <Link to="/">Inicia sesión</Link>
                 </FormGroup>
               </Form>
             </Col>
