@@ -20,19 +20,19 @@ export function getNotImplementedOptions(msg: string): SweetAlertOptions {
 }
 
 export function isEmployee(user: any) {
-  return (user.type == 'employee');
+  return (user.type === 'employee');
 }
 
 export function isCompany(user: any) {
-  return (user.type == 'company');
+  return (user.type === 'company');
 }
 
 export function isAdmin(user: any) {
-  return (user.type == 'admin');
+  return (user.type === 'admin');
 }
 
 export function isSuperAdmin(user: any) {
-  return (user.type == 'super-admin');
+  return (user.type === 'super-admin');
 }
 
 export function isMinEmployee(user: any) {

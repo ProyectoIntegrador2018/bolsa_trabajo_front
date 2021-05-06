@@ -4,6 +4,9 @@ import "firebase/firestore";
 import "firebase/functions";
 import "firebase/storage";
 import { UserType } from "./model/Users";
+import axios from 'axios';
+
+import { config } from "./config";
 
 const firebaseConfig = {
     apiKey: process.env.REACT_APP_API_KEY,
@@ -29,44 +32,45 @@ export const signInWithGoogle = () => {
   auth.signInWithPopup(provider);
 };
 
-interface AdditionalUserData {
+interface userData {
+  email: string,
   name: string,
-  type: UserType, 
+  type: UserType,
+  password: string,
+  phoneNumber: string
 };
 
-// If we don't declare it locally, we get an unitialized firebase error (ONLY IN THIS FILE)
-const UsersCollection = firestore.collection('users');
-
-export const generateUserDocument = async (user: any, additionalData?: AdditionalUserData) => {
-  if (!user) return;
-  const userRef = UsersCollection.doc(user.uid);
-  const snapshot = await userRef.get();
-  // TODO(important): Feels unsafe imo, move it to backend, and change security rules to not allow writes firestore
-  //                  only reads. Or find way to amke it strict af.
-  if (!snapshot.exists && additionalData) {
-    const { email } = user;
-    const { name, type } = additionalData;
-    try {
-      await userRef.set({
-        email,
-        name,
-        type: type.type,
-      });
-    } catch (error) {
-      console.error("Error creating user document", error);
-    }
-  }
-  return getUserDocument(user.uid);
-};
-
-const getUserDocument = async (uid: string) => {
-  if (!uid) return null;
+export const generateUserDocument = async (data?: userData) => {
+  if (!data) return;
+  const { email, name, type, password, phoneNumber } = data;
   try {
-    const userDocument = await UsersCollection.doc(uid).get();
-    return {
-      uid,
-      ...userDocument.data()
-    };
+    const res = await axios.post(
+      config.apiUrl + '/api/user/register', {
+        email,
+        username: name,
+        type: type.type,
+        phoneNumber,
+        password
+      }
+    );
+    return res.data;
+  } catch (error) {
+    console.error("Error creating user document", error);
+  }
+};
+
+export const getUserDocument = async (user: any) => {
+  if (!user) return null;
+  const token = await user.getIdToken();
+  try {
+    const res = await axios.get(
+      config.apiUrl + '/api/user', {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      }
+    );
+    return res.data;
   } catch (error) {
     console.error("Error fetching user", error);
   }

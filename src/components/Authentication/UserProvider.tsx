@@ -1,5 +1,5 @@
 import React, { createContext, useEffect, useState } from 'react';
-import { auth, generateUserDocument } from '../../firebase';
+import { auth, getUserDocument } from '../../firebase';
 
 export const UserContext = createContext({user: null});
 
@@ -10,7 +10,7 @@ function UserProvider(props: any) {
   useEffect(() => {
     // setObserver on authUser
     auth.onAuthStateChanged(async (authUser) => {
-      const user_local: any = await generateUserDocument(authUser, undefined);
+      const user_local: any = await getUserDocument(authUser);
       setUser({user: user_local});
     });
   }, []);
