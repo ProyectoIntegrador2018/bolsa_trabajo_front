@@ -30,7 +30,7 @@ function SignIn() {
 
   return (
       <React.Fragment>
-          <Jumbotron>
+          <Jumbotron className="main-jumbotron">
             <Row className="justify-content-center">
               <img src="logoIEPAM_Blanco.png" height="110" width="180"/>
             </Row>
@@ -50,7 +50,7 @@ function SignIn() {
                     <Button type="submit" value="submit" color="primary" className="mr-4">Iniciar Sesion</Button>
                 </FormGroup>
                 <FormGroup>
-                    <Link to="/register">Registrarse</Link>
+                    ¿No estás registrado? <Link to="/register">Crea una cuenta</Link>
                 </FormGroup>
               </Form>
             </Col>

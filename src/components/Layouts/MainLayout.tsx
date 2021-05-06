@@ -1,47 +1,26 @@
-import React, { useContext } from 'react';
-import { Button } from 'antd';
+import React, { useContext, useState } from 'react';
+import {
+  Collapse,
+  Navbar,
+  NavbarToggler,
+  NavbarBrand,
+  Nav,
+  NavItem,
+  NavLink,
+  UncontrolledDropdown,
+  DropdownToggle,
+  DropdownMenu,
+  DropdownItem,
+  NavbarText,
+  Button
+} from 'reactstrap';
 
 import styled from '@emotion/styled';
 import logo from '../../logo.svg';
-import { LogoutOutlined, } from '@ant-design/icons';
 import { Link } from 'react-router-dom';
-import { isAdmin } from '../../helpers/utils/utility';
+import { isEmployee, isMinEmployee, isMinCompany, isMinAdmin, isSuperAdmin } from '../../helpers/utils/utility';
 import { UserContext } from '../Authentication/UserProvider';
 import { authenticationService } from '../../services/authentication';
-
-export const StyledSmallLogo = styled.img`
-  width: 100px;
-  height: auto;
-`;
-
-const StyledNav = styled.div`
-  display: flex;
-  flex-direction: row;
-  justify-content: flex-start;
-  align-items: center;
-`;
-
-const StyledSearch = styled.div`
-  width: 100%;
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
-  margin-top: 20px;
-  margin-bottom: 20px;
-`;
-
-const StyledNavContent = styled.div`
-  width: 100%;
-  display: flex;
-  flex-direction: row;
-  justify-content: flex-end;
-  align-items: center;
-`;
-
-const StyledDashboardWrapper = styled.div`
-  padding: 20px;
-`;
 
 function MainLayout({navExtraInfo = <></>, children,}: any) {
   const { user } = useContext(UserContext);
@@ -50,46 +29,57 @@ function MainLayout({navExtraInfo = <></>, children,}: any) {
     await authenticationService.logout();
   }
 
-  console.log(isAdmin(user));
+  const [isOpen, setIsOpen] = useState(false);
+
+  const toggle = () => setIsOpen(!isOpen);
 
   return (
-    <StyledDashboardWrapper>
-      <StyledNav>
-        <Link to="/">
-          <StyledSmallLogo src={logo}></StyledSmallLogo>
-        </Link>
-        <StyledSearch>
-          {navExtraInfo}
-        </StyledSearch>
-        <StyledNavContent>
-          <Link to="/">
-            <Button type="primary">
-              Home
-            </Button>
-          </Link>
-          <Link to="/postulantes">
-            <Button type="primary">
-             ExplorarPostulantes
-            </Button>
-          </Link>
-          {isAdmin(user) && (
-            <Link to="/admin">
-              <Button type="primary">
-                Panel Admin
-              </Button>
-            </Link>
+    <div>
+    <Navbar expand="md" className="py-4 px-5 navbar navbar-dark">
+      <Link to="/" style={{ textDecoration: 'none' }}>
+        <NavbarBrand href="/">Bolsa de Trabajo</NavbarBrand>
+      </Link>
+
+      <NavbarToggler onClick={toggle} />
+      <Collapse isOpen={isOpen} navbar>
+        <Nav className="mr-auto" navbar>
+          {isEmployee(user) && (
+            <NavItem>
+              <Link to="/" style={{ textDecoration: 'none' }}>
+                <NavLink>Mis Solicitudes</NavLink>
+              </Link>
+            </NavItem>
           )}
-          <Button
-            onClick={logout}
-            danger
-          >
-            Cerrar sesión
-            <LogoutOutlined />
-          </Button>
-        </StyledNavContent>
-      </StyledNav>
+          <NavItem>
+            <Link to="/" style={{ textDecoration: 'none' }}>
+              <NavLink>Home</NavLink>
+            </Link>
+          </NavItem>
+          {isMinCompany(user) && (
+          <NavItem>
+            <Link to="/postulantes" style={{ textDecoration: 'none' }}>
+              <NavLink>Explorar Postulantes</NavLink>
+            </Link>
+          </NavItem>
+          )}
+          {isMinAdmin(user) && (
+          <NavItem>
+            <Link to="/admin" style={{ textDecoration: 'none' }}>
+              <NavLink>Panel Admin</NavLink>
+            </Link>
+          </NavItem>
+          )}
+        </Nav>
+        <Button outline onClick={logout} color="light">
+          Cerrar sesión
+        </Button>
+      </Collapse>
+    </Navbar>
+    <div className="p-5">
       {children}
-    </StyledDashboardWrapper>
+    </div>
+    </div>
+
   );
 }
 

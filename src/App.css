@@ -1,5 +1,9 @@
-.jumbotron, .navbar {
+.main-jumbotron { /* Sign in and sign up*/
   background-color: #6b2565 !important;
   color: #ffffff;
+  border-radius: 0 !important;
 }
 
+.navbar {
+  background-color: #25274d !important;
+}
