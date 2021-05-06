@@ -2,20 +2,10 @@ import React from 'react';
 import { Table, Row, Col, Button } from 'reactstrap';
 import { Link, useHistory, useParams } from 'react-router-dom';
 import listaPostulantes from '../../testing/detallesPostulantes.json'
-/*
-{
-  "secciones": {
-    "comentarios": {
-      "porque_quieres_trabajo": "Para trabajar"
-    }
-  }
-}
-*/
-function ExplorarPostulantes() {
+
+function DetallePostulante() {
 
   const { id } = useParams<{ id: any }>();
-  //console.log(params);
-  //let id = 1;
 
   const postulante = listaPostulantes.find(p => p.id == id);
   if (!postulante) {
@@ -171,4 +161,4 @@ function ExplorarPostulantes() {
   );
 }
 
-export default ExplorarPostulantes;
+export default DetallePostulante;

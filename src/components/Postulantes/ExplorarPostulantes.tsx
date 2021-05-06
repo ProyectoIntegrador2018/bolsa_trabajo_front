@@ -4,7 +4,7 @@ import { Link, useHistory } from 'react-router-dom';
 import listaPostulantes from '../../testing/explorarPostulantes.json'
 
 function ExplorarPostulantes() {
-  console.log(listaPostulantes);
+
   return (
     <React.Fragment>
       <Row className="mx-auto">

@@ -9,9 +9,9 @@ const SignUp = () => {
 
   const history = useHistory();
 
-  const createUserWithEmailAndPasswordHandler = async ({ name, email, password}: any) => {
+  const createUserWithEmailAndPasswordHandler = async ({ name, email, password, phoneNumber}: any) => {
     const type: UserType = {type: 'employee'};
-    const data: RegisterData = {name, email, password, type};
+    const data: RegisterData = {name, email, password, type, phoneNumber};
       try {
         await authenticationService.register(data);
         history.push('/'); // redirect to login
@@ -24,7 +24,9 @@ const SignUp = () => {
     initialValues: {
       name: '',
       email: '',
-      password: ''
+      password: '',
+      phoneNumber: '+528112345699',
+      type: 'employee'
     },
     onSubmit: values => {
       createUserWithEmailAndPasswordHandler(values);
