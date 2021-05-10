@@ -12,7 +12,6 @@ function SignIn() {
   const signInWithEmailAndPasswordHandler = async ({ email, password }: any) => {
     try {
       await authenticationService.login({email, password});
-      history.push('/');
     } catch (error) {
       Swal.fire(createErrorOptions(error));
     }

@@ -36,7 +36,7 @@ function MainLayout({navExtraInfo = <></>, children,}: any) {
   return (
     <div>
     <Navbar expand="md" className="py-4 px-5 navbar navbar-dark">
-      <Link to="/" style={{ textDecoration: 'none' }}>
+      <Link to="/dashboard" style={{ textDecoration: 'none' }}>
         <NavbarBrand href="/">Bolsa de Trabajo</NavbarBrand>
       </Link>
 
@@ -45,13 +45,13 @@ function MainLayout({navExtraInfo = <></>, children,}: any) {
         <Nav className="mr-auto" navbar>
           {isEmployee(user) && (
             <NavItem>
-              <Link to="/" style={{ textDecoration: 'none' }}>
+              <Link to="/dashboard" style={{ textDecoration: 'none' }}>
                 <NavLink>Mis Solicitudes</NavLink>
               </Link>
             </NavItem>
           )}
           <NavItem>
-            <Link to="/" style={{ textDecoration: 'none' }}>
+            <Link to="/dashboard" style={{ textDecoration: 'none' }}>
               <NavLink>Home</NavLink>
             </Link>
           </NavItem>
