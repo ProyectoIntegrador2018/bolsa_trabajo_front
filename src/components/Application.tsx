@@ -28,6 +28,8 @@ const mapRoutes = (routes: any, guard: any) => routes.map((route: any, index: nu
           />
 });
 
+
+// ToDo: Change guards for each type of route (minEmployee, minCompany, etc.)
 function Application() {
   // Get user context here:
   const { user } = useContext(UserContext);

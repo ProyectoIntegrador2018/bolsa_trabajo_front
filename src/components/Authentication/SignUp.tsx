@@ -1,5 +1,5 @@
 import React from 'react';
-import { Form, Row, Col, Button, Input, Jumbotron, Label, FormGroup } from "reactstrap";
+import { Form, Row, Col, Button, Input, Jumbotron, Label, FormGroup, CustomInput } from "reactstrap";
 import { useFormik } from "formik";
 import { Link, useHistory } from 'react-router-dom';
 import { authenticationService, RegisterData } from '../../services/authentication';
@@ -43,6 +43,8 @@ const SignUp = () => {
           <Row className="mx-auto">
             <Col md={{size: 4, offset: 4}} sm={{size: 12}}>
               <Form onSubmit={formik.handleSubmit}>
+                <h2>Registro</h2>
+                <hr></hr>
                 <FormGroup>
                   <Label htmlFor="name" >Nombre</Label>
                   <Input type="text" id="name" name="name" onChange={formik.handleChange} value={formik.values.name}></Input>
@@ -56,23 +58,22 @@ const SignUp = () => {
                   <Input type="password" id="password" name="password" onChange={formik.handleChange} value={formik.values.password}></Input>
                 </FormGroup>
                 <FormGroup>
-                  <Label htmlFor="phoneNumber" >Télefono</Label>
+                  <Label htmlFor="phoneNumber" >Teléfono</Label>
                   <Input type="text" id="phoneNumber" name="phoneNumber" onChange={formik.handleChange} value={formik.values.phoneNumber}></Input>
                 </FormGroup>
                 <FormGroup>
-                  <Label htmlFor="type" >Tipo de cuenta: </Label>
-                  <br/>
-                  <select id="type" name="type" onChange={formik.handleChange} value={formik.values.type}>
+                  <Label htmlFor="type" >Tipo de cuenta</Label>
+                  <CustomInput type="select" id="type" name="type" onChange={formik.handleChange} value={formik.values.type}>
                     <option value="employee">Empleado</option>
-                    <option value="company">Organizacion</option>
-                  </select>
+                    <option value="company">Organización</option>
+                  </CustomInput>
                 </FormGroup>
                 <FormGroup>
-                    <Button type="submit" value="submit" color="primary" className="mr-4">Crear Usuario</Button>
+                    <Button type="submit" value="submit" color="primary" className="mr-4 signbtn">Crear Usuario</Button>
                 </FormGroup>
-                <FormGroup>
-                    ¿Ya te registraste? <Link to="/">Inicia sesión</Link>
-                </FormGroup>
+                <div className="text-center">
+                    <p>¿Ya te registraste? <Link to="/">Inicia sesión</Link></p>
+                </div>
               </Form>
             </Col>
           </Row>

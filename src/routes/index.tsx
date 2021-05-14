@@ -15,6 +15,7 @@ import PanelAdmin from '../components/PanelAdmin/PanelAdmin';
 import Home from '../components/Home/Home';
 import ExplorarPostulantes from '../components/Postulantes/ExplorarPostulantes'
 import DetallePostulante from '../components/Postulantes/DetallePostulante'
+import MisSolicitudes from '../components/Pages/MisSolicitudes'
 
 //const SignIn = async(() => import('../components/Authentication/SignIn'));
 //const SignUp = async(() => import('../components/Authentication/SignUp'));
@@ -27,7 +28,13 @@ export const employeeRoutes = [
     layout: MainLayout,
     layoutProps: null,
     component: FormEmployee
-  }
+  },
+  {
+    path: '/missolicitudes',
+    layout: MainLayout,
+    layoutProps: null,
+    component: MisSolicitudes
+  },
 ]
 
 export const companyRoutes = [

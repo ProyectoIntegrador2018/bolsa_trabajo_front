@@ -43,18 +43,25 @@ function MainLayout({navExtraInfo = <></>, children,}: any) {
       <NavbarToggler onClick={toggle} />
       <Collapse isOpen={isOpen} navbar>
         <Nav className="mr-auto" navbar>
-          {isEmployee(user) && (
-            <NavItem>
-              <Link to="/dashboard" style={{ textDecoration: 'none' }}>
-                <NavLink>Mis Solicitudes</NavLink>
-              </Link>
-            </NavItem>
-          )}
           <NavItem>
             <Link to="/dashboard" style={{ textDecoration: 'none' }}>
               <NavLink>Home</NavLink>
             </Link>
           </NavItem>
+          {isEmployee(user) && (
+            <NavItem>
+              <Link to="/missolicitudes" style={{ textDecoration: 'none' }}>
+                <NavLink>Mis Solicitudes</NavLink>
+              </Link>
+            </NavItem>
+          )}
+          {isEmployee(user) && (
+            <NavItem>
+              <Link to="/form-employee" style={{ textDecoration: 'none' }}>
+                <NavLink>Mi Información</NavLink>
+              </Link>
+            </NavItem>
+          )}
           {isMinCompany(user) && (
           <NavItem>
             <Link to="/postulantes" style={{ textDecoration: 'none' }}>
