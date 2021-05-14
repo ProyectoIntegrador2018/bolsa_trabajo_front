@@ -15,6 +15,9 @@ import { UserContext } from './Authentication/UserProvider';
 import { employeeRoutes, companyRoutes, adminRoutes, mainRoutes, authRoutes} from '../routes/index';
 
 import AuthGuard from './Guards/AuthGuard';
+import AdminGuard from './Guards/AdminGuard';
+import CompanyGuard from './Guards/CompanyGuard';
+import EmployeeGuard from './Guards/EmployeeGuard';
 import SignedInGuard from './Guards/SignedInGuard';
 
 
@@ -28,18 +31,19 @@ const mapRoutes = (routes: any, guard: any) => routes.map((route: any, index: nu
           />
 });
 
+
+// ToDo: Change guards for each type of route (minEmployee, minCompany, etc.)
 function Application() {
   // Get user context here:
   const { user } = useContext(UserContext);
   return (
     <Router>
       <Switch>
-        {mapRoutes(employeeRoutes, AuthGuard)}
-        {mapRoutes(companyRoutes, AuthGuard)}
-        {mapRoutes(adminRoutes, AuthGuard)}
+        {mapRoutes(employeeRoutes, EmployeeGuard)}
+        {mapRoutes(companyRoutes, CompanyGuard)}
+        {mapRoutes(adminRoutes, AdminGuard)}
         {mapRoutes(mainRoutes, AuthGuard)}
-        {mapRoutes(authRoutes, SignedInGuard)//, SignedInGuard)}
-        }
+        {mapRoutes(authRoutes, SignedInGuard)}
         <Route
         render={() => (
           <div>
