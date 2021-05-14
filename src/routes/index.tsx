@@ -16,7 +16,8 @@ import CompanyDashboard from '../components/Pages/CompanyDashboard';
 import Home from '../components/Home/Home';
 import ExplorarPostulantes from '../components/Postulantes/ExplorarPostulantes'
 import DetallePostulante from '../components/Postulantes/DetallePostulante'
-import MisSolicitudes from '../components/Pages/MisSolicitudes'
+import SolicitudesPostulante from '../components/Pages/SolicitudesPostulante'
+import SolicitudesEmpresa from '../components/Pages/SolicitudesEmpresa'
 
 //const SignIn = async(() => import('../components/Authentication/SignIn'));
 //const SignUp = async(() => import('../components/Authentication/SignUp'));
@@ -34,7 +35,7 @@ export const employeeRoutes = [
     path: '/missolicitudes',
     layout: MainLayout,
     layoutProps: null,
-    component: MisSolicitudes
+    component: SolicitudesPostulante
   },
 ]
 
@@ -62,6 +63,12 @@ export const companyRoutes = [
     layout: MainLayout,
     layoutProps: null,
     component: FormOrganization
+  },
+  {
+    path: '/solicitudes',
+    layout: MainLayout,
+    layoutProps: null,
+    component: SolicitudesEmpresa
   }
 ]
 

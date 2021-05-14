@@ -15,6 +15,9 @@ import { UserContext } from './Authentication/UserProvider';
 import { employeeRoutes, companyRoutes, adminRoutes, mainRoutes, authRoutes} from '../routes/index';
 
 import AuthGuard from './Guards/AuthGuard';
+import AdminGuard from './Guards/AdminGuard';
+import CompanyGuard from './Guards/CompanyGuard';
+import EmployeeGuard from './Guards/EmployeeGuard';
 import SignedInGuard from './Guards/SignedInGuard';
 
 
@@ -36,12 +39,11 @@ function Application() {
   return (
     <Router>
       <Switch>
-        {mapRoutes(employeeRoutes, AuthGuard)}
-        {mapRoutes(companyRoutes, AuthGuard)}
-        {mapRoutes(adminRoutes, AuthGuard)}
+        {mapRoutes(employeeRoutes, EmployeeGuard)}
+        {mapRoutes(companyRoutes, CompanyGuard)}
+        {mapRoutes(adminRoutes, AdminGuard)}
         {mapRoutes(mainRoutes, AuthGuard)}
-        {mapRoutes(authRoutes, SignedInGuard)//, SignedInGuard)}
-        }
+        {mapRoutes(authRoutes, SignedInGuard)}
         <Route
         render={() => (
           <div>
