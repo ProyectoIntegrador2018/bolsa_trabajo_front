@@ -25,8 +25,8 @@ const SignUp = () => {
       name: '',
       email: '',
       password: '',
-      phoneNumber: '+528112345699',
-      type: 'employee'
+      phoneNumber: '',
+      type: ''
     },
     onSubmit: values => {
       createUserWithEmailAndPasswordHandler(values);
@@ -54,6 +54,18 @@ const SignUp = () => {
                 <FormGroup>
                   <Label htmlFor="password" >Contraseña</Label>
                   <Input type="password" id="password" name="password" onChange={formik.handleChange} value={formik.values.password}></Input>
+                </FormGroup>
+                <FormGroup>
+                  <Label htmlFor="phoneNumber" >Télefono</Label>
+                  <Input type="text" id="phoneNumber" name="phoneNumber" onChange={formik.handleChange} value={formik.values.phoneNumber}></Input>
+                </FormGroup>
+                <FormGroup>
+                  <Label htmlFor="type" >Tipo de cuenta: </Label>
+                  <br/>
+                  <select id="type" name="type" onChange={formik.handleChange} value={formik.values.type}>
+                    <option value="employee">Empleado</option>
+                    <option value="company">Organizacion</option>
+                  </select>
                 </FormGroup>
                 <FormGroup>
                     <Button type="submit" value="submit" color="primary" className="mr-4">Crear Usuario</Button>
