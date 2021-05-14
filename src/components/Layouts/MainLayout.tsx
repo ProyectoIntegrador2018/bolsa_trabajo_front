@@ -18,7 +18,7 @@ import {
 import styled from '@emotion/styled';
 import logo from '../../logo.svg';
 import { Link } from 'react-router-dom';
-import { isEmployee, isMinEmployee, isMinCompany, isMinAdmin, isSuperAdmin } from '../../helpers/utils/utility';
+import { isEmployee, isCompany, isMinEmployee, isMinCompany, isMinAdmin, isSuperAdmin } from '../../helpers/utils/utility';
 import { UserContext } from '../Authentication/UserProvider';
 import { authenticationService } from '../../services/authentication';
 
@@ -43,11 +43,6 @@ function MainLayout({navExtraInfo = <></>, children,}: any) {
       <NavbarToggler onClick={toggle} />
       <Collapse isOpen={isOpen} navbar>
         <Nav className="mr-auto" navbar>
-          <NavItem>
-            <Link to="/dashboard" style={{ textDecoration: 'none' }}>
-              <NavLink>Home</NavLink>
-            </Link>
-          </NavItem>
           {isEmployee(user) && (
             <NavItem>
               <Link to="/missolicitudes" style={{ textDecoration: 'none' }}>
@@ -62,6 +57,13 @@ function MainLayout({navExtraInfo = <></>, children,}: any) {
               </Link>
             </NavItem>
           )}
+          {isMinAdmin(user) && (
+          <NavItem>
+            <Link to="/admin" style={{ textDecoration: 'none' }}>
+              <NavLink>Panel Admin</NavLink>
+            </Link>
+          </NavItem>
+          )}
           {isMinCompany(user) && (
           <NavItem>
             <Link to="/postulantes" style={{ textDecoration: 'none' }}>
@@ -69,10 +71,10 @@ function MainLayout({navExtraInfo = <></>, children,}: any) {
             </Link>
           </NavItem>
           )}
-          {isMinAdmin(user) && (
+          {isCompany(user) && (
           <NavItem>
-            <Link to="/admin" style={{ textDecoration: 'none' }}>
-              <NavLink>Panel Admin</NavLink>
+            <Link to="/dashboard" style={{ textDecoration: 'none' }}>
+              <NavLink>Crear Puesto de Trabajo</NavLink>
             </Link>
           </NavItem>
           )}

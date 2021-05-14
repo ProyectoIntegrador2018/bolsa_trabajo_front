@@ -12,6 +12,7 @@ import SignUp from '../components/Authentication/SignUp';
 import FormEmployee from '../components/Forms/FormEmployee';
 import FormOrganization from '../components/Forms/FormOrganization';
 import PanelAdmin from '../components/PanelAdmin/PanelAdmin';
+import CompanyDashboard from '../components/Pages/CompanyDashboard';
 import Home from '../components/Home/Home';
 import ExplorarPostulantes from '../components/Postulantes/ExplorarPostulantes'
 import DetallePostulante from '../components/Postulantes/DetallePostulante'
@@ -38,6 +39,12 @@ export const employeeRoutes = [
 ]
 
 export const companyRoutes = [
+  {
+    path: '/dashboard',
+    layout: MainLayout,
+    layoutProps: null,
+    component: CompanyDashboard
+  },
   {
     path: '/postulantes',
     layout: MainLayout,
@@ -69,7 +76,7 @@ export const adminRoutes = [
 
 export const mainRoutes = [
   {
-    path: '/dashboard',
+    path: '/home',
     layout: MainLayout,
     layoutProps: null,
     component: Home
