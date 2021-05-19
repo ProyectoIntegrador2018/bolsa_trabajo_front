@@ -7,3 +7,7 @@
 .navbar {
   background-color: #25274d !important;
 }
+
+.errorMessage {
+  color: red;
+}
