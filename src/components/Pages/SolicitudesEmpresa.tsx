@@ -10,12 +10,12 @@ function SolicitudesEmpresa() {
     <React.Fragment>
       <Row className="mx-auto">
         <Col md={{size: 10, offset: 1}} sm={{size: 12}}>
-          <h1>Solicitudes activas</h1>
+          <h1>Mis solicitudes activas</h1>
           <Table>
             <thead>
               <tr>
                 <th>Fecha</th>
-                <th>Postulante</th>
+                <th>Empresa</th>
                 <th>Puesto</th>
                 <th>Estatus</th>
                 <th style={{ textAlign: "center" }}>Ver detalle</th>
@@ -26,11 +26,15 @@ function SolicitudesEmpresa() {
               let urlDetalle = "/oferta/" + solicitud.id;
               return (
               <tr>
-                <td>{solicitud.date}</td>
-                <td>{solicitud.company}</td>
-                <td>{solicitud.position}</td>
-                <td>{solicitud.status}</td>
-                <td style={{ textAlign: "center" }}>
+                <td className="align-middle" style={{ width: "20%" }}>{solicitud.date}</td>
+                <td className="align-middle" style={{ width: "20%" }}>{solicitud.company}</td>
+                <td className="align-middle" style={{ width: "20%" }}>{solicitud.position}</td>
+                <td className="align-middle" style={{ width: "20%" }}>
+                  <div className="alert alert-warning text-center mb-0" role="alert">
+                    {solicitud.status}
+                  </div>
+                </td>
+                <td style={{ textAlign: "center", width: "20%"}}>
                   <Link to={urlDetalle}>
                     <Button color="primary" className="mr-4">
                       Ver detalle
@@ -42,12 +46,12 @@ function SolicitudesEmpresa() {
             })}
             </tbody>
           </Table>
-          <h1>Solicitudes pasadas</h1>
+          <h1>Mis solicitudes pasadas</h1>
           <Table>
             <thead>
             <tr>
               <th>Fecha</th>
-              <th>Postulante</th>
+              <th>Empresa</th>
               <th>Puesto</th>
               <th>Estatus</th>
               <th style={{ textAlign: "center" }}>Ver detalle</th>
@@ -58,11 +62,15 @@ function SolicitudesEmpresa() {
               let urlDetalle = "/oferta/" + solicitud.id;
               return (
               <tr>
-                <td>{solicitud.date}</td>
-                <td>{solicitud.company}</td>
-                <td>{solicitud.position}</td>
-                <td>{solicitud.status}</td>
-                <td style={{ textAlign: "center" }}>
+                <td className="align-middle" style={{ width: "20%" }}>{solicitud.date}</td>
+                <td className="align-middle" style={{ width: "20%" }}>{solicitud.company}</td>
+                <td className="align-middle" style={{ width: "20%" }}>{solicitud.position}</td>
+                <td className="align-middle" style={{ width: "20%" }}>
+                  <div className="alert alert-primary text-center mb-0" role="alert">
+                    {solicitud.status}
+                  </div>
+                </td>
+                <td style={{ textAlign: "center", width: "20%" }}>
                   <Link to={urlDetalle}>
                     <Button color="primary" className="mr-4">
                       Ver detalle

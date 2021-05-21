@@ -98,7 +98,7 @@ function MainLayout({navExtraInfo = <></>, children,}: any) {
         </Button>
       </Collapse>
     </Navbar>
-    <div className="p-5">
+    <div className="px-0 py-5 p-sm-5 p-md-5">
       {children}
     </div>
     </div>
