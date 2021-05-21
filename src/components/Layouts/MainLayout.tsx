@@ -66,13 +66,6 @@ function MainLayout({navExtraInfo = <></>, children,}: any) {
           )}
           {isCompany(user) && (
           <NavItem>
-            <Link to="/dashboard" style={{ textDecoration: 'none' }}>
-              <NavLink>Dashboard</NavLink>
-            </Link>
-          </NavItem>
-          )}
-          {isMinCompany(user) && (
-          <NavItem>
             <Link to="/postulantes" style={{ textDecoration: 'none' }}>
               <NavLink>Explorar Postulantes</NavLink>
             </Link>
@@ -89,6 +82,13 @@ function MainLayout({navExtraInfo = <></>, children,}: any) {
           <NavItem>
             <Link to="/solicitudes" style={{ textDecoration: 'none' }}>
               <NavLink>Solicitudes</NavLink>
+            </Link>
+          </NavItem>
+          )}
+          {isCompany(user) && (
+          <NavItem>
+            <Link to="/dashboard" style={{ textDecoration: 'none' }}>
+              <NavLink>Mi información</NavLink>
             </Link>
           </NavItem>
           )}

@@ -14,3 +14,10 @@
 .signbtn {
   width: 100%;
 }
+
+.backbtn {
+  background-image: url(https://image.flaticon.com/icons/svg/8/8764.svg);
+  cursor: pointer;
+  width: 40px;
+  height: 40px;
+}

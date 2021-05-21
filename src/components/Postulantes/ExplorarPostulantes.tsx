@@ -15,18 +15,27 @@ function ExplorarPostulantes() {
               <tr>
                 <th>#</th>
                 <th>Nombre</th>
-                <th>Municipio</th>
                 <th style={{ textAlign: "center" }}>Ver detalle</th>
               </tr>
             </thead>
             <tbody>
+            <tr>
+              <th scope="row">{0}</th>
+              <td>Employee Test</td>
+              <td style={{ textAlign: "center" }}>
+                <Link to={"/postulantes/pZmKDehcEdWE6xR3cU4cdgk7ynp1"}>
+                  <Button color="primary" className="mr-4">
+                    Ver detalle
+                  </Button>
+                </Link>
+              </td>
+            </tr>
             { listaPostulantes.map((postulante, index) => {
               let urlDetalle = "/postulantes/" + postulante.id;
               return (
               <tr>
                 <th scope="row">{index + 1}</th>
                 <td>{postulante.name}</td>
-                <td>{postulante.municipio}</td>
                 <td style={{ textAlign: "center" }}>
                   <Link to={urlDetalle}>
                     <Button color="primary" className="mr-4">
