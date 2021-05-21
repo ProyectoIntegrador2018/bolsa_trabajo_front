@@ -26,6 +26,39 @@ const validPositionInfoSchema = Yup.object().shape({
   professionalTitle: Yup.string().required('Requerido')
 });
 
+function generateOrganizationEnrollmentDocument(values: { organizationName: string; street: string; city: string; zipCode: string; telephone1: string; telephone2: string; worktime: string; jobFunction: string; training: string; consulting: string; coaching: string; machineOperationDescription: string; technicalKnowledgeDescription: string; computingEquimentKnowledge: string; programmingKnowledge: string; logicKnowledge: string; numericKnowledge: string; competences: never[]; professionalTitle: string; }) {
+  let enrollmentDocument = 
+  {
+    nombre_empresa: values.organizationName,
+    calle: values.street,
+    municipio: values.city,
+    codigo_postal: values.zipCode,
+    telefono_1: values.telephone1,
+    telefono_2: values.telephone2,
+    secciones: {
+            posicion_vacante: {
+                    jornada_de_trabajo: values.worktime,
+                    funcion: values.jobFunction,
+                    capacitacion_o_entrenamiento: values.training,
+                    consultoria: values.consulting,
+                    coaching: values.coaching
+            },
+            habilidades_necesarias: {
+                    operacion_de_maquinaria: values.machineOperationDescription,
+                    conocimientos_tecnicos: values.technicalKnowledgeDescription,
+                    manejo_de_equipo_de_computo: values.computingEquimentKnowledge,
+                    programacion_u_office: values.programmingKnowledge,
+                    analisis_logico: values.logicKnowledge,
+                    analisis_numerico: values.numericKnowledge
+            },
+            competencias_requeridas: {
+                    competencias: values.competences
+            }
+    }
+}
+  return enrollmentDocument;
+}
+
 const FormPosition = () => (
         <React.Fragment>
           <Navbar>
@@ -61,8 +94,10 @@ const FormPosition = () => (
             validationSchema={validPositionInfoSchema}
             onSubmit={(values, { setSubmitting }) => {
               setTimeout(() => {
-                console.log(JSON.stringify(values, null, 2))
-                alert(JSON.stringify(values, null, 2));
+                //console.log(JSON.stringify(values, null, 2))
+                //alert(JSON.stringify(values, null, 2));
+                let enrollmentDocument = generateOrganizationEnrollmentDocument(values)
+                console.log(JSON.stringify(enrollmentDocument))
                 setSubmitting(false);
               }, 400);
             }}
