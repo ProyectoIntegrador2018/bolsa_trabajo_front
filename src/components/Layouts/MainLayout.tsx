@@ -66,13 +66,6 @@ function MainLayout({navExtraInfo = <></>, children,}: any) {
           )}
           {isCompany(user) && (
           <NavItem>
-            <Link to="/dashboard" style={{ textDecoration: 'none' }}>
-              <NavLink>Dashboard</NavLink>
-            </Link>
-          </NavItem>
-          )}
-          {isMinCompany(user) && (
-          <NavItem>
             <Link to="/postulantes" style={{ textDecoration: 'none' }}>
               <NavLink>Explorar Postulantes</NavLink>
             </Link>
@@ -92,13 +85,20 @@ function MainLayout({navExtraInfo = <></>, children,}: any) {
             </Link>
           </NavItem>
           )}
+          {isCompany(user) && (
+          <NavItem>
+            <Link to="/dashboard" style={{ textDecoration: 'none' }}>
+              <NavLink>Mi información</NavLink>
+            </Link>
+          </NavItem>
+          )}
         </Nav>
         <Button outline onClick={logout} color="light">
           Cerrar sesión
         </Button>
       </Collapse>
     </Navbar>
-    <div className="p-5">
+    <div className="px-0 py-5 p-sm-5 p-md-5">
       {children}
     </div>
     </div>
