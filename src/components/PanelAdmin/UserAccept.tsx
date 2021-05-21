@@ -7,7 +7,7 @@ function UserAccept() {
 
     const users: User[] = [
         {
-            id: "kgrkxfi",
+            id: "1",
             username: "ricardo_lozano",
             createdBy: "fjjfkejf",
             type: "employee",
@@ -15,7 +15,7 @@ function UserAccept() {
             email: "rick@email.com"
         },
         {
-            id: "kgrkxfi",
+            id: "2",
             username: "david_acevedo",
             createdBy: "fjjfkejf",
             type: "employee",
@@ -23,13 +23,21 @@ function UserAccept() {
             email: "david@email.com"
         },
         {
-            id: "kgrkxfi",
+            id: "3",
             username: "aaron_garcia",
             createdBy: "fjjfkejf",
             type: "company",
-            state: "active",
+            state: "inactive",
             email: "user@email.com"
-        }
+        },
+        {
+            id: "4",
+            username: "luis_felipe",
+            createdBy: "fjjfkejf",
+            type: "company",
+            state: "active",
+            email: "luis@email.com"
+        },
     ]
 
     let inactiveUsers: User[] = [];

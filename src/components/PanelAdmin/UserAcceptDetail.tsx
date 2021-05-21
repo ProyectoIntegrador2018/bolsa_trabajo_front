@@ -15,7 +15,7 @@ function UserAcceptDetails() {
         id: "kgrkxfi",
         username: "ricardo_lozano",
         createdBy: "fjjfkejf",
-        type: "employee",
+        type: userId === "3" ? "company" : "employee", //TODO: this is hardcode for tests, change after demo
         state: "inactive",
         email: "user@email.com"
     }
