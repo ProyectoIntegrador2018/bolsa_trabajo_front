@@ -4,17 +4,14 @@ import { Field, Formik, FormikErrors } from 'formik'
 import styled from '@emotion/styled';
 import { isMinAdmin, isSuperAdmin } from '../../helpers/utils/utility';
 import { UserContext } from '../Authentication/UserProvider';
-import { AdminCreate, AdminType } from '../../model/Admins';
+import { Admin, AdminCreate, AdminType, translateToAdminType } from '../../model/Admins';
 
 const StyledErrorMessage = styled.div`
   color: red;
 `;
 
 interface RegisterAdminProps {
-    username: string;
-    email: string;
-    type: AdminType;
-    phoneNumber: string;
+    admin: Admin;
     isEdit?: boolean;
     onEdit?: () => void;
 }
@@ -94,10 +91,10 @@ function RegisterAdmins(props: RegisterAdminProps) {
 
     if (props.isEdit) {
         initialValues = {
-            username: props.username,
-            email: props.email,
-            type: props.type,
-            phoneNumber: props.phoneNumber,
+            username: props.admin.username,
+            email: props.admin.email,
+            type: translateToAdminType(props.admin.type),
+            phoneNumber: props.admin.phoneNumber,
             password: ''
         };
     }
@@ -105,7 +102,7 @@ function RegisterAdmins(props: RegisterAdminProps) {
         initialValues = {
             username: '',
             email: '',
-            type: AdminType.none,
+            type: AdminType.admin,
             phoneNumber: '',
             password: ''
         }
@@ -115,7 +112,7 @@ function RegisterAdmins(props: RegisterAdminProps) {
 
     const { user } = useContext(UserContext);
 
-    const [adminTipo, setAdminTipo] = useState(initialValues.type || AdminType.none)
+    const [adminTipo, setAdminTipo] = useState(initialValues.type || AdminType.admin)
 
     const [dropdownOpen, setDropdownOpen] = useState(false);
     const toggle = () => setDropdownOpen(prevState => !prevState);
@@ -129,7 +126,7 @@ function RegisterAdmins(props: RegisterAdminProps) {
                     </Jumbotron>
                 )
             }
-            {isMinAdmin(user) ? (
+            {isSuperAdmin(user) ? (
                 <Container>
                     <Row>
                         <Col md={{ size: props.isEdit ? 8 : 6, offset: props.isEdit ? 2 : 3 }} sm={{ size: 12 }}>
@@ -150,7 +147,7 @@ function RegisterAdmins(props: RegisterAdminProps) {
                                     }
 
                                     const phoneNumber = validatePhoneNumber(values.phoneNumber)
-                                    if(phoneNumber) {
+                                    if (phoneNumber) {
                                         errors.phoneNumber = phoneNumber
                                     }
 
@@ -174,17 +171,21 @@ function RegisterAdmins(props: RegisterAdminProps) {
                                     setSubmitting(false);
                                     values.username = values.username.trim();
                                     values.email = values.email.trim();
-
                                     values.phoneNumber = "+52" + values.phoneNumber;
-
                                     values.type = adminTipo;
+
+                                    if (props.isEdit) {
+                                        // TODO: post
+                                    }
+                                    else {
+                                        // TODO: post
+                                    }
 
                                     console.log(values)
 
                                     if (props.isEdit && props.onEdit) {
                                         props.onEdit();
                                     }
-
                                 }}
                             >
                                 {({ values, errors, handleChange, touched, handleSubmit, validateForm }) =>
@@ -209,7 +210,7 @@ function RegisterAdmins(props: RegisterAdminProps) {
                                                 <Label htmlFor="adminType">Tipo de Administrador</Label>
                                                 <Dropdown id="adminType" isOpen={dropdownOpen} toggle={toggle}>
                                                     <DropdownToggle caret>
-                                                        {adminTipo !== AdminType.none ? (adminTipo === AdminType.admin ? "Administrador" : "Super Administrador") : "Seleccione una opción"}
+                                                        {adminTipo === AdminType.admin ? "Administrador" : "Super Administrador"}
                                                     </DropdownToggle>
                                                     <DropdownMenu>
                                                         <DropdownItem onClick={() => { setAdminTipo(AdminType.admin); validateForm() }}>Administrador</DropdownItem>

@@ -1,18 +1,14 @@
 export enum AdminType {
-    none = "none",
     admin = "admin",
     superAdmin = "super-admin"
 }
 
 export function translateToAdminType(str:string) : AdminType {
-    if(str === "admin") {
-        return AdminType.admin
-    }
-    else if(str === "super-admin") {
+    if(str === "super-admin") {
         return AdminType.superAdmin
     }
 
-    return AdminType.none;
+    return AdminType.admin;
 }
 
 export interface AdminCreate {

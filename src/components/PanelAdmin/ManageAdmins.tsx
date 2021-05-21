@@ -45,7 +45,7 @@ function ManageAdmins() {
     const [modal, setModal] = useState(false);
     const toggle = () => setModal(!modal);
 
-    const emptyAdmin = {
+    const emptyAdmin : Admin = {
         id: "",
         username: "",
         email: '',
@@ -79,7 +79,7 @@ function ManageAdmins() {
                                             <th>Correo Electrónico</th>
                                             <th>Tipo de Administrador</th>
                                             {
-                                                isMinAdmin(user) && (
+                                                isSuperAdmin(user) && (
                                                     <th></th>
                                                 )
                                             }
@@ -97,7 +97,7 @@ function ManageAdmins() {
                                                     <td>{admin.email}</td>
                                                     <td>{admin.type}</td>
                                                     {
-                                                        isMinAdmin(user) && (
+                                                        isSuperAdmin(user) && (
                                                             <td className="text-center">
                                                                 <Button color="primary" onClick={() => { setAdminEdit(admin); toggle(); }}>Editar</Button>
 
@@ -118,7 +118,7 @@ function ManageAdmins() {
                 <Modal isOpen={modal} toggle={toggle} >
                     <ModalHeader toggle={toggle}>Editar Administrador</ModalHeader>
                     <ModalBody>
-                        <RegisterAdmins username={adminEdit.username} email={adminEdit.email} type={translateToAdminType(adminEdit.type)} phoneNumber={adminEdit.phoneNumber} isEdit onEdit={() => { setModal(false) }} />
+                        <RegisterAdmins admin={adminEdit} isEdit onEdit={() => { setModal(false) }} />
                     </ModalBody>
                 </Modal>
             </Container>

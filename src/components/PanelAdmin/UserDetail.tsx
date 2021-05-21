@@ -1,126 +1,235 @@
-import styled from '@emotion/styled';
-import { Field, Formik, FormikErrors } from 'formik';
-import React, { useState } from 'react';
-import { useParams } from 'react-router-dom';
-import { Button, Col, Container, Form, FormGroup, Input, Jumbotron, Modal, ModalBody, ModalHeader, Row } from 'reactstrap';
+import React from 'react';
+import { Col, Container, Jumbotron, Row } from 'reactstrap';
+import { CompanyForm, EmployeeForm } from '../../model/Forms';
+import { UserType, UserTypeEnum } from '../../model/Users';
 
-function UserDetails() {
-    let params = useParams<{ userId?: string }>();
-    const userId = params.userId;
-    console.log(userId);
+interface UserDetailProps {
+    userId: string;
+    userType: UserTypeEnum;
+}
 
-    const userInfo = {
-        name: "Ricardo Lozano",
-        dateApplied: new Date(Date.now() - 86400000), // that is: 24 * 60 * 60 * 1000
-        age: 70,
-        city: "Monterrey",
-        address: "Calle 123, Colonia Tecnológico",
-        phone: "812345678",
-        email: "user@email.com"
-    }
-
-    const [modal, setModal] = useState(false);
-
-    const toggle = () => setModal(!modal);
-
-    const StyledErrorMessage = styled.div`
-        color: red;
-    `;
+function EmployeeDetail(props: { enrollmentForm: EmployeeForm }) {
 
     return (
         <React.Fragment>
-            <Jumbotron>
-                <h1>Detalle de Usuario</h1>
-            </Jumbotron>
-            <Container>
-                <Row>
+            <Container fluid>
+                <Row className="mx-auto">
                     <Col>
-                        <h2><b>{userInfo.name}</b></h2>
-                    </Col>
-                </Row>
-                <Row>
-                    <Col><b>Fecha de Aplicación:</b> {userInfo.dateApplied.toLocaleDateString('es-MX', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}</Col>
-                </Row>
-            </Container>
-            <Container className="mt-5">
-                <Row >
-                    <Col>
-                        <h3>Información Personal</h3>
-                    </Col>
-                </Row>
-                <Row className="mt-2">
-                    <Col xs="12">
-                        <b>Edad:</b> {userInfo.age} años
-                                </Col>
-                    <Col xs="12">
-                        <b>Dirección:</b> {userInfo.address}
-                    </Col>
-                    <Col xs="12">
-                        <b>Municipio:</b> {userInfo.city}
-                    </Col>
-                    <Col xs="12">
-                        <b>Número de Teléfono:</b> {userInfo.phone}
-                    </Col>
-                    <Col xs="12">
-                        <b>Correo electrónico:</b> {userInfo.email}
+                        <h2><b>{props.enrollmentForm.nombre}</b></h2>
                     </Col>
                 </Row>
             </Container>
-            <Container className="mt-5">
-                <Row>
-                    <Col xs="6" sm="4">
-                        <Button color="secondary">Aceptar</Button>
-                    </Col>
-                    <Col xs="6" sm="4">
-                        <Button color="danger" onClick={toggle}>Rechazar</Button>
+            <Container fluid>
+                <Row className="mx-auto">
+                    <Col md={{ size: 9, offset: 2 }} sm={{ size: 12 }}>
+                        <hr></hr>
+                        <h4 className="mb-3">Información General</h4>
+                        <dl className="row">
+
+                            <dt className="col-sm-4">Dirección actual:</dt>
+                            <dd className="col-sm-8">{(props.enrollmentForm.calle + ", " || "") + props.enrollmentForm.municipio + ", " + (props.enrollmentForm.codigo_postal || "")}</dd>
+
+                            <dt className="col-sm-4">Fecha de nacimiento:</dt>
+                            <dd className="col-sm-8">{props.enrollmentForm.fecha_de_nacimiento}</dd>
+
+                            <dt className="col-sm-4">Lugar de nacimiento:</dt>
+                            <dd className="col-sm-8">{props.enrollmentForm.lugar_de_nacimiento || "Información No Disponible"}</dd>
+
+                            <dt className="col-sm-4">Telefono casa:</dt>
+                            <dd className="col-sm-8">{props.enrollmentForm.telefono_casa || "Información No Disponible"}</dd>
+
+                            <dt className="col-sm-4">Telefono celular:</dt>
+                            <dd className="col-sm-8">{props.enrollmentForm.telefono_celular || "Información No Disponible"}</dd>
+                        </dl>
+
+                        <hr></hr>
+                        <h4 className="mb-3">Último Empleo o Actividad</h4>
+                        <dl className="row">
+
+                            <dt className="col-sm-4">Ultimo Periodo:</dt>
+                            <dd className="col-sm-8">{props.enrollmentForm.secciones!.ultimo_ejemplo_o_actividad!.ultimo_periodo}</dd>
+
+                            <dt className="col-sm-4">Empresa:</dt>
+                            <dd className="col-sm-8">{props.enrollmentForm.secciones!.ultimo_ejemplo_o_actividad!.empresa}</dd>
+
+                            <dt className="col-sm-4">Puesto:</dt>
+                            <dd className="col-sm-8">{props.enrollmentForm.secciones!.ultimo_ejemplo_o_actividad!.puesto}</dd>
+
+                            <dt className="col-sm-4">Responsabilidad:</dt>
+                            <dd className="col-sm-8">{props.enrollmentForm.secciones!.ultimo_ejemplo_o_actividad!.responsabilidad || "Información No Disponible"}</dd>
+                        </dl>
+
+                        <hr></hr>
+                        <h4 className="mb-3">Actividad Deseada</h4>
+                        <dl className="row">
+
+                            <dt className="col-sm-4">Jornada de trabajo:</dt>
+                            <dd className="col-sm-8">{props.enrollmentForm.secciones!.actividad_deseada!.jornada_de_trabajo}</dd>
+
+                            <dt className="col-sm-4">Función:</dt>
+                            <dd className="col-sm-8">{props.enrollmentForm.secciones!.actividad_deseada!.funcion}</dd>
+
+                            <dt className="col-sm-4">Capacitación o entrenamiento:</dt>
+                            <dd className="col-sm-8">{props.enrollmentForm.secciones!.actividad_deseada!.capacitacion_o_entrenamiento || "Información No Disponible"}</dd>
+
+                            <dt className="col-sm-4">Consultoría:</dt>
+                            <dd className="col-sm-8">{props.enrollmentForm.secciones!.actividad_deseada!.consultoria || "Información No Disponible"}</dd>
+
+                            <dt className="col-sm-4">Coaching:</dt>
+                            <dd className="col-sm-8">{props.enrollmentForm.secciones!.actividad_deseada!.coaching || "Información No Disponible"}</dd>
+                        </dl>
+
+                        <hr></hr>
+                        <h4 className="mb-3">Nivel de estudios</h4>
+                        <dl className="row">
+                            <dt className="col-sm-4">Nivel Escolar:</dt>
+                            <dd className="col-sm-8">{props.enrollmentForm.secciones!.nivel_de_estudios!.nivel_escolar}</dd>
+                            <dt className="col-sm-4">Institución:</dt>
+                            <dd className="col-sm-8">{props.enrollmentForm.secciones!.nivel_de_estudios!.nombre_institucion}</dd>
+                            <dt className="col-sm-4">Fecha de Inicio:</dt>
+                            <dd className="col-sm-8">{props.enrollmentForm.secciones!.nivel_de_estudios!.fecha_inicio}</dd>
+                            <dt className="col-sm-4">Fecha de Fin:</dt>
+                            <dd className="col-sm-8">{props.enrollmentForm.secciones!.nivel_de_estudios!.fecha_fin}</dd>
+                        </dl>
+
+                        <hr></hr>
+                        <h4 className="mb-3">Habilidades</h4>
+                        <ul>
+                            {props.enrollmentForm.secciones.tus_habilidades_son.habilidades ? (props.enrollmentForm.secciones.tus_habilidades_son.habilidades.map((habilidad, index) => {
+                                return <li>{habilidad}</li>;
+                            })) : (<li>Ninguna especificada</li>)
+                            }
+                        </ul>
+                        <hr></hr>
+                        <h4 className="mb-3">Comentarios</h4>
+                        <dl className="row">
+
+                            <dt className="col-sm-4">¿Por qué quieres trabajo?</dt>
+                            <dd className="col-sm-8">{props.enrollmentForm.secciones!.comentarios!.porque_quieres_trabajo}</dd>
+                        </dl>
                     </Col>
                 </Row>
             </Container>
-            <Modal isOpen={modal} toggle={toggle}>
-                <ModalHeader toggle={toggle}>Razón de Rechazo</ModalHeader>
-                <ModalBody>
-                    <Row>
-                        <Col>Describa por qué ha decidido rechazar al usuario, como retroalimentación para este:</Col>
-                    </Row>
-                    <Row>
-                        <Col>
-                            <Formik
-                                initialValues={{ feedback: '' }}
-                                validate={values => {
-                                    let errors: FormikErrors<{ feedback: string }> = {};
-
-                                    if (!values.feedback || values.feedback.length < 1) {
-                                        errors.feedback = "Es necesario escribir algo de retroalimentación"
-                                    }
-
-                                    return errors;
-                                }}
-
-                                validateOnBlur={true}
-                                onSubmit={(values, { setSubmitting }) => {
-
-                                    setSubmitting(false);
-
-                                    // TODO
-                                }}
-                            >
-                                {({ values, errors, touched, handleChange, handleSubmit }) =>
-                                    <Form onSubmit={handleSubmit}>
-                                        <Input id="feedback" name="feedback" tag={Field} type="textarea" onChange={handleChange} value={values.feedback} placeholder="Ejemplo: La dirección no existe" invalid={(typeof errors.feedback !== 'undefined') && touched.feedback}></Input>
-                                        {touched.feedback && errors.feedback && <StyledErrorMessage>{errors.feedback}</StyledErrorMessage>}
-                                        <FormGroup className="mt-4">
-                                            <Button type="submit" color="danger" className="mr-4">Enviar</Button>
-                                            <Button onClick={toggle} className="mr-4">Cancelar</Button>
-                                        </FormGroup>
-                                    </Form>}
-
-                            </Formik>
-                        </Col>
-                    </Row>
-                </ModalBody>
-            </Modal>
         </React.Fragment>
     )
 }
 
-export default UserDetails;
+function CompanyDetail(props: { enrollmentForm: CompanyForm }) {
+
+    return (
+        <React.Fragment>
+            <Container fluid>
+                <Row className="mx-auto">
+                    <Col>
+                        <h2><b>{props.enrollmentForm.nombre_empresa}</b></h2>
+                    </Col>
+                </Row>
+            </Container>
+            <Container fluid>
+                <Row className="mx-auto">
+                    <Col md={{ size: 9, offset: 2 }} sm={{ size: 12 }}>
+                        <hr></hr>
+                        <h4 className="mb-3">Información General</h4>
+                        <dl className="row">
+
+                            <dt className="col-sm-4">Dirección actual:</dt>
+                            <dd className="col-sm-8">{props.enrollmentForm.direccion_actual}</dd>
+
+                            <dt className="col-sm-4">Municipio:</dt>
+                            <dd className="col-sm-8">{props.enrollmentForm.municipio}</dd>
+
+                            <dt className="col-sm-4">Estado:</dt>
+                            <dd className="col-sm-8">{props.enrollmentForm.estado}</dd>
+
+                            <dt className="col-sm-4">Telefono 1:</dt>
+                            <dd className="col-sm-8">{props.enrollmentForm.telefono_1 || "Información No Disponible"}</dd>
+
+                            <dt className="col-sm-4">Telefono 2:</dt>
+                            <dd className="col-sm-8">{props.enrollmentForm.telefono_2}</dd>
+                        </dl>
+                    </Col>
+                </Row>
+            </Container>
+
+        </React.Fragment>
+    )
+}
+
+function UserDetail(props: UserDetailProps) {
+
+    let enrollmentForm: EmployeeForm | CompanyForm;
+
+    if (props.userType == UserTypeEnum.employee) {
+        // TODO: get form
+        enrollmentForm = {
+            nombre: "Ricardo Lozano Gil",
+            fecha_de_nacimiento: "25/01/1950",
+            lugar_de_nacimiento: "Monterrey",
+            calle: "Calle Falsa 123",
+            municipio: "Monterrey",
+            codigo_postal: "64790",
+            telefono_casa: "+528123456789",
+            telefono_celular: "+528123456789",
+            secciones: {
+                ultimo_ejemplo_o_actividad: {
+                    ultimo_periodo: "Ultimo año",
+                    empresa: "CEMEX",
+                    puesto: "Gerente",
+                },
+                actividad_deseada: {
+                    jornada_de_trabajo: "Completa",
+                    funcion: "Gerencial",
+                },
+
+                nivel_de_estudios: {
+                    nivel_escolar: "Licenciatura",
+                    nombre_institucion: "Tec de Monterrey",
+                    fecha_inicio: "12/06/1970",
+                    fecha_fin: "20/06/1975"
+                },
+
+                comentarios: {
+                    porque_quieres_trabajo: "Necesidad económica"
+                },
+
+                tus_habilidades_son: {
+                    habilidades: ["Administración de Proyectos"]
+                },
+
+                clasificacion_puesto: {
+                    clasificacion: "Gerente"
+                },
+
+                aceptacion_politica: {
+                    aceptacion: true
+                }
+            }
+        }
+    }
+    else {
+        // TODO: get form
+        enrollmentForm = {
+            nombre_empresa: "CEMEX",
+            direccion_actual: "Calle Falsa 123, Colonia Prueba",
+            municipio: "Monterrey",
+            estado: "Nuevo León",
+            telefono_1: "+528123456789",
+            telefono_2: "+528123456789",
+        }
+    }
+
+    return (
+        <React.Fragment>
+            {
+                props.userType == UserTypeEnum.employee ? (
+                    <EmployeeDetail enrollmentForm={enrollmentForm as EmployeeForm} />
+                ) :
+                    (
+                        <CompanyDetail enrollmentForm={enrollmentForm as CompanyForm} />
+                    )
+            }
+        </React.Fragment>
+    )
+}
+
+export default UserDetail;

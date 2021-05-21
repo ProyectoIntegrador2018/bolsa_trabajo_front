@@ -30,14 +30,12 @@ function AdminLayout({ children }: any) {
                             <NavbarToggler onClick={toggle} />
                             <Collapse isOpen={isOpen} navbar>
                                 <Nav className="mr-auto" navbar>
+                                    <NavItem>
+                                        <Link to="/admin/accept-users" style={{ textDecoration: 'none' }}>
+                                            <NavLink>Aceptar Usuarios</NavLink>
+                                        </Link>
+                                    </NavItem>
 
-                                    {isMinAdmin(user) && (
-                                        <NavItem>
-                                            <Link to="/admin/accept-users" style={{ textDecoration: 'none' }}>
-                                                <NavLink>Aceptar Usuarios</NavLink>
-                                            </Link>
-                                        </NavItem>
-                                    )}
                                     {isSuperAdmin(user) && (
                                         <NavItem>
                                             <Link to="/admin/register-admins" style={{ textDecoration: 'none' }}>
@@ -46,14 +44,12 @@ function AdminLayout({ children }: any) {
                                         </NavItem>
 
                                     )}
-                                    {isMinAdmin(user) && (
-                                        <NavItem>
-                                            <Link to="/admin/manage-admins" style={{ textDecoration: 'none' }}>
-                                                <NavLink>Gestionar Administradores</NavLink>
-                                            </Link>
-                                        </NavItem>
-                                    )}
 
+                                    <NavItem>
+                                        <Link to="/admin/manage-admins" style={{ textDecoration: 'none' }}>
+                                            <NavLink>Gestionar Administradores</NavLink>
+                                        </Link>
+                                    </NavItem>
                                 </Nav>
                                 <Button outline onClick={logout} color="light">
                                     Cerrar sesión
@@ -65,9 +61,9 @@ function AdminLayout({ children }: any) {
                         </div>
                     </div>
                 ) :
-                (
-                    <h1>Acceso Denegado: Solo Administradores</h1>
-                )
+                    (
+                        <h1>Acceso Denegado: Solo Administradores</h1>
+                    )
             }
         </div>
 

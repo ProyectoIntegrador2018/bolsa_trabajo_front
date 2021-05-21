@@ -20,7 +20,7 @@ import SolicitudesEmpresa from '../components/Pages/SolicitudesEmpresa'
 import AdminLayout from '../components/Layouts/AdminLayout';
 import AdminHome from '../components/PanelAdmin/AdminHome';
 import UserAccept from '../components/PanelAdmin/UserAccept';
-import UserDetails from '../components/PanelAdmin/UserDetail';
+import UserAcceptDetails from '../components/PanelAdmin/UserAcceptDetail';
 import RegisterAdmins from '../components/PanelAdmin/RegisterAdmins';
 import ManageAdmins from '../components/PanelAdmin/ManageAdmins';
 
@@ -94,7 +94,7 @@ export const adminRoutes = [
     path: '/admin/accept-users/:userId',
     layout: AdminLayout,
     layoutProps: null,
-    component: UserDetails
+    component: UserAcceptDetails
   },
   {
     path: '/admin/register-admins',
