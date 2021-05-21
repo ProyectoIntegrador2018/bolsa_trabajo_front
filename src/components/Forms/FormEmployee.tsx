@@ -4,6 +4,7 @@ import { Formik,Field } from "formik";
 import municipios from "../../shared/municipios";
 import puestos from "../../shared/puestos";
 import * as Yup from 'yup';
+import { postEmployeeEnrollmentForm } from '../../services/formService';
 
 //Esquema de validación
 const validEmployeeInfoSchema = Yup.object().shape({
@@ -30,6 +31,61 @@ const validEmployeeInfoSchema = Yup.object().shape({
   classification: Yup.string().required('Requerido'),
   TandA: Yup.bool().isTrue('Debe aceptar la politica de privacidad')
 });
+
+function generateEmployeeEnrollmentDocument(values: { name: any; birthday: any; birthplace: any; street?: string; city?: string; zipCode?: string; phones?: { homePhone: string; personalPhone: string; }; lastActivityPeriod?: string; lastOrganizationActivity?: string; lastPositionActivity?: string; lastResponsabilityActivity?: string; worktime?: string; jobFunction?: string; desiredActivity?: { training: string; consulting: string; coaching: string; }; workingReasons?: string; schoolLevel?: string; schoolName?: string; schoolStartDate?: string; schoolEndDate?: string; abilities?: never[]; classification?: string; resume?: string; TandA?: boolean; ""?: any; }) {
+  let enrollmentDocument = 
+    {
+      nombre: values.name,
+      fecha_de_nacimiento: values.birthday,
+      lugar_de_nacimiento: values.birthplace,
+      calle: values.street,
+      municipio: values.city,
+      codigo_postal: values.zipCode,
+      telefono_casa: values.phones?.homePhone,
+      telefono_celular: values.phones?.personalPhone,
+      secciones: {
+        
+        ultimo_ejemplo_o_actividad: {
+          ultimo_periodo: values.lastActivityPeriod,
+          empresa: values.lastOrganizationActivity,
+          puesto: values.lastPositionActivity,
+          responsabilidad: values.lastResponsabilityActivity
+        },
+
+        actividad_deseada: {
+          jornada_de_trabajo: values.worktime,
+          funcion: values.jobFunction,
+          capacitacion_o_entrenamiento: values.desiredActivity?.training,
+          consultoria: values.desiredActivity?.consulting,
+          coaching: values.desiredActivity?.coaching
+        },
+
+        nivel_de_estudios: {
+          nivel_escolar: values.schoolLevel,
+          nombre_institucion: values.schoolName,
+          fecha_inicio: values.schoolStartDate,
+          fecha_fin: values.schoolEndDate
+        },
+
+        comentarios: {
+          porque_quieres_trabajo: values.workingReasons
+        },
+
+        tus_habilidades_son: {
+          habilidades: values.abilities
+        },
+
+        clasificacion_puesto : {
+          clasificacion: values.classification
+        },
+
+        aceptacion_politica : {
+          aceptacion : values.TandA
+        }
+      }
+  }
+  return enrollmentDocument;
+}
 
 const FormEmployee = () => (
         <React.Fragment>
@@ -75,13 +131,16 @@ const FormEmployee = () => (
               TandA: false
             }}
             validationSchema={validEmployeeInfoSchema}
-            onSubmit={(values, { setSubmitting }) => {
-              setTimeout(() => {
-                console.log(JSON.stringify(values, null, 2))
-                alert(JSON.stringify(values, null, 2));
+            onSubmit={async (values, { setSubmitting }) => {
+                debugger;
+                let enrollmentDocument = generateEmployeeEnrollmentDocument(values)
+                //console.log(JSON.stringify(values, null, 2))
+                //alert(JSON.stringify(values, null, 2));
+                await postEmployeeEnrollmentForm(enrollmentDocument)
+                alert('Formulario enviado!')
                 setSubmitting(false);
-              }, 400);
-            }}
+              }
+            }
           >
             {({ 
               values,
