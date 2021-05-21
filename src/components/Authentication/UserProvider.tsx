@@ -12,6 +12,8 @@ function UserProvider(props: any) {
     // setObserver on authUser
     auth.onAuthStateChanged(async (authUser) => {
       const user_local: any = await getUserDocument(authUser);
+      //const token = await authUser?.getIdToken();
+      //console.log(token);
       setUser({user: user_local});
 
       if (user_local) {

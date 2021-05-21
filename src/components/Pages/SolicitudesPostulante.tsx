@@ -48,7 +48,7 @@ function SolicitudesPostulante() {
       )
     }
 
-    if (!user) {//.state == 'inactive') {
+    if (user.state == 'inactive') {//.state == 'inactive') {
       return (
         <React.Fragment>
           <Row className="mx-auto">
