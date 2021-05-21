@@ -6,7 +6,6 @@ import FormEmployee from "./Forms/FormEmployee";
 import FormOrganization from "./Forms/FormOrganization";
 import MainLayout from './Layouts/MainLayout';
 import RouteWithLayout from './Layouts/RouteWithLayout';
-import PanelAdmin from './PanelAdmin/PanelAdmin';
 import Home from './Home/Home';
 import ExplorarPostulantes from './Postulantes/ExplorarPostulantes';
 import DetallePostulante from './Postulantes/DetallePostulante';

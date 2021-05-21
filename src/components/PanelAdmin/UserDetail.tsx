@@ -8,9 +8,8 @@ function UserDetails() {
     let params = useParams<{ userId?: string }>();
     const userId = params.userId;
     console.log(userId);
-    
 
-    const user = {
+    const userInfo = {
         name: "Ricardo Lozano",
         dateApplied: new Date(Date.now() - 86400000), // that is: 24 * 60 * 60 * 1000
         age: 70,
@@ -36,11 +35,11 @@ function UserDetails() {
             <Container>
                 <Row>
                     <Col>
-                        <h2><b>{user.name}</b></h2>
+                        <h2><b>{userInfo.name}</b></h2>
                     </Col>
                 </Row>
                 <Row>
-                    <Col><b>Fecha de Aplicación:</b> {user.dateApplied.toLocaleDateString('es-MX', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}</Col>
+                    <Col><b>Fecha de Aplicación:</b> {userInfo.dateApplied.toLocaleDateString('es-MX', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}</Col>
                 </Row>
             </Container>
             <Container className="mt-5">
@@ -51,28 +50,28 @@ function UserDetails() {
                 </Row>
                 <Row className="mt-2">
                     <Col xs="12">
-                        <b>Edad:</b> {user.age} años
+                        <b>Edad:</b> {userInfo.age} años
+                                </Col>
+                    <Col xs="12">
+                        <b>Dirección:</b> {userInfo.address}
                     </Col>
                     <Col xs="12">
-                        <b>Dirección:</b> {user.address}
+                        <b>Municipio:</b> {userInfo.city}
                     </Col>
                     <Col xs="12">
-                        <b>Municipio:</b> {user.city}
+                        <b>Número de Teléfono:</b> {userInfo.phone}
                     </Col>
                     <Col xs="12">
-                        <b>Número de Teléfono:</b> {user.phone}
-                    </Col>
-                    <Col xs="12">
-                        <b>Correo electrónico:</b> {user.email}
+                        <b>Correo electrónico:</b> {userInfo.email}
                     </Col>
                 </Row>
             </Container>
             <Container className="mt-5">
                 <Row>
-                    <Col xs="12" sm="4">
+                    <Col xs="6" sm="4">
                         <Button color="secondary">Aceptar</Button>
                     </Col>
-                    <Col xs="12" sm="4">
+                    <Col xs="6" sm="4">
                         <Button color="danger" onClick={toggle}>Rechazar</Button>
                     </Col>
                 </Row>

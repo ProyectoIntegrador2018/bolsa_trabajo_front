@@ -11,13 +11,18 @@ import SignIn from '../components/Authentication/SignIn';
 import SignUp from '../components/Authentication/SignUp';
 import FormEmployee from '../components/Forms/FormEmployee';
 import FormOrganization from '../components/Forms/FormOrganization';
-import PanelAdmin from '../components/PanelAdmin/PanelAdmin';
 import CompanyDashboard from '../components/Pages/CompanyDashboard';
 import Home from '../components/Home/Home';
 import ExplorarPostulantes from '../components/Postulantes/ExplorarPostulantes'
 import DetallePostulante from '../components/Postulantes/DetallePostulante'
 import SolicitudesPostulante from '../components/Pages/SolicitudesPostulante'
 import SolicitudesEmpresa from '../components/Pages/SolicitudesEmpresa'
+import AdminLayout from '../components/Layouts/AdminLayout';
+import AdminHome from '../components/PanelAdmin/AdminHome';
+import UserAccept from '../components/PanelAdmin/UserAccept';
+import UserDetails from '../components/PanelAdmin/UserDetail';
+import RegisterAdmins from '../components/PanelAdmin/RegisterAdmins';
+import ManageAdmins from '../components/PanelAdmin/ManageAdmins';
 
 //const SignIn = async(() => import('../components/Authentication/SignIn'));
 //const SignUp = async(() => import('../components/Authentication/SignUp'));
@@ -75,9 +80,33 @@ export const companyRoutes = [
 export const adminRoutes = [
   {
     path: '/admin',
-    layout: MainLayout,
+    layout: AdminLayout,
     layoutProps: null,
-    component: PanelAdmin
+    component: AdminHome
+  },
+  {
+    path: '/admin/accept-users',
+    layout: AdminLayout,
+    layoutProps: null,
+    component: UserAccept
+  },
+  {
+    path: '/admin/accept-users/:userId',
+    layout: AdminLayout,
+    layoutProps: null,
+    component: UserDetails
+  },
+  {
+    path: '/admin/register-admins',
+    layout: AdminLayout,
+    layoutProps: null,
+    component: RegisterAdmins
+  },
+  {
+    path: '/admin/manage-admins',
+    layout: AdminLayout,
+    layoutProps: null,
+    component: ManageAdmins
   }
 ]
 

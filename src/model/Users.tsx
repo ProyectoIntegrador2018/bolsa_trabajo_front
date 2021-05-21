@@ -1,3 +1,3 @@
 export interface UserType {
-  type: 'employee' | 'employer'
+  type: 'employee' | 'company'
 };
