@@ -56,4 +56,30 @@ export interface CompanyForm {
     estado: string,
     telefono_1?: string,
     telefono_2: string,
+    aceptacion_politica : {
+        aceptacion : boolean
+      }
+}
+
+export interface PositionForm {
+    secciones: {
+        posicion_vacante: {
+                jornada_de_trabajo: string,
+                funcion: string,
+                capacitacion_o_entrenamiento: string,
+                consultoria: string,
+                coaching: string
+        },
+        habilidades_necesarias: {
+                operacion_de_maquinaria: string,
+                conocimientos_tecnicos: string,
+                manejo_de_equipo_de_computo: string,
+                programacion_u_office: string,
+                analisis_logico: string,
+                analisis_numerico: string
+        },
+        competencias_requeridas: {
+                competencias: string[]
+        }
+    }
 }

@@ -73,7 +73,7 @@ function MainLayout({navExtraInfo = <></>, children,}: any) {
           )}
           {isCompany(user) && (
           <NavItem>
-            <Link to="/form-organization" style={{ textDecoration: 'none' }}>
+            <Link to="/form-position" style={{ textDecoration: 'none' }}>
               <NavLink>Crear Puesto de Trabajo</NavLink>
             </Link>
           </NavItem>
@@ -87,7 +87,7 @@ function MainLayout({navExtraInfo = <></>, children,}: any) {
           )}
           {isCompany(user) && (
           <NavItem>
-            <Link to="/dashboard" style={{ textDecoration: 'none' }}>
+            <Link to="/form-organization" style={{ textDecoration: 'none' }}>
               <NavLink>Mi información</NavLink>
             </Link>
           </NavItem>

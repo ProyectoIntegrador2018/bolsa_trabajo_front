@@ -215,6 +215,9 @@ function UserDetail(props: UserDetailProps) {
             estado: "Nuevo León",
             telefono_1: "+528123456789",
             telefono_2: "+528123456789",
+            aceptacion_politica : {
+                aceptacion : true
+              }
         }
     }
 

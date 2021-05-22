@@ -23,6 +23,7 @@ import UserAccept from '../components/PanelAdmin/UserAccept';
 import UserAcceptDetails from '../components/PanelAdmin/UserAcceptDetail';
 import RegisterAdmins from '../components/PanelAdmin/RegisterAdmins';
 import ManageAdmins from '../components/PanelAdmin/ManageAdmins';
+import FormPosition from '../components/Forms/FormPosition';
 
 //const SignIn = async(() => import('../components/Authentication/SignIn'));
 //const SignUp = async(() => import('../components/Authentication/SignUp'));
@@ -68,6 +69,12 @@ export const companyRoutes = [
     layout: MainLayout,
     layoutProps: null,
     component: FormOrganization
+  },
+  {
+    path: '/form-position',
+    layout: MainLayout,
+    layoutProps: null,
+    component: FormPosition
   },
   {
     path: '/solicitudes',
