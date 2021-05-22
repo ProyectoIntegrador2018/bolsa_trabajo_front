@@ -4,7 +4,6 @@ import { Link, useHistory } from 'react-router-dom';
 //import misSolicitudesActivas from '../../testing/misSolicitudesActivas.json';
 import misSolicitudesCerradas from '../../testing/misSolicitudesCerradas.json';
 import { UserContext } from '../Authentication/UserProvider';
-import { auth} from '../../firebase';
 import { getMatches } from '../../services/matchesService';
 interface User {
   enrollmentFormId?: string;
@@ -64,7 +63,6 @@ function SolicitudesPostulante() {
   const [activeMatches, setActiveMatches] = useState<any | null>(null);
   const [pastMatches, setPastMatches] = useState<any | null>(null);
   const [isLoading, setLoading] = useState(true);
-  var misSolicitudesActivas:Array<any> = [];
 
   useEffect(() => {
     if (user) {
