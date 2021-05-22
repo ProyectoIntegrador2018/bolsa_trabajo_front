@@ -1,5 +1,6 @@
 .main-jumbotron { /* Sign in and sign up*/
-  background-color: #6b2565 !important;
+  /*background-color: #6b2565 !important;*/
+  background-color: black !important;
   color: #ffffff;
   border-radius: 0 !important;
 }
