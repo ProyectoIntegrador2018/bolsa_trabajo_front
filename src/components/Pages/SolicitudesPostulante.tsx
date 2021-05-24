@@ -4,22 +4,10 @@ import { Link, useHistory } from 'react-router-dom';
 //import misSolicitudesActivas from '../../testing/misSolicitudesActivas.json';
 import misSolicitudesCerradas from '../../testing/misSolicitudesCerradas.json';
 import { UserContext } from '../Authentication/UserProvider';
-import { getMatches } from '../../services/matchesService';
+import { getMatches, answerMatch } from '../../services/matchesService';
 interface User {
   enrollmentFormId?: string;
 };
-
-function isPending(state:any) {
-  if (state == 'pending') {
-    return (
-      <React.Fragment>
-        <Button color="success" style={{width: "100%"}} className="mb-2">Dar acceso</Button>
-        <Button color="danger" style={{width: "100%"}} className="mb-2">Rechazar</Button>
-      </React.Fragment>
-    );
-  }
-  return;
-}
 
 function typeTextSwitch(param:any) {
   switch(param) {
@@ -29,9 +17,9 @@ function typeTextSwitch(param:any) {
       return 'En proceso';
     case 'hired':
       return 'Oferta';
-    case 'nohired':
+    case 'notHired':
       return 'Cerrada';
-    case 'rejected':
+    case 'declined':
       return 'Rechazada';
     default:
       return 'Rechazada';
@@ -46,9 +34,9 @@ function typeColorSwitch(param:any) {
       return 'warning';
     case 'hired':
       return 'success';
-    case 'nohired':
+    case 'notHired':
       return 'danger';
-    case 'rejected':
+    case 'declined':
       return 'secondary';
     default:
       return 'secondary';
@@ -64,6 +52,29 @@ function SolicitudesPostulante() {
   const [pastMatches, setPastMatches] = useState<any | null>(null);
   const [isLoading, setLoading] = useState(true);
 
+  const giveAccess = useCallback(async (id: any) => {
+    //setLoading(true);
+    //await answerMatch(id, 'active'); //jobId not working
+    console.log(id);
+    //setLoading(false);
+  }, []);
+
+  const decline = useCallback(async (id: any) => {
+    console.log(id);
+  }, []);
+
+  const isPending = (state:any, id:any) => {
+    if (state == 'pending') {
+      return (
+        <React.Fragment>
+          <Button color="success" style={{width: "100%"}} className="mb-2" onClick={() => giveAccess(id)}>Dar acceso</Button>
+          <Button color="danger" style={{width: "100%"}} className="mb-2" onClick={() => decline(id)}>Rechazar</Button>
+        </React.Fragment>
+      );
+    }
+    return;
+  }
+
   useEffect(() => {
     if (user) {
       getMatches().then((data:any) => {
@@ -73,7 +84,7 @@ function SolicitudesPostulante() {
             return b.matchMetadata.createdAt - a.matchMetadata.createdAt;
           });
           setActiveMatches(_matches.filter((s:any) => s.state=== 'pending' || s.state === 'active'));
-          setPastMatches(_matches.filter((s:any) => s.state=== 'hired' || s.state === 'nohired' || s.state === 'rejected'));
+          setPastMatches(_matches.filter((s:any) => s.state=== 'hired' || s.state === 'notHired' || s.state === 'declined'));
           setLoading(false);
         }
       });
@@ -152,12 +163,12 @@ function SolicitudesPostulante() {
               return (
               <tr>
                 <td className="align-middle" style={{ width: "20%" }}>{formattedDate}</td>
-                <td className="align-middle" style={{ width: "30%" }}>{solicitud.companyName}</td>
+                <td className="align-middle" style={{ width: "30%" }}>{solicitud.company.username}</td>
                 {/*<td className="align-middle" style={{ width: "30%" }}>{solicitud.position}</td>*/}
                 <td className="align-middle" style={{ width: "25%" }}>
                   <div className={myClassName} role="alert">{typeTextSwitch(solicitud.state)}</div>
                 </td>
-                <td className="align-middle" style={{ width: "25%" }}>{isPending(solicitud.state)}</td>
+                <td className="align-middle" style={{ width: "25%" }}>{isPending(solicitud.state, solicitud.id)}</td>
               </tr>
               )
             })}
@@ -183,7 +194,7 @@ function SolicitudesPostulante() {
               return (
               <tr>
                 <td className="align-middle" style={{ width: "20%" }}>{formattedDate}</td>
-                <td className="align-middle" style={{ width: "30%" }}>{solicitud.companyName}</td>
+                <td className="align-middle" style={{ width: "30%" }}>{solicitud.company.username}</td>
                 {/*<td className="align-middle" style={{ width: "30%" }}>{solicitud.position}</td>*/}
                 <td className="align-middle" style={{ width: "25%" }}>
                   <div className={myClassName} role="alert">{typeTextSwitch(solicitud.state)}</div>
