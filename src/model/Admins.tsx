@@ -19,6 +19,15 @@ export interface AdminCreate {
     type: AdminType;
 }
 
+export interface AdminUpdate {
+    username: string;
+    email: string;
+    password?: string;
+    phoneNumber: string;
+    type: AdminType;
+    state: string;
+}
+
 export interface Admin {
     id: string,
     createdBy: string,

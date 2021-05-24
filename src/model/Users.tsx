@@ -8,7 +8,7 @@ export enum UserTypeEnum {
 }
 
 export function translateToUserType(str:string) : UserTypeEnum {
-  if(str === "company") {
+  if(str == "company") {
       return UserTypeEnum.company
   }
 

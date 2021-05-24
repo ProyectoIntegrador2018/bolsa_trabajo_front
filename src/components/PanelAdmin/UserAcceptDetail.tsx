@@ -1,28 +1,41 @@
 import styled from '@emotion/styled';
 import { Field, Formik, FormikErrors } from 'formik';
 import React, { useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useHistory, useParams } from 'react-router-dom';
 import { Button, Col, Container, Form, FormGroup, Input, Jumbotron, Modal, ModalBody, ModalHeader, Row } from 'reactstrap';
 import { translateToUserType, User, UserType } from '../../model/Users';
+import { updateUser } from '../../services/usersService';
 import UserDetail from './UserDetail';
 
-function UserAcceptDetails() {
+function UserAcceptDetails(props: any) {
     let params = useParams<{ userId: string }>();
     const userId = params.userId;
     console.log(userId);
 
-    const userInfo: User = {
-        id: "kgrkxfi",
-        username: "ricardo_lozano",
-        createdBy: "fjjfkejf",
-        type: userId === "3" ? "company" : "employee", //TODO: this is hardcode for tests, change after demo
+    const [modal, setModal] = useState(false);
+    const toggle = () => setModal(!modal);
+
+    let userInfo = {
+        id: "",
+        username: "",
+        createdBy: "",
+        type: "employee", //TODO: this is hardcode for tests, change after demo
         state: "inactive",
-        email: "user@email.com"
+        email: ""
+    };
+
+    if (props.location.state.user) {
+        userInfo = props.location.state.user;
+        console.log(userInfo)
     }
 
-    const [modal, setModal] = useState(false);
-
-    const toggle = () => setModal(!modal);
+    let history = useHistory();
+    const acceptUser = async() => {
+       await updateUser(userInfo.id, {state: "active"});
+       alert("El usuario ha sido aceptado");
+       
+       history.push("/admin/accept-users")
+    }
 
     const StyledErrorMessage = styled.div`
         color: red;
@@ -33,17 +46,17 @@ function UserAcceptDetails() {
             <Jumbotron>
                 <h1>Detalle de Usuario</h1>
             </Jumbotron>
-            <UserDetail userId={userId} userType={translateToUserType(userInfo.type)}></UserDetail>
-            <Container className="mt-5" fluid>
-                <Row className="text-center">
-                    <Col xs="6" sm="4">
-                        <Button color="secondary">Aceptar</Button>
-                    </Col>
-                    <Col xs="6" sm="4">
-                        <Button color="danger" onClick={toggle}>Rechazar</Button>
-                    </Col>
-                </Row>
-            </Container>
+            <UserDetail userId={userId} userType={translateToUserType(userInfo.type)}>
+                <Container className="mt-5" fluid>
+                    <Row>
+                        <Col xs="12" md={{ size: 8, offset: 2 }}>
+                            <Button className="mr-3" onClick={acceptUser} color="success" size="lg">Aceptar</Button>
+                            <Button color="danger" onClick={toggle} size="lg">Rechazar</Button>
+                        </Col>
+
+                    </Row>
+                </Container>
+            </UserDetail>
             <Modal isOpen={modal} toggle={toggle}>
                 <ModalHeader toggle={toggle}>Razón de Rechazo</ModalHeader>
                 <ModalBody>

@@ -4,7 +4,8 @@ import { Field, Formik, FormikErrors } from 'formik'
 import styled from '@emotion/styled';
 import { isMinAdmin, isSuperAdmin } from '../../helpers/utils/utility';
 import { UserContext } from '../Authentication/UserProvider';
-import { Admin, AdminCreate, AdminType, translateToAdminType } from '../../model/Admins';
+import { Admin, AdminCreate, AdminType, AdminUpdate, translateToAdminType } from '../../model/Admins';
+import { registerAdmin, updateUser } from '../../services/usersService';
 
 const StyledErrorMessage = styled.div`
   color: red;
@@ -13,7 +14,7 @@ const StyledErrorMessage = styled.div`
 interface RegisterAdminProps {
     admin: Admin;
     isEdit?: boolean;
-    onEdit?: () => void;
+    onEdit?: (admin: Admin) => void;
 }
 
 const validateEmail = (value: string) => {
@@ -34,7 +35,7 @@ const validatePhoneNumber = (value: string) => {
     if (!value) {
         error = 'Campo requerido';
     }
-    else if (!/^[0-9]{10}$/i.test(value)) {
+    else if (!/^(\+[0-9][0-9]?)?[0-9]{10}$/i.test(value)) {
         error = 'Formato del teléfono incorrecto (10 dígitos)'
     }
 
@@ -166,25 +167,58 @@ function RegisterAdmins(props: RegisterAdminProps) {
 
                                 validateOnBlur={true}
 
-                                onSubmit={(values, { setSubmitting }) => {
+                                onSubmit={async (values, { setSubmitting }) => {
 
                                     setSubmitting(false);
                                     values.username = values.username.trim();
                                     values.email = values.email.trim();
-                                    values.phoneNumber = "+52" + values.phoneNumber;
+                                    values.phoneNumber = values.phoneNumber[0] == '+' ? values.phoneNumber : "+52" + values.phoneNumber;
                                     values.type = adminTipo;
 
                                     if (props.isEdit) {
+                                        const updateAdmin: AdminUpdate = {
+                                            email: values.email,
+                                            type: values.type,
+                                            username: values.username,
+                                            phoneNumber: values.phoneNumber,
+                                            state: props.admin.state
+                                        }
+                                        
+                                        if(values.password.length > 0) {
+                                            updateAdmin.password = values.password;
+                                        }
+
+                                        await updateUser(props.admin.id, updateAdmin);
+                                        alert("Se ha editado el administrador");
+
                                         // TODO: post
+
+                                        if (props.onEdit) {
+                                            const editedAdmin: Admin = {
+                                                id: props.admin.id,
+                                                createdBy: props.admin.createdBy,
+                                                email: values.email,
+                                                type: values.type,
+                                                username: values.username,
+                                                phoneNumber: values.phoneNumber,
+                                                state: props.admin.state
+                                            }
+                                            props.onEdit(editedAdmin);
+                                        }
                                     }
                                     else {
+
+                                        const createAdmin: AdminCreate = values;
                                         // TODO: post
+                                        await registerAdmin(createAdmin);
+                                        alert("Se ha registrado el administrador");
                                     }
 
                                     console.log(values)
 
                                     if (props.isEdit && props.onEdit) {
-                                        props.onEdit();
+
+
                                     }
                                 }}
                             >
@@ -203,7 +237,7 @@ function RegisterAdmins(props: RegisterAdminProps) {
                                             </FormGroup>
                                             <FormGroup >
                                                 <Label htmlFor="phoneNumber">Número de Teléfono</Label>
-                                                <Input id="phoneNumber" name="phoneNumber" tag={Field} type="text" onChange={handleChange} value={values.phoneNumber} placeholder="Ejemplo: +528123456789" invalid={(typeof errors.phoneNumber !== 'undefined') && touched.phoneNumber}></Input>
+                                                <Input id="phoneNumber" name="phoneNumber" tag={Field} type="text" onChange={handleChange} value={values.phoneNumber} placeholder="Ejemplo: 8123456789" invalid={(typeof errors.phoneNumber !== 'undefined') && touched.phoneNumber}></Input>
                                                 {touched.phoneNumber && errors.phoneNumber && <StyledErrorMessage>{errors.phoneNumber}</StyledErrorMessage>}
                                             </FormGroup>
                                             <FormGroup>

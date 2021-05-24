@@ -1,43 +1,44 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { Button, Col, Container, Jumbotron, Modal, ModalBody, ModalHeader, Row, Table, UncontrolledCollapse } from 'reactstrap';
 import { isMinAdmin, isSuperAdmin } from '../../helpers/utils/utility';
-import { Admin, AdminCreate, translateToAdminType } from '../../model/Admins';
+import { Admin, AdminCreate, AdminUpdate, translateToAdminType } from '../../model/Admins';
+import { getAdmins } from '../../services/usersService';
 import { UserContext } from '../Authentication/UserProvider';
 import RegisterAdmins from './RegisterAdmins';
 
-
-
 function ManageAdmins() {
 
-    const admins: Admin[] = [
-        {
-            id: "1",
-            username: "ricardo_lozano",
-            email: 'ricardo@email.com',
-            type: "admin",
-            phoneNumber: "+528120005940",
-            createdBy: "fko4ikmdor",
-            state: "active"
-        },
-        {
-            id: "2",
-            username: "david _acevedo",
-            email: 'david@email.com',
-            type: "admin",
-            phoneNumber: "+528120005940",
-            createdBy: "fko4ikmdor",
-            state: "active"
-        },
-        {
-            id: "3",
-            username: "aaron_garcia",
-            email: 'aaron@email.com',
-            type: "superadmin",
-            phoneNumber: "+528120005940",
-            createdBy: "fko4ikmdor",
-            state: "active"
-        },
-    ]
+    
+
+    // const adminsAPI: Admin[] = [
+    //     {
+    //         id: "1",
+    //         username: "ricardo_lozano",
+    //         email: 'ricardo@email.com',
+    //         type: "admin",
+    //         phoneNumber: "+528120005940",
+    //         createdBy: "fko4ikmdor",
+    //         state: "active"
+    //     },
+    //     {
+    //         id: "2",
+    //         username: "david _acevedo",
+    //         email: 'david@email.com',
+    //         type: "admin",
+    //         phoneNumber: "+528120005940",
+    //         createdBy: "fko4ikmdor",
+    //         state: "active"
+    //     },
+    //     {
+    //         id: "3",
+    //         username: "aaron_garcia",
+    //         email: 'aaron@email.com',
+    //         type: "super-admin",
+    //         phoneNumber: "+528120005940",
+    //         createdBy: "fko4ikmdor",
+    //         state: "active"
+    //     },
+    // ]
 
 
     const { user } = useContext(UserContext);
@@ -45,7 +46,11 @@ function ManageAdmins() {
     const [modal, setModal] = useState(false);
     const toggle = () => setModal(!modal);
 
-    const emptyAdmin : Admin = {
+    const [deleteConfirmation, setDeleteConfirmation] = useState(false);
+    const toggleDeleteConfirmation = () => setDeleteConfirmation(!deleteConfirmation);
+
+    
+    const emptyAdmin: Admin = {
         id: "",
         username: "",
         email: '',
@@ -54,7 +59,36 @@ function ManageAdmins() {
         createdBy: "",
         state: ""
     }
-    const [adminEdit, setAdminEdit] = useState(emptyAdmin);
+
+    const [admins, setAdmins] = useState<Admin[]>([]);
+
+    //TODO: fix error on refresh
+    useEffect(() => {
+        const getAdminsFromAPI = async () => {
+            const adminsAPI = await getAdmins();
+            setAdmins(adminsAPI)
+        }
+        getAdminsFromAPI();
+    }, [])
+
+    const [adminEdit, setAdminEdit] = useState(0);
+
+    const updateAdmin = (index: number, admin: Admin) => {
+
+        const adminArr = [...admins];
+        adminArr[index] = admin;
+
+        setAdmins(adminArr);
+    }
+    
+    const deleteAdmin = () => {
+        //TODO: send delete to API
+
+        const adminArr = [...admins];
+        adminArr.splice(adminEdit, 1);
+  
+        setAdmins(adminArr);
+    }
 
     return (
         <React.Fragment>
@@ -77,6 +111,7 @@ function ManageAdmins() {
                                             <th>Id</th>
                                             <th>Nombre</th>
                                             <th>Correo Electrónico</th>
+                                            <th>Teléfono</th>
                                             <th>Tipo de Administrador</th>
                                             {
                                                 isSuperAdmin(user) && (
@@ -89,18 +124,16 @@ function ManageAdmins() {
 
                                         {admins.map((admin, index) => {
                                             return (
-
-
                                                 <tr key={index}>
                                                     <td>{admin.id}</td>
                                                     <td>{admin.username}</td>
                                                     <td>{admin.email}</td>
-                                                    <td>{admin.type}</td>
+                                                    <td>{admin.phoneNumber}</td>
+                                                    <td>{admin.type == "admin" ? "Administrador" : "Super Administrador"}</td>
                                                     {
                                                         isSuperAdmin(user) && (
                                                             <td className="text-center">
-                                                                <Button color="primary" onClick={() => { setAdminEdit(admin); toggle(); }}>Editar</Button>
-
+                                                                <Button color="primary" onClick={() => { setAdminEdit(index); toggle(); }}>Editar</Button>
                                                             </td>
                                                         )
                                                     }
@@ -117,8 +150,28 @@ function ManageAdmins() {
             <Container>
                 <Modal isOpen={modal} toggle={toggle} >
                     <ModalHeader toggle={toggle}>Editar Administrador</ModalHeader>
-                    <ModalBody>
-                        <RegisterAdmins admin={adminEdit} isEdit onEdit={() => { setModal(false) }} />
+                    <ModalBody >
+                        <RegisterAdmins admin={admins[adminEdit]} isEdit onEdit={(editedAdmin: Admin) => { updateAdmin(adminEdit, editedAdmin); setModal(false) }} />
+                        <Container className={`${deleteConfirmation ? 'd-none' : ''} ml-3`}>
+                            <Row >
+                                <Col md={{ size: 8, offset: 2 }} sm="12">
+                                    <Button color="danger" onClick={toggleDeleteConfirmation}>Eliminar Administrador</Button>
+                                </Col>
+                            </Row>
+                        </Container>
+                        <Container className={`${deleteConfirmation ? '' : 'd-none'} ml-3`}>
+                            <Row>
+                                <Col md={{ size: 8, offset: 2 }} sm="12">
+                                    <p>¿Seguro que desea eliminarlo?</p>
+                                </Col>
+                            </Row>
+                            <Row>
+                                <Col md={{ size: 8, offset: 2 }} sm="12">
+                                    <Button className="mr-2" color="danger" onClick={() => {deleteAdmin(); toggle();}}>Sí, eliminar</Button>
+                                    <Button onClick={toggleDeleteConfirmation}>No, Cancelar</Button>
+                                </Col>
+                            </Row>
+                        </Container>
                     </ModalBody>
                 </Modal>
             </Container>

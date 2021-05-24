@@ -1,11 +1,13 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Col, Container, Jumbotron, Row } from 'reactstrap';
 import { CompanyForm, EmployeeForm } from '../../model/Forms';
 import { UserType, UserTypeEnum } from '../../model/Users';
+import { getEnrollmentForm } from '../../services/formService';
 
 interface UserDetailProps {
     userId: string;
     userType: UserTypeEnum;
+    children: React.ReactNode
 }
 
 function EmployeeDetail(props: { enrollmentForm: EmployeeForm }) {
@@ -14,7 +16,7 @@ function EmployeeDetail(props: { enrollmentForm: EmployeeForm }) {
         <React.Fragment>
             <Container fluid>
                 <Row className="mx-auto">
-                    <Col>
+                    <Col md={{ size: 8, offset: 2 }} sm="12">
                         <h2><b>{props.enrollmentForm.nombre}</b></h2>
                     </Col>
                 </Row>
@@ -120,7 +122,7 @@ function CompanyDetail(props: { enrollmentForm: CompanyForm }) {
         <React.Fragment>
             <Container fluid>
                 <Row className="mx-auto">
-                    <Col>
+                    <Col md={{ size: 8, offset: 2 }} sm="12">
                         <h2><b>{props.enrollmentForm.nombre_empresa}</b></h2>
                     </Col>
                 </Row>
@@ -157,78 +159,102 @@ function CompanyDetail(props: { enrollmentForm: CompanyForm }) {
 
 function UserDetail(props: UserDetailProps) {
 
-    let enrollmentForm: EmployeeForm | CompanyForm;
+    const [enrollmentForm, setEnrollmentForm] = useState<EmployeeForm | CompanyForm>();
 
-    if (props.userType == UserTypeEnum.employee) {
-        // TODO: get form
-        enrollmentForm = {
-            nombre: "Ricardo Lozano Gil",
-            fecha_de_nacimiento: "25/01/1950",
-            lugar_de_nacimiento: "Monterrey",
-            calle: "Calle Falsa 123",
-            municipio: "Monterrey",
-            codigo_postal: "64790",
-            telefono_casa: "+528123456789",
-            telefono_celular: "+528123456789",
-            secciones: {
-                ultimo_ejemplo_o_actividad: {
-                    ultimo_periodo: "Ultimo año",
-                    empresa: "CEMEX",
-                    puesto: "Gerente",
-                },
-                actividad_deseada: {
-                    jornada_de_trabajo: "Completa",
-                    funcion: "Gerencial",
-                },
-
-                nivel_de_estudios: {
-                    nivel_escolar: "Licenciatura",
-                    nombre_institucion: "Tec de Monterrey",
-                    fecha_inicio: "12/06/1970",
-                    fecha_fin: "20/06/1975"
-                },
-
-                comentarios: {
-                    porque_quieres_trabajo: "Necesidad económica"
-                },
-
-                tus_habilidades_son: {
-                    habilidades: ["Administración de Proyectos"]
-                },
-
-                clasificacion_puesto: {
-                    clasificacion: "Gerente"
-                },
-
-                aceptacion_politica: {
-                    aceptacion: true
-                }
+    //TODO: fix error on refresh
+    useEffect(() => {
+        const getEnrollmentFormFromAPI = async () => {
+            const enrollmentFormAPI = await getEnrollmentForm(props.userId);
+            if (!enrollmentFormAPI || enrollmentFormAPI.message) {
+                setEnrollmentForm(undefined);
+            }
+            else {
+                setEnrollmentForm(enrollmentFormAPI)
             }
         }
-    }
-    else {
-        // TODO: get form
-        enrollmentForm = {
-            nombre_empresa: "CEMEX",
-            direccion_actual: "Calle Falsa 123, Colonia Prueba",
-            municipio: "Monterrey",
-            estado: "Nuevo León",
-            telefono_1: "+528123456789",
-            telefono_2: "+528123456789",
-            aceptacion_politica : {
-                aceptacion : true
-              }
-        }
-    }
+        getEnrollmentFormFromAPI();
+    }, [])
+
+    //if (props.userType == UserTypeEnum.employee) {
+    // TODO: get form
+
+    // enrollmentForm = {
+    //     nombre: "Ricardo Lozano Gil",
+    //     fecha_de_nacimiento: "25/01/1950",
+    //     lugar_de_nacimiento: "Monterrey",
+    //     calle: "Calle Falsa 123",
+    //     municipio: "Monterrey",
+    //     codigo_postal: "64790",
+    //     telefono_casa: "+528123456789",
+    //     telefono_celular: "+528123456789",
+    //     secciones: {
+    //         ultimo_ejemplo_o_actividad: {
+    //             ultimo_periodo: "Ultimo año",
+    //             empresa: "CEMEX",
+    //             puesto: "Gerente",
+    //         },
+    //         actividad_deseada: {
+    //             jornada_de_trabajo: "Completa",
+    //             funcion: "Gerencial",
+    //         },
+
+    //         nivel_de_estudios: {
+    //             nivel_escolar: "Licenciatura",
+    //             nombre_institucion: "Tec de Monterrey",
+    //             fecha_inicio: "12/06/1970",
+    //             fecha_fin: "20/06/1975"
+    //         },
+
+    //         comentarios: {
+    //             porque_quieres_trabajo: "Necesidad económica"
+    //         },
+
+    //         tus_habilidades_son: {
+    //             habilidades: ["Administración de Proyectos"]
+    //         },
+
+    //         clasificacion_puesto: {
+    //             clasificacion: "Gerente"
+    //         },
+
+    //         aceptacion_politica: {
+    //             aceptacion: true
+    //         }
+    //     }
+    // }
+    // }
+    // else {
+    //     // TODO: get form
+    //     enrollmentForm = {
+    //         nombre_empresa: "CEMEX",
+    //         direccion_actual: "Calle Falsa 123, Colonia Prueba",
+    //         municipio: "Monterrey",
+    //         estado: "Nuevo León",
+    //         telefono_1: "+528123456789",
+    //         telefono_2: "+528123456789",
+    //         aceptacion_politica : {
+    //             aceptacion : true
+    //           }
+    //     }
+    // }
 
     return (
         <React.Fragment>
             {
-                props.userType == UserTypeEnum.employee ? (
-                    <EmployeeDetail enrollmentForm={enrollmentForm as EmployeeForm} />
+                enrollmentForm ? (
+                    <div>
+                        {props.userType == UserTypeEnum.employee ? (<EmployeeDetail enrollmentForm={enrollmentForm as EmployeeForm} />) : (<CompanyDetail enrollmentForm={enrollmentForm as CompanyForm} />)}
+                        {props.children}
+                    </div>
                 ) :
                     (
-                        <CompanyDetail enrollmentForm={enrollmentForm as CompanyForm} />
+                        <Container className="text-center">
+                            <Row>
+                                <Col>
+                                    <h2>Error: No se pudo acceder a la información. Intente de nuevo más tarde</h2>
+                                </Col>
+                            </Row>
+                        </Container>
                     )
             }
         </React.Fragment>
