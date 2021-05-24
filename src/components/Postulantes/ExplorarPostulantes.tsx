@@ -2,6 +2,7 @@ import React, {useContext, useState, useCallback, useEffect} from 'react';
 import { Table, Row, Col, Button } from 'reactstrap';
 import { Link, useHistory } from 'react-router-dom';
 import municipios from "../../shared/municipios";
+import puestos from "../../shared/puestos";
 import { getEmployeesFiltered } from '../../services/employeeService';
 import { useFormik, Formik, Field, useFormikContext } from "formik";
 import { Form, Input, Jumbotron, Label, FormGroup, CustomInput } from "reactstrap";
@@ -13,36 +14,71 @@ function ExplorarPostulantes() {
 
   const [isLoading, setLoading] = useState(true);
   const [employees, setEmployees] = useState<any | null>(null);
+  const [targetValues, setTargetValues] = useState<any>(['-']);
 
   useEffect(() => {
     if (user) {
-      getEmployeesFiltered({field: "municipio", operator: "==", target: "Monterrey"}).then((data:any) => {
-        if (data) {
+      getEmployeesFiltered({field: "municipio", operator: "==", target: ""}).then((data:any) => {
+        if (data && data.users) {
           setEmployees(data);
-          setLoading(false);
         }
+        setLoading(false);
       });
     }
   }, [user]);
 
-  const myHandleChange = (e:any) => {
-    const selectedField = e.target.value;
-    console.log(selectedField);
-  }
-
-
-
   const formik = useFormik({
     initialValues: {
-      field: 'municipio',
+      field: '',
       operator: '==',
-      target: 'Monterrey'
+      target: ''
     },
     onSubmit: async (values) => {
-      const result = await getEmployeesFiltered(values);
-      setEmployees(result);
+      setLoading(true);
+      console.log(values);
+      getEmployeesFiltered(values).then((data:any) => {
+        console.log("Data: ", data);
+        if (data && data.users) {
+          setEmployees(data);
+          setLoading(false);
+        } else {
+          setEmployees(null);
+        }
+        setLoading(false);
+      });
     },
   });
+
+  useEffect(() => {
+    formik.values.target = 'empty';
+    switch (formik.values.field) {
+      case 'empty':
+        //formik.values.target = '-';
+        setTargetValues([]);
+        break;
+      case 'municipio':
+        //formik.values.target = municipios[0];
+        setTargetValues(municipios);
+        break;
+      case 'secciones.clasificacion_puesto.clasificacion':
+        //formik.values.target = puestos[0];
+        setTargetValues(puestos);
+        break;
+      case 'secciones.actividad_deseada.jornada_de_trabajo':
+        let jornadas = ['Parcial', 'Completa'];
+        //formik.values.target = jornadas[0];
+        setTargetValues(jornadas);
+        break;
+      case 'secciones.nivel_de_estudios.nivel_escolar':
+        let nivelEscolar = ['Primaria', 'Secundaria', 'Técnica o Bachillerato', 'Profesional', 'Maestría o Doctorado'];
+        //formik.values.target = nivelEscolar[0];
+        setTargetValues(nivelEscolar);
+        break;
+      default:
+        //formik.values.target = '-';
+        setTargetValues(['-']);
+    }
+  }, [formik.values.field]);
 
   if (isLoading) {
     return (
@@ -77,6 +113,7 @@ function ExplorarPostulantes() {
             <Col md={{size: 4}} sm={{size: 4}}>
             <FormGroup>
               <CustomInput type="select" id="field" name="field" onChange={formik.handleChange} value={formik.values.field}>
+                <option value="empty">-</option>
                 <option value="municipio">Municipio</option>
                 <option value="secciones.actividad_deseada.jornada_de_trabajo">Jornada de trabajo</option>
                 <option value="secciones.clasificacion_puesto.clasificacion">Puesto deseado</option>
@@ -86,10 +123,11 @@ function ExplorarPostulantes() {
             </Col>
             <Col md={{size: 4}} sm={{size: 4}}>
             <FormGroup>
-              <CustomInput type="select" id="target" name="target" onChange={formik.handleChange} value={formik.values.field}>
-                {municipios.map((municipio) => {
-                  return <option value={municipio}>{municipio}</option>;
-                })}
+              <CustomInput type="select" id="target" name="target" onChange={formik.handleChange} value={formik.values.target}>
+                  <option value="empty" disabled selected>-</option>
+                {targetValues.map((value:any) => {
+                  return <option value={value}>{value}</option>;
+                })};
               </CustomInput>
             </FormGroup>
             </Col>

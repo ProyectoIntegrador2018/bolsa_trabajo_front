@@ -14,9 +14,9 @@ function typeTextSwitch(param:any) {
       return 'En proceso';
     case 'hired':
       return 'Oferta';
-    case 'nohired':
+    case 'notHired':
       return 'Cerrada';
-    case 'rejected':
+    case 'declined':
       return 'Rechazada';
     default:
       return 'Rechazada';
@@ -31,9 +31,9 @@ function typeColorSwitch(param:any) {
       return 'warning';
     case 'hired':
       return 'success';
-    case 'nohired':
+    case 'notHired':
       return 'danger';
-    case 'rejected':
+    case 'declined':
       return 'secondary';
     default:
       return 'secondary';
@@ -53,11 +53,12 @@ function SolicitudesEmpresa() {
         getMatches().then((data:any) => {
           if (data) {
             let _matches = data.matches;
+            console.log(_matches);
             _matches.sort((a:any, b:any) => {
               return b.matchMetadata.createdAt - a.matchMetadata.createdAt;
             });
             setActiveMatches(_matches.filter((s:any) => s.state=== 'pending' || s.state === 'active'));
-            setPastMatches(_matches.filter((s:any) => s.state=== 'hired' || s.state === 'nohired' || s.state === 'rejected'));
+            setPastMatches(_matches.filter((s:any) => s.state=== 'hired' || s.state === 'notHired' || s.state === 'declined'));
             setLoading(false);
           }
         });
@@ -103,7 +104,7 @@ function SolicitudesEmpresa() {
                 return (
                 <tr>
                   <td className="align-middle" style={{ width: "20%" }}>{formattedDate}</td>
-                  <td className="align-middle" style={{ width: "30%" }}>{solicitud.employeeName}</td>
+                  <td className="align-middle" style={{ width: "30%" }}>{solicitud.employee.username}</td>
                   {/*<td className="align-middle" style={{ width: "30%" }}>{solicitud.position}</td>*/}
                   <td className="align-middle" style={{ width: "25%" }}>
                     <div className={myClassName} role="alert">{typeTextSwitch(solicitud.state)}</div>
@@ -136,7 +137,7 @@ function SolicitudesEmpresa() {
                 return (
                 <tr>
                   <td className="align-middle" style={{ width: "20%" }}>{formattedDate}</td>
-                  <td className="align-middle" style={{ width: "30%" }}>{solicitud.employeeName}</td>
+                  <td className="align-middle" style={{ width: "30%" }}>{solicitud.employee.username}</td>
                   {/*<td className="align-middle" style={{ width: "30%" }}>{solicitud.position}</td>*/}
                   <td className="align-middle" style={{ width: "25%" }}>
                     <div className={myClassName} role="alert">{typeTextSwitch(solicitud.state)}</div>
