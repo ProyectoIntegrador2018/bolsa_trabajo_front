@@ -1,21 +1,56 @@
-import React from 'react';
+import React, {useContext, useState, useCallback, useEffect} from 'react';
 import { Table, Row, Col, Button } from 'reactstrap';
 import { Link, useHistory, useParams } from 'react-router-dom';
 import listaPostulantes from '../../testing/detallesPostulantes.json'
+import { getEmployeeDetail } from '../../services/employeeService';
+import { postMatch } from '../../services/matchesService';
+import { UserContext } from '../Authentication/UserProvider';
 
 function DetallePostulante() {
 
   const { id } = useParams<{ id: any }>();
+  const { user } = useContext(UserContext);
 
-  const postulante = listaPostulantes.find(p => p.userId == id);
-  if (!postulante) {
+  const [userInfo, setUserInfo] = useState<any | null>(null);
+  const [isLoading, setLoading] = useState(true);
+
+  const extenderOferta = useCallback(async () => {
+    setLoading(true);
+    console.log("Extender Oferta");
+    await postMatch(id, 'cY3HbirgbLMBQeKoiuJG', 'TEST'); // ToDo: get jobId, description from user input
+    setLoading(false);
+  }, []);
+
+  useEffect(() => {
+    getEmployeeDetail(id).then((data:any) => {
+      if (data && data.enrollmentForm) {
+        setUserInfo(data.enrollmentForm);
+        setLoading(false);
+      }
+    });
+  }, [user]);
+
+  if (isLoading) {
+    return (
+      <React.Fragment>
+        <Row className="mx-auto">
+          <Col style={{ textAlign: "center" }} md={{size: 12}} sm={{size: 12}}>
+            <div className="spinner-border" role="status">
+              <span className="sr-only">Loading...</span>
+            </div>
+          </Col>
+        </Row>
+      </React.Fragment>
+    );
+  }
+
+  if (!userInfo) {
     return (
       <React.Fragment>
         <h1>404. Not found.</h1>
       </React.Fragment>
     )
   }
-  const enrollmentForm = postulante.enrollmentForm;
   return (
     <React.Fragment>
       <Row className="mx-auto">
@@ -24,13 +59,13 @@ function DetallePostulante() {
             <div className="backbtn mt-0 mt-sm-4 mt-md-4"></div>
           </Link>
         </Col>
-        <Col md={{size: 4, offset: -1}} sm={{size: 12}}>
+        <Col md={{size: 5, offset: -1}} sm={{size: 12}}>
           <h3 className="mb-2 mt-4 mt-sm-4 mt-md-0 text-muted">Detalle de:</h3>
-          <h1 className="display-4">{enrollmentForm.nombre}</h1>
+          <h1 className="display-4">{userInfo.nombre}</h1>
         </Col>
-        <Col md={{size: 4, offset: 1}} sm={{size: 12}}>
+        <Col className="text-center" md={{size: 3, offset: 1}} sm={{size: 12}}>
           <br/>
-          <Button>Extender oferta</Button>
+          <Button color="primary" className="w-100 mw-200" onClick={() => extenderOferta()}>Extender oferta</Button>
         </Col>
       </Row>
       <Row className="mx-auto">
@@ -40,19 +75,19 @@ function DetallePostulante() {
           <dl className="row">
 
             <dt className="col-sm-4">Dirección actual:</dt>
-            <dd className="col-sm-8">{enrollmentForm.calle + ", " + enrollmentForm.municipio + ", " + enrollmentForm.codigo_postal}</dd>
+            <dd className="col-sm-8">{userInfo.calle + ", " + userInfo.municipio + ", " + userInfo.codigo_postal}</dd>
 
             <dt className="col-sm-4">Fecha de nacimiento:</dt>
-            <dd className="col-sm-8">{enrollmentForm.fecha_de_nacimiento}</dd>
+            <dd className="col-sm-8">{userInfo.fecha_de_nacimiento}</dd>
 
             <dt className="col-sm-4">Lugar de nacimiento:</dt>
-            <dd className="col-sm-8">{enrollmentForm.lugar_de_nacimiento}</dd>
+            <dd className="col-sm-8">{userInfo.lugar_de_nacimiento}</dd>
 
             <dt className="col-sm-4">Telefono casa:</dt>
-            <dd className="col-sm-8">{enrollmentForm.telefono_casa}</dd>
+            <dd className="col-sm-8">{userInfo.telefono_casa}</dd>
 
             <dt className="col-sm-4">Telefono celular:</dt>
-            <dd className="col-sm-8">{enrollmentForm.telefono_celular}</dd>
+            <dd className="col-sm-8">{userInfo.telefono_celular}</dd>
           </dl>
 
           <hr></hr>
@@ -60,16 +95,16 @@ function DetallePostulante() {
           <dl className="row">
 
             <dt className="col-sm-4">Ultimo Periodo:</dt>
-            <dd className="col-sm-8">{enrollmentForm.secciones!.ultimo_ejemplo_o_actividad!.ultimo_periodo}</dd>
+            <dd className="col-sm-8">{userInfo.secciones!.ultimo_ejemplo_o_actividad!.ultimo_periodo}</dd>
 
             <dt className="col-sm-4">Empresa:</dt>
-            <dd className="col-sm-8">{enrollmentForm.secciones!.ultimo_ejemplo_o_actividad!.empresa}</dd>
+            <dd className="col-sm-8">{userInfo.secciones!.ultimo_ejemplo_o_actividad!.empresa}</dd>
 
             <dt className="col-sm-4">Puesto:</dt>
-            <dd className="col-sm-8">{enrollmentForm.secciones!.ultimo_ejemplo_o_actividad!.puesto}</dd>
+            <dd className="col-sm-8">{userInfo.secciones!.ultimo_ejemplo_o_actividad!.puesto}</dd>
 
             <dt className="col-sm-4">Responsabilidad:</dt>
-            <dd className="col-sm-8">{enrollmentForm.secciones!.ultimo_ejemplo_o_actividad!.responsabilidad}</dd>
+            <dd className="col-sm-8">{userInfo.secciones!.ultimo_ejemplo_o_actividad!.responsabilidad}</dd>
           </dl>
 
           <hr></hr>
@@ -77,38 +112,38 @@ function DetallePostulante() {
           <dl className="row">
 
             <dt className="col-sm-4">Jornada de trabajo:</dt>
-            <dd className="col-sm-8">{enrollmentForm.secciones!.actividad_deseada!.jornada_de_trabajo}</dd>
+            <dd className="col-sm-8">{userInfo.secciones!.actividad_deseada!.jornada_de_trabajo}</dd>
 
             <dt className="col-sm-4">Función:</dt>
-            <dd className="col-sm-8">{enrollmentForm.secciones!.actividad_deseada!.funcion}</dd>
+            <dd className="col-sm-8">{userInfo.secciones!.actividad_deseada!.funcion}</dd>
 
             <dt className="col-sm-4">Capacitación o entrenamiento:</dt>
-            <dd className="col-sm-8">{enrollmentForm.secciones!.actividad_deseada!.capacitacion_o_entrenamiento}</dd>
+            <dd className="col-sm-8">{userInfo.secciones!.actividad_deseada!.capacitacion_o_entrenamiento}</dd>
 
             <dt className="col-sm-4">Consultoría:</dt>
-            <dd className="col-sm-8">{enrollmentForm.secciones!.actividad_deseada!.consultoria}</dd>
+            <dd className="col-sm-8">{userInfo.secciones!.actividad_deseada!.consultoria}</dd>
 
             <dt className="col-sm-4">Coaching:</dt>
-            <dd className="col-sm-8">{enrollmentForm.secciones!.actividad_deseada!.coaching}</dd>
+            <dd className="col-sm-8">{userInfo.secciones!.actividad_deseada!.coaching}</dd>
           </dl>
 
           <hr></hr>
           <h4 className="mb-3">Nivel de estudios</h4>
           <dl className="row">
             <dt className="col-sm-4">Nivel Escolar:</dt>
-            <dd className="col-sm-8">{enrollmentForm.secciones!.nivel_de_estudios!.nivel_escolar}</dd>
+            <dd className="col-sm-8">{userInfo.secciones!.nivel_de_estudios!.nivel_escolar}</dd>
             <dt className="col-sm-4">Institución:</dt>
-            <dd className="col-sm-8">{enrollmentForm.secciones!.nivel_de_estudios!.nombre_institucion}</dd>
+            <dd className="col-sm-8">{userInfo.secciones!.nivel_de_estudios!.nombre_institucion}</dd>
             <dt className="col-sm-4">Fecha de Inicio:</dt>
-            <dd className="col-sm-8">{enrollmentForm.secciones!.nivel_de_estudios!.fecha_inicio}</dd>
+            <dd className="col-sm-8">{userInfo.secciones!.nivel_de_estudios!.fecha_inicio}</dd>
             <dt className="col-sm-4">Fecha de Fin:</dt>
-            <dd className="col-sm-8">{enrollmentForm.secciones!.nivel_de_estudios!.fecha_fin}</dd>
+            <dd className="col-sm-8">{userInfo.secciones!.nivel_de_estudios!.fecha_fin}</dd>
           </dl>
 
           <hr></hr>
           <h4 className="mb-3">Habilidades</h4>
           <ul>
-          {enrollmentForm.secciones!.tus_habilidades_son!.habilidades.map((habilidad, index) => {
+          {userInfo.secciones!.tus_habilidades_son!.habilidades.map((habilidad:any, index:number) => {
             return <li>{habilidad}</li>;
           })}
           </ul>
@@ -117,7 +152,7 @@ function DetallePostulante() {
           <dl className="row">
 
             <dt className="col-sm-4">¿Por qué quieres trabajo?</dt>
-            <dd className="col-sm-8">{enrollmentForm.secciones!.comentarios!.porque_quieres_trabajo}</dd>
+            <dd className="col-sm-8">{userInfo.secciones!.comentarios!.porque_quieres_trabajo}</dd>
           </dl>
         </Col>
       </Row>
