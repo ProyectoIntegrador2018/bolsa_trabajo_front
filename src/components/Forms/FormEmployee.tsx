@@ -27,7 +27,7 @@ const validEmployeeInfoSchema = Yup.object().shape({
   schoolName: Yup.string().required('Requerido'),
   schoolStartDate: Yup.date().required('Requerido'),
   schoolEndDate: Yup.date().min(Yup.ref('schoolStartDate'),"La fecha de fin de estudios no puede ser antes que la fecha de inicio").required('Campo requerido'),
-  abilities: Yup.array().length(1,'Eligir al menos una de las habilidades en la lista'),
+  abilities: Yup.array().min(1,'Eligir al menos una de las habilidades en la lista'),
   classification: Yup.string().required('Requerido'),
   TandA: Yup.bool().isTrue('Debe aceptar la politica de privacidad')
 });

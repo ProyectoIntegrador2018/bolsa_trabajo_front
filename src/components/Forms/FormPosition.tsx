@@ -13,7 +13,7 @@ const validPositionInfoSchema = Yup.object().shape({
   !!(value.training || value.consulting || value.coaching)),
   abilities: Yup.object().test('at-least-one-activity', "Llenar al menos un recuadro de descripcion de habilidades", value =>
   !!(value.machineOperationDescription || value.technicalKnowledgeDescription || value.computingEquimentKnowledge || value.programmingKnowledge || value.logicKnowledge || value.numericKnowledge)),
-  competences: Yup.array().length(1,'Eligir al menos una de las competencias en la lista'),
+  competences: Yup.array().min(1,'Eligir al menos una de las competencias en la lista'),
 });
 
 function generateOrganizationEnrollmentDocument(values: { jobTitle: any; worktime: any; jobFunction: any; desiredActivity: any; abilities?: { machineOperationDescription: string; technicalKnowledgeDescription: string; computingEquimentKnowledge: string; programmingKnowledge: string; logicKnowledge: string; numericKnowledge: string; professionalTitle: string; }; competences: any; technicalKnowledgeDescription?: any; computingEquimentKnowledge?: any; programmingKnowledge?: any; logicKnowledge?: any; numericKnowledge?: any; }) {
