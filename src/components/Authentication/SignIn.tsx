@@ -12,7 +12,6 @@ function SignIn() {
   const signInWithEmailAndPasswordHandler = async ({ email, password }: any) => {
     try {
       await authenticationService.login({email, password});
-      history.push('/');
     } catch (error) {
       Swal.fire(createErrorOptions(error));
     }
@@ -30,7 +29,7 @@ function SignIn() {
 
   return (
       <React.Fragment>
-          <Jumbotron>
+          <Jumbotron className="main-jumbotron">
             <Row className="justify-content-center">
               <img src="logoIEPAM_Blanco.png" height="110" width="180"/>
             </Row>
@@ -38,6 +37,8 @@ function SignIn() {
           <Row className="mx-auto">
             <Col md={{size: 4, offset: 4}} sm={{size: 12}}>
               <Form onSubmit={formik.handleSubmit}>
+                <h2>Iniciar sesión</h2>
+                <hr></hr>
                 <FormGroup>
                   <Label htmlFor="email" >Email</Label>
                   <Input type="text" id="email" name="email" onChange={formik.handleChange} value={formik.values.email}></Input>
@@ -47,11 +48,11 @@ function SignIn() {
                   <Input type="password" id="password" name="password" onChange={formik.handleChange} value={formik.values.password}></Input>
                 </FormGroup>
                 <FormGroup>
-                    <Button type="submit" value="submit" color="primary" className="mr-4">Iniciar Sesion</Button>
+                    <Button type="submit" value="submit" color="primary" className="mr-4 signbtn">Iniciar Sesión</Button>
                 </FormGroup>
-                <FormGroup>
-                    <Link to="/register">Registrarse</Link>
-                </FormGroup>
+                <div className="text-center">
+                  <p>¿No estás registrado? <Link to="/register">Crea una cuenta</Link></p>
+                </div>
               </Form>
             </Col>
           </Row>

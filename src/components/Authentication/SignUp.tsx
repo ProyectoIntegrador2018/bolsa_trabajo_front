@@ -1,5 +1,5 @@
 import React from 'react';
-import { Form, Row, Col, Button, Input, Jumbotron, Label, FormGroup } from "reactstrap";
+import { Form, Row, Col, Button, Input, Jumbotron, Label, FormGroup, CustomInput } from "reactstrap";
 import { useFormik } from "formik";
 import { Link, useHistory } from 'react-router-dom';
 import { authenticationService, RegisterData } from '../../services/authentication';
@@ -9,9 +9,9 @@ const SignUp = () => {
 
   const history = useHistory();
 
-  const createUserWithEmailAndPasswordHandler = async ({ name, email, password}: any) => {
+  const createUserWithEmailAndPasswordHandler = async ({ name, email, password, phoneNumber}: any) => {
     const type: UserType = {type: 'employee'};
-    const data: RegisterData = {name, email, password, type};
+    const data: RegisterData = {name, email, password, type, phoneNumber};
       try {
         await authenticationService.register(data);
         history.push('/'); // redirect to login
@@ -24,7 +24,9 @@ const SignUp = () => {
     initialValues: {
       name: '',
       email: '',
-      password: ''
+      password: '',
+      phoneNumber: '',
+      type: ''
     },
     onSubmit: values => {
       createUserWithEmailAndPasswordHandler(values);
@@ -33,7 +35,7 @@ const SignUp = () => {
 
   return (
     <React.Fragment>
-          <Jumbotron>
+          <Jumbotron className="main-jumbotron">
             <Row className="justify-content-center">
               <img src="logoIEPAM_Blanco.png" height="110" width="180"/>
             </Row>
@@ -41,6 +43,8 @@ const SignUp = () => {
           <Row className="mx-auto">
             <Col md={{size: 4, offset: 4}} sm={{size: 12}}>
               <Form onSubmit={formik.handleSubmit}>
+                <h2>Registro</h2>
+                <hr></hr>
                 <FormGroup>
                   <Label htmlFor="name" >Nombre</Label>
                   <Input type="text" id="name" name="name" onChange={formik.handleChange} value={formik.values.name}></Input>
@@ -54,11 +58,22 @@ const SignUp = () => {
                   <Input type="password" id="password" name="password" onChange={formik.handleChange} value={formik.values.password}></Input>
                 </FormGroup>
                 <FormGroup>
-                    <Button type="submit" value="submit" color="primary" className="mr-4">Crear Usuario</Button>
+                  <Label htmlFor="phoneNumber" >Teléfono</Label>
+                  <Input type="text" id="phoneNumber" name="phoneNumber" onChange={formik.handleChange} value={formik.values.phoneNumber}></Input>
                 </FormGroup>
                 <FormGroup>
-                    <Link to="/">Iniciar Sesión</Link>
+                  <Label htmlFor="type" >Tipo de cuenta</Label>
+                  <CustomInput type="select" id="type" name="type" onChange={formik.handleChange} value={formik.values.type}>
+                    <option value="employee">Empleado</option>
+                    <option value="company">Organización</option>
+                  </CustomInput>
                 </FormGroup>
+                <FormGroup>
+                    <Button type="submit" value="submit" color="primary" className="mr-4 signbtn">Crear Usuario</Button>
+                </FormGroup>
+                <div className="text-center">
+                    <p>¿Ya te registraste? <Link to="/">Inicia sesión</Link></p>
+                </div>
               </Form>
             </Col>
           </Row>

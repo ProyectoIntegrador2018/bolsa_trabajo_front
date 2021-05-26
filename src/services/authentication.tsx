@@ -15,12 +15,14 @@ export interface LoginData {
 export interface RegisterData extends LoginData {
   name: string,
   type: UserType,
+  password: string,
+  phoneNumber: string
 };
 
 async function register(data: RegisterData) {
-  let {name, email, password, type} = data;
-  let { user } = await auth.createUserWithEmailAndPassword(email, password);
-  return generateUserDocument(user, {name, type});
+  let {name, email, password, type, phoneNumber} = data;
+  await generateUserDocument({name, email, password, type, phoneNumber});
+  return auth.signInWithEmailAndPassword(email, password);
 }
 
 async function login(data: LoginData) {

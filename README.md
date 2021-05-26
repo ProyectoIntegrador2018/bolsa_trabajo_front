@@ -64,17 +64,23 @@ $ git clone https://github.com/ProyectoIntegrador2018/bolsa_trabajo_front.git
 
 ### Running the stack for Development
 
+1. Run the following command to install all the necessary dependencies:
+
 ```bash
 $ npm install
 ```
 
+2. Run the following command to run the program.
 ```bash
 $ npm run start
 ```
 
 ### Stop the project
 
-TBD
+1. You can stop the project in the terminal with the command
+```bash
+Control + C
+```
 
 
 ### Debugging

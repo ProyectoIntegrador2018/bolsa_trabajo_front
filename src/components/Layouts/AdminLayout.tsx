@@ -1,49 +1,73 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
-import { Row, Col } from 'reactstrap';
-import styled from '@emotion/styled';
+import React, { useContext, useState } from 'react';
+import { Link, } from 'react-router-dom';
+import { Button, Collapse, Container, Nav, Navbar, NavbarBrand, NavbarToggler, NavItem, NavLink } from 'reactstrap';
+import { isMinAdmin, isSuperAdmin } from '../../helpers/utils/utility';
+import { authenticationService } from '../../services/authentication';
+import { UserContext } from '../Authentication/UserProvider';
 
 
 function AdminLayout({ children }: any) {
+    const { user } = useContext(UserContext);
 
-    const StyledLink = styled.div`
-        color: black;
-    `
+    const logout = async () => {
+        await authenticationService.logout();
+    }
+
+    const [isOpen, setIsOpen] = useState(false);
+
+    const toggle = () => setIsOpen(!isOpen);
 
     return (
-        <React.Fragment>
-            <Row>
-                <Col xs="12" md="2">
-                    <Row className="mt-3">
-                        <Col>
-                            <h4>Administradores</h4>
-                            <hr></hr>
-                        </Col>
-                    </Row>
-                    <Row>
-                        <Col xs="4" md="12" className="my-3">
-                            <Link to="/admin/accept-users">
-                                <StyledLink>Usuarios Por Aceptar</StyledLink>
+        <div>
+            {
+                isMinAdmin(user) ? (
+                    <div>
+                        <Navbar expand="md" className="py-4 px-5 navbar navbar-dark">
+                            <Link to="/admin" style={{ textDecoration: 'none' }}>
+                                <NavbarBrand href="/">Bolsa de Trabajo</NavbarBrand>
                             </Link>
-                        </Col>
-                        <Col xs="4" md="12" className="my-3">
-                            <Link to="/admin/register-admins">
-                            <StyledLink>Registrar Administrador</StyledLink>
-                            </Link>
-                        </Col>
-                        <Col xs="4" md="12" className="my-3">
-                            <Link to="/admin/manage-admins">
-                            <StyledLink>Gestionar Administradores</StyledLink>
-                            </Link>
-                        </Col>
-                    </Row>
-                </Col>
-                <Col xs="12" md="10">
-                    {children}
-                </Col>
-            </Row>
-        </React.Fragment>
-    )
+
+                            <NavbarToggler onClick={toggle} />
+                            <Collapse isOpen={isOpen} navbar>
+                                <Nav className="mr-auto" navbar>
+                                    <NavItem>
+                                        <Link to="/admin/accept-users" style={{ textDecoration: 'none' }}>
+                                            <NavLink>Aceptar Usuarios</NavLink>
+                                        </Link>
+                                    </NavItem>
+
+                                    {isSuperAdmin(user) && (
+                                        <NavItem>
+                                            <Link to="/admin/register-admins" style={{ textDecoration: 'none' }}>
+                                                <NavLink>Registrar Administrador</NavLink>
+                                            </Link>
+                                        </NavItem>
+
+                                    )}
+
+                                    <NavItem>
+                                        <Link to="/admin/manage-admins" style={{ textDecoration: 'none' }}>
+                                            <NavLink>Gestionar Administradores</NavLink>
+                                        </Link>
+                                    </NavItem>
+                                </Nav>
+                                <Button outline onClick={logout} color="light">
+                                    Cerrar sesión
+                    </Button>
+                            </Collapse>
+                        </Navbar>
+                        <div className="p-5">
+                            {children}
+                        </div>
+                    </div>
+                ) :
+                    (
+                        <h1>Acceso Denegado: Solo Administradores</h1>
+                    )
+            }
+        </div>
+
+    );
 }
 
 export default AdminLayout;

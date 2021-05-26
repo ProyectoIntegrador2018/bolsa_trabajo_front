@@ -1,67 +1,58 @@
 [
   {
-    "id": 1,
-    "nombre": "David Acevedo",
-    "direccion_actual": "Abasolo",
-    "fecha_de_nacimiento": "31/12/1945",
-    "lugar_de_nacimiento": "Brasilia",
-    "telefono_casa": "81897324823",
-    "telefono_celular": "818182913",
-    "secciones": {
-      "ultimo_empleo_o_actividad": {
-        "empresa": "FEMSA",
-        "puesto": "Desarrollador",
-        "responsabilidad": "-",
-        "ultimo_anio": "FEMSA",
-        "ultimos_tres_anios": "Google, Facebook, Twitter"
-      },
-      "tus_habilidades_son": ["habilidad0","habilidad1","habilidad2"],
-      "nivel_de_estudios": {
-        "primaria": {
-          "fechas": null,
-          "institucion": null
+    "userId": "pZmKDehcEdWE6xR3cU4cdgk7ynp1",
+    "enrollmentForm": {
+      "nombre": "Employee Test",
+      "fecha_de_nacimiento": "20/12/1963",
+      "lugar_de_nacimiento": "Monterrey",
+      "calle": "Eugenio Garza Sada #8132",
+      "municipio": "Monterrey",
+      "codigo_postal": "66766",
+      "telefono_casa": "+5219045874",
+      "telefono_celular": "+528112121212",
+      "secciones": {
+
+        "ultimo_ejemplo_o_actividad": {
+          "ultimo_periodo": "Ultimo año",
+          "empresa": "John Deere",
+          "puesto": "CEO",
+          "responsabilidad": ""
         },
-        "secundaria": {
-          "fechas": null,
-          "institucion": null
+
+        "actividad_deseada": {
+          "jornada_de_trabajo": "Parcial",
+          "funcion": "Operativa",
+          "capacitacion_o_entrenamiento": "Operativa",
+          "consultoria": "Ejecutiva",
+          "coaching": "Ejecutiva"
         },
-        "tecnica_o_bachillerato": {
-          "fechas": null,
-          "institucion": null
+
+        "nivel_de_estudios": {
+          "nivel_escolar": "Profesional",
+          "nombre_institucion": "ITESM",
+          "fecha_inicio": "20/08/1970",
+          "fecha_fin": "30/06/1975"
         },
-        "profesional": {
-          "fechas": null,
-          "institucion": null
+
+        "comentarios": {
+          "porque_quieres_trabajo": "Porque necesito dinero"
         },
-        "maestria_o_doctorado": {
-          "fechas": null,
-          "institucion": null
+
+        "tus_habilidades_son": {
+          "habilidades": ["Hacer equipo", "Conciliador", "Innovador"]
+        },
+
+        "clasificacion_puesto" : {
+          "clasificacion": "Director General"
+        },
+
+        "aceptacion_politica" : {
+          "aceptacion" : true
         }
-      },
-      "actividad_deseada": {
-        "capacitación_o_entrenamiento": "Operativa",
-        "coaching": "Operativa",
-        "consultoria": "Ejecutiva",
-        "funcion": "Contable",
-        "jornada_de_trabajo": "Completa"
-      },
-      "comentarios": {
-        "porque_quieres_trabajo": "Para trabajar"
       }
+    },
+    "enrollmentMetadata": {
+      "createdAt": 1618622307
     }
-  },
-  {
-    "id": 2,
-    "nombre": "Luis Felipe Miranda",
-    "direccion_actual": "Agualeguas",
-    "fecha_de_nacimiento": "01/10/1957",
-    "lugar_de_nacimiento": "Munich"
-  },
-  {
-    "id": 3,
-    "nombre": "Ricardo Lozano",
-    "direccion_actual": "Allende",
-    "fecha_de_nacimiento": "19/07/1964",
-    "lugar_de_nacimiento": "Tokyo"
   }
 ]
