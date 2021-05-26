@@ -16,7 +16,7 @@ export const getMatches = async () => {
     );
     return res.data;
   } catch (error) {
-    console.error("Error fetching user", error);
+    console.error("Error getting matches", error);
   }
 };
 
@@ -38,6 +38,29 @@ export const answerMatch = async (id:string, state:string) => {//, jobId:string)
     );
     return res.data;
   } catch (error) {
-    console.error("Error fetching user", error);
+    console.error("Error answering match", error);
+  }
+};
+
+export const postMatch = async (employeeId:string, jobId:string, description:string) => {//, jobId:string) => {
+  try {
+    const token = await auth.currentUser?.getIdToken();
+    const res = await axios.post(
+      config.apiUrl + '/api/match/',
+      {
+        employeeId,
+        jobId,
+        description
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        },
+      }
+    );
+    return res.data;
+  } catch (error) {
+    console.error("Error creating match", error);
   }
 };
