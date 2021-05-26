@@ -1,11 +1,19 @@
 import styled from '@emotion/styled';
 import { Field, Formik, FormikErrors } from 'formik';
 import React, { useState } from 'react';
-import { useHistory, useParams } from 'react-router-dom';
+import { Link, useHistory, useParams } from 'react-router-dom';
 import { Button, Col, Container, Form, FormGroup, Input, Jumbotron, Modal, ModalBody, ModalHeader, Row } from 'reactstrap';
-import { translateToUserType, User, UserType } from '../../model/Users';
+import { translateToUserType } from '../../model/Users';
 import { updateUser } from '../../services/usersService';
 import UserDetail from './UserDetail';
+
+function createEmailLink(accepted: boolean, email: string, feedback?: string) {
+    if (accepted) {
+        return "mailto:" + email + "?subject=Aprobación De Cuenta&body=Estimado Usuario,%0D%0A%0D%0ASu cuenta ha sido aprobada en el sistema de Bolsa De Trabajo.%0D%0A¡Bienvenido!%0D%0A%0D%0ASaludos,%0D%0AIEPAM";
+    }
+
+    return "mailto:" + email + "?subject=Rechazo De Cuenta&body=Estimado Usuario,%0D%0A%0D%0ASu cuenta ha sido rechazada en el sistema de Bolsa De Trabajo por la siguiente razón:%0D%0A%0D%0A" + feedback + "%0D%0A%0D%0ACorrija estos detalles para empezar a usar el sistema.%0D%0A%0D%0ASaludos,%0D%0AIEPAM"
+}
 
 function UserAcceptDetails(props: any) {
     let params = useParams<{ userId: string }>();
@@ -15,31 +23,65 @@ function UserAcceptDetails(props: any) {
     const [modal, setModal] = useState(false);
     const toggle = () => setModal(!modal);
 
+    const [emailText, setEmailText] = useState("");
+
     let userInfo = {
         id: "",
         username: "",
         createdBy: "",
-        type: "employee", //TODO: this is hardcode for tests, change after demo
+        type: "employee",
         state: "inactive",
         email: ""
     };
 
-    if (props.location.state.user) {
+    let history = useHistory();
+    if (props.location.state) {
         userInfo = props.location.state.user;
         console.log(userInfo)
     }
+    else {
+        console.log("No state")
+        history.push("/admin/accept-users")
+    }
 
-    let history = useHistory();
-    const acceptUser = async() => {
-       await updateUser(userInfo.id, {state: "active"});
-       alert("El usuario ha sido aceptado");
-       
-       history.push("/admin/accept-users")
+    const acceptUser = async () => {
+        await updateUser(userId, { state: "active" });
+        alert("El usuario ha sido aceptado");
+
+        setEmailText(createEmailLink(true, userInfo.email));
     }
 
     const StyledErrorMessage = styled.div`
         color: red;
     `;
+
+    if (emailText !== "") {
+        return (
+            <React.Fragment>
+                <Jumbotron>
+                    <h1>Detalle de Usuario</h1>
+                </Jumbotron>
+                <Container>
+                    <Row>
+                        <Col><h2>Haga click en el botón para comunicar la decisión al usuario:</h2></Col>
+                    </Row>
+                    <Row className="mt-3">
+                        <Col>
+                            <Link to="#" onClick={(e) => {
+                                window.location.href = emailText;
+                                e.preventDefault();
+                            }}>
+                                <Button color="primary">Enviar Correo</Button>
+                            </Link>
+                            <Link to="/admin/accept-users">
+                                <Button className="ml-3">Regresar</Button>
+                            </Link>
+                        </Col>
+                    </Row>
+                </Container>
+            </React.Fragment>
+        )
+    }
 
     return (
         <React.Fragment>
@@ -82,7 +124,8 @@ function UserAcceptDetails(props: any) {
 
                                     setSubmitting(false);
 
-                                    // TODO
+                                    // TODO: send email
+                                    setEmailText(createEmailLink(false, userInfo.email, values.feedback));
                                 }}
                             >
                                 {({ values, errors, touched, handleChange, handleSubmit }) =>

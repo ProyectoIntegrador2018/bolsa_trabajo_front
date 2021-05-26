@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { Col, Container, Jumbotron, Row } from 'reactstrap';
+import { Col, Container, Jumbotron, Row, Spinner } from 'reactstrap';
+import { auth } from '../../firebase';
 import { CompanyForm, EmployeeForm } from '../../model/Forms';
 import { UserType, UserTypeEnum } from '../../model/Users';
 import { getEnrollmentForm } from '../../services/formService';
@@ -160,8 +161,8 @@ function CompanyDetail(props: { enrollmentForm: CompanyForm }) {
 function UserDetail(props: UserDetailProps) {
 
     const [enrollmentForm, setEnrollmentForm] = useState<EmployeeForm | CompanyForm>();
+    const [isLoading, setLoading] = useState(true);
 
-    //TODO: fix error on refresh
     useEffect(() => {
         const getEnrollmentFormFromAPI = async () => {
             const enrollmentFormAPI = await getEnrollmentForm(props.userId);
@@ -172,71 +173,27 @@ function UserDetail(props: UserDetailProps) {
                 setEnrollmentForm(enrollmentFormAPI)
             }
         }
-        getEnrollmentFormFromAPI();
+        auth.onAuthStateChanged(async user => {
+            if (user) {
+                await getEnrollmentFormFromAPI();
+            }
+            else {
+                console.log("No user")
+            }
+
+            setLoading(false);
+        })
     }, [])
 
-    //if (props.userType == UserTypeEnum.employee) {
-    // TODO: get form
-
-    // enrollmentForm = {
-    //     nombre: "Ricardo Lozano Gil",
-    //     fecha_de_nacimiento: "25/01/1950",
-    //     lugar_de_nacimiento: "Monterrey",
-    //     calle: "Calle Falsa 123",
-    //     municipio: "Monterrey",
-    //     codigo_postal: "64790",
-    //     telefono_casa: "+528123456789",
-    //     telefono_celular: "+528123456789",
-    //     secciones: {
-    //         ultimo_ejemplo_o_actividad: {
-    //             ultimo_periodo: "Ultimo año",
-    //             empresa: "CEMEX",
-    //             puesto: "Gerente",
-    //         },
-    //         actividad_deseada: {
-    //             jornada_de_trabajo: "Completa",
-    //             funcion: "Gerencial",
-    //         },
-
-    //         nivel_de_estudios: {
-    //             nivel_escolar: "Licenciatura",
-    //             nombre_institucion: "Tec de Monterrey",
-    //             fecha_inicio: "12/06/1970",
-    //             fecha_fin: "20/06/1975"
-    //         },
-
-    //         comentarios: {
-    //             porque_quieres_trabajo: "Necesidad económica"
-    //         },
-
-    //         tus_habilidades_son: {
-    //             habilidades: ["Administración de Proyectos"]
-    //         },
-
-    //         clasificacion_puesto: {
-    //             clasificacion: "Gerente"
-    //         },
-
-    //         aceptacion_politica: {
-    //             aceptacion: true
-    //         }
-    //     }
-    // }
-    // }
-    // else {
-    //     // TODO: get form
-    //     enrollmentForm = {
-    //         nombre_empresa: "CEMEX",
-    //         direccion_actual: "Calle Falsa 123, Colonia Prueba",
-    //         municipio: "Monterrey",
-    //         estado: "Nuevo León",
-    //         telefono_1: "+528123456789",
-    //         telefono_2: "+528123456789",
-    //         aceptacion_politica : {
-    //             aceptacion : true
-    //           }
-    //     }
-    // }
+    if (isLoading) {
+        return (
+            <React.Fragment>
+                <Container className="text-center">
+                    <Spinner />
+                </Container>
+            </React.Fragment>
+        )
+    }
 
     return (
         <React.Fragment>

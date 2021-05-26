@@ -1,50 +1,17 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { Link, useRouteMatch } from 'react-router-dom';
-import { Button, Col, Container, Jumbotron, Row, Table } from 'reactstrap';
+import { Button, Col, Container, Jumbotron, Row, Spinner, Table } from 'reactstrap';
+import { auth } from '../../firebase';
 import { translateToUserType, User, UserTypeEnum } from '../../model/Users';
 import { getUsers } from '../../services/usersService';
 
 function UserAccept() {
 
-    // const users: User[] = [
-    //     {
-    //         id: "1",
-    //         username: "ricardo_lozano",
-    //         createdBy: "fjjfkejf",
-    //         type: "employee",
-    //         state: "active",
-    //         email: "rick@email.com"
-    //     },
-    //     {
-    //         id: "2",
-    //         username: "david_acevedo",
-    //         createdBy: "fjjfkejf",
-    //         type: "employee",
-    //         state: "inactive",
-    //         email: "david@email.com"
-    //     },
-    //     {
-    //         id: "3",
-    //         username: "aaron_garcia",
-    //         createdBy: "fjjfkejf",
-    //         type: "company",
-    //         state: "inactive",
-    //         email: "user@email.com"
-    //     },
-    //     {
-    //         id: "4",
-    //         username: "luis_felipe",
-    //         createdBy: "fjjfkejf",
-    //         type: "company",
-    //         state: "active",
-    //         email: "luis@email.com"
-    //     },
-    // ]
-
     const [inactiveUsers, setInactiveUsers] = useState<User[]>([]);
     const [activeUsers, setActiveUsers] = useState<User[]>([]);
 
-    //TODO: fix error on refresh
+    const [isLoading, setLoading] = useState(true)
+
     useEffect(() => {
         const getUsersFromAPI = async () => {
             const users = await getUsers();
@@ -52,21 +19,43 @@ function UserAccept() {
             let activeUsersAPI: User[] = [];
             let inactiveUsersAPI: User[] = [];
 
-            users.forEach(user => {
-                if (user.state === "active") {
-                    activeUsersAPI.push(user);
+            users.forEach(u => {
+                if (u.state === "active") {
+                    activeUsersAPI.push(u);
                 }
                 else {
-                    inactiveUsersAPI.push(user)
+                    inactiveUsersAPI.push(u)
                 }
             })
 
             setInactiveUsers(inactiveUsersAPI);
             setActiveUsers(activeUsersAPI);
         }
-        getUsersFromAPI();
+
+        auth.onAuthStateChanged(async user => {
+            if (user) {
+                await getUsersFromAPI();
+            }
+            else {
+                console.log("No user")
+            }
+            setLoading(false);
+        })
     }, [])
-    
+
+    if (isLoading) {
+        return (
+            <React.Fragment>
+                <Jumbotron>
+                    <h1>Autorización de Usuarios</h1>
+                </Jumbotron>
+                <Container className="text-center">
+                    <Spinner />
+                </Container>
+            </React.Fragment>
+        )
+    }
+
     return (
         <React.Fragment>
             <Jumbotron>
@@ -103,7 +92,7 @@ function UserAccept() {
                                                             <td>{translateToUserType(user.type) == UserTypeEnum.employee ? "Empleado" : "Organización"}</td>
                                                             <td>{user.email}</td>
                                                             <td className="text-center">
-                                                                <Link to={{pathname: `/admin/accept-users/${user.id}`, state: {user: user}}}>
+                                                                <Link to={{ pathname: `/admin/accept-users/${user.id}`, state: { user: user } }}>
                                                                     <Button color="primary">Ver Usuario</Button>
                                                                 </Link>
                                                             </td>
