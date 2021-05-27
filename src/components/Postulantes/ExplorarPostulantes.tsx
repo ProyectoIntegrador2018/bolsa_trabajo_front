@@ -4,9 +4,13 @@ import { Link, useHistory } from 'react-router-dom';
 import municipios from "../../shared/municipios";
 import puestos from "../../shared/puestos";
 import { getEmployeesFiltered } from '../../services/employeeService';
+import { getJobs } from '../../services/jobService';
 import { useFormik, Formik, Field, useFormikContext } from "formik";
 import { Form, Input, Jumbotron, Label, FormGroup, CustomInput } from "reactstrap";
 import { UserContext } from '../Authentication/UserProvider';
+import ModalDetallePostulante from '../Modals/ModalDetallePostulante';
+import Loader from '../Loader/Loader';
+import { Redirect } from "react-router-dom";
 
 function ExplorarPostulantes() {
 
@@ -14,6 +18,7 @@ function ExplorarPostulantes() {
 
   const [isLoading, setLoading] = useState(true);
   const [employees, setEmployees] = useState<any | null>(null);
+  const [jobs, setJobs] = useState<any | null>(null);
   const [targetValues, setTargetValues] = useState<any>(['-']);
 
   useEffect(() => {
@@ -27,6 +32,16 @@ function ExplorarPostulantes() {
     }
   }, [user]);
 
+  useEffect(() => {
+    if (user) {
+      getJobs().then((data:any) => {
+        if (data && data.jobs) {
+          setJobs(data);
+        }
+      });
+    }
+  }, [user]);
+
   const formik = useFormik({
     initialValues: {
       field: '',
@@ -35,9 +50,7 @@ function ExplorarPostulantes() {
     },
     onSubmit: async (values) => {
       setLoading(true);
-      console.log(values);
       getEmployeesFiltered(values).then((data:any) => {
-        console.log("Data: ", data);
         if (data && data.users) {
           setEmployees(data);
           setLoading(false);
@@ -81,17 +94,7 @@ function ExplorarPostulantes() {
   }, [formik.values.field]);
 
   if (isLoading) {
-    return (
-      <React.Fragment>
-        <Row className="mx-auto">
-          <Col style={{ textAlign: "center" }} md={{size: 12}} sm={{size: 12}}>
-            <div className="spinner-border" role="status">
-              <span className="sr-only">Loading...</span>
-            </div>
-          </Col>
-        </Row>
-      </React.Fragment>
-    );
+    return <Loader></Loader>;
   }
   // console.log("Working: ", employees);
   return (
@@ -154,11 +157,7 @@ function ExplorarPostulantes() {
                 <th scope="row">{index + 1}</th>
                 <td>{postulante.username}</td>
                 <td style={{ textAlign: "center" }}>
-                  <Link to={urlDetalle}>
-                    <Button color="primary" className="mr-4">
-                      Ver detalle
-                    </Button>
-                  </Link>
+                  <ModalDetallePostulante id={postulante.id} jobs={jobs.jobs} buttonLabel="Ver detalle"></ModalDetallePostulante>
                 </td>
               </tr>
               )
