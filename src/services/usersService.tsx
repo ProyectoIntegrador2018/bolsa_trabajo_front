@@ -33,19 +33,36 @@ export const registerAdmin = async (body: any) => {
     if (!body) return null;
     const token = await auth.currentUser?.getIdToken();
     try {
-      const res = await axios.post(
-        config.apiUrl + '/api/admin', body, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          'Content-Type': 'application/json'
-        },
-      }
-      );
-      return res.data;
+        const res = await axios.post(
+            config.apiUrl + '/api/admin', body, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+                'Content-Type': 'application/json'
+            },
+        }
+        );
+        return res.data;
     } catch (error) {
-      console.error("Error fetching user", error);
+        console.error("Error fetching user", error);
     }
-  };
+};
+
+export const deleteAdmin = async (id: string) => {
+    if (!id) return null;
+    const token = await auth.currentUser?.getIdToken();
+    try {
+        const res = await axios.delete(
+            config.apiUrl + '/api/admin/' + id, {
+            headers: {
+                Authorization: `Bearer ${token}`
+            },
+        }
+        );
+        return res.data;
+    } catch (error) {
+        console.error("Error fetching user", error);
+    }
+}
 
 export const getUsers = async (): Promise<User[]> => {
     const token = await auth.currentUser?.getIdToken();

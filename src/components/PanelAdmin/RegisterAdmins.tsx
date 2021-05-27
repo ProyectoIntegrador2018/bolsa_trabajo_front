@@ -191,8 +191,6 @@ function RegisterAdmins(props: RegisterAdminProps) {
                                         await updateUser(props.admin.id, updateAdmin);
                                         alert("Se ha editado el administrador");
 
-                                        // TODO: post
-
                                         if (props.onEdit) {
                                             const editedAdmin: Admin = {
                                                 id: props.admin.id,
@@ -209,7 +207,7 @@ function RegisterAdmins(props: RegisterAdminProps) {
                                     else {
 
                                         const createAdmin: AdminCreate = values;
-                                        // TODO: post
+                                        
                                         await registerAdmin(createAdmin);
                                         alert("Se ha registrado el administrador");
                                     }
