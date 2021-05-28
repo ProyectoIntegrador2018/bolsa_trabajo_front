@@ -201,7 +201,7 @@ const FormEmployee = () =>  {
             schoolName: userInfo.secciones!.nivel_de_estudios!.nombre_institucion,
             schoolStartDate: setDateFormat(userInfo.secciones!.nivel_de_estudios!.fecha_inicio),
             schoolEndDate: setDateFormat(userInfo.secciones!.nivel_de_estudios!.fecha_fin),
-            abilities: userInfo.secciones!.tus_habilidades_son!.habilidades!.fecha_fin,
+            abilities: userInfo.secciones!.tus_habilidades_son!.habilidades,
             classification: userInfo.secciones!.clasificacion_puesto!.clasificacion,
             TandA: false
           }
@@ -370,9 +370,11 @@ const FormEmployee = () =>  {
                   <FormGroup check>
                     <Label check>
                       <Input  type="radio" 
+                              id = "partial_worktime_radio"
                               name="worktime" 
                               value='partial' 
-                              onChange={handleChange}/>{' '}
+                              onChange={handleChange}
+                              />{' '}
                       Parcial (horas)
                     </Label>
                   </FormGroup>
@@ -381,10 +383,12 @@ const FormEmployee = () =>  {
                       <Input  type="radio" 
                               name="worktime" 
                               value='fulltime'  
-                              onChange={handleChange}/> 
+                              onChange={handleChange}
+                              /> 
                       Completa
                     </Label>
                   </FormGroup>
+                  {userInfo.secciones!.actividad_deseada.jornada_de_trabajo != '' ? <div>*Ultima opcion registrada: <strong>{userInfo.secciones!.actividad_deseada.jornada_de_trabajo}</strong> (puedes cambiar tu selección y al enviar el formulario se reemplazara por tu nueva seleccion)</div> : null}
                   {errors.worktime && touched.worktime ? (
                   <div className="errorMessage">{errors.worktime}</div>) : null}
                 </Col>
@@ -415,7 +419,8 @@ const FormEmployee = () =>  {
                       <Input  type="radio" 
                               name="jobFunction" 
                               value='Administrativa' 
-                              onChange={handleChange}/>{' '}
+                              onChange={handleChange}
+                              />{' '}
                       Administrativa
                     </Label>
                   </FormGroup>
@@ -455,6 +460,7 @@ const FormEmployee = () =>  {
                       Oficina
                     </Label>
                   </FormGroup>
+                  {userInfo.secciones!.actividad_deseada.jornada_de_trabajo != '' ? <div>*Ultima opcion registrada: <strong>{userInfo.secciones!.actividad_deseada.funcion}</strong> (puedes cambiar tu selección y al enviar el formulario se reemplazara por tu nueva seleccion)</div> : null}
                   {errors.jobFunction && touched.jobFunction ? (
                   <div className="errorMessage">{errors.jobFunction}</div>) : null}
                 </Col>
@@ -480,6 +486,7 @@ const FormEmployee = () =>  {
                       Ejecutiva
                     </Label>
                   </FormGroup>
+                  {userInfo.secciones!.actividad_deseada.jornada_de_trabajo != '' ? <div>*Ultima opcion registrada: <strong>{userInfo.secciones!.actividad_deseada!.capacitacion_o_entrenamiento}</strong> (puedes cambiar tu selección y al enviar el formulario se reemplazara por tu nueva seleccion)</div> : null}
                   {errors.desiredActivity && touched.desiredActivity ? (
                   <div className="errorMessage">{errors.desiredActivity}</div>) : null}
                 </Col>
@@ -505,6 +512,7 @@ const FormEmployee = () =>  {
                       Ejecutiva
                     </Label>
                   </FormGroup>
+                  {userInfo.secciones!.actividad_deseada.jornada_de_trabajo != '' ? <div>*Ultima opcion registrada: <strong>{userInfo.secciones!.actividad_deseada!.consultoria}</strong> (puedes cambiar tu selección y al enviar el formulario se reemplazara por tu nueva seleccion)</div> : null}
                   {errors.desiredActivity && touched.desiredActivity ? (
                   <div className="errorMessage">{errors.desiredActivity}</div>) : null}
                 </Col>
@@ -530,6 +538,7 @@ const FormEmployee = () =>  {
                       Ejecutiva
                     </Label>
                   </FormGroup>
+                  {userInfo.secciones!.actividad_deseada.jornada_de_trabajo != '' ? <div>*Ultima opcion registrada: <strong>{userInfo.secciones!.actividad_deseada!.coaching}</strong> (puedes cambiar tu selección y al enviar el formulario se reemplazara por tu nueva seleccion)</div> : null}
                   {errors.desiredActivity && touched.desiredActivity ? (
                   <div className="errorMessage">{errors.desiredActivity}</div>) : null}
                 </Col>
