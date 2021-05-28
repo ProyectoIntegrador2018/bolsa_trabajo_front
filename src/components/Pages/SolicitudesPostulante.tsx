@@ -4,7 +4,10 @@ import { Link, useHistory } from 'react-router-dom';
 //import misSolicitudesActivas from '../../testing/misSolicitudesActivas.json';
 import misSolicitudesCerradas from '../../testing/misSolicitudesCerradas.json';
 import { UserContext } from '../Authentication/UserProvider';
-import { getMatches, answerMatch } from '../../services/matchesService';
+import { getMatches } from '../../services/matchesService';
+import ModalSolicitudesEmpresa from '../Modals/ModalSolicitudesPostulante';
+import Loader from '../Loader/Loader';
+
 interface User {
   enrollmentFormId?: string;
 };
@@ -97,17 +100,7 @@ function SolicitudesPostulanteContent(props: {user: any}) {
   }, [props.user]);
 
   if (isLoading) {
-    return (
-      <React.Fragment>
-        <Row className="mx-auto">
-          <Col style={{ textAlign: "center" }} md={{size: 12}} sm={{size: 12}}>
-            <div className="spinner-border" role="status">
-              <span className="sr-only">Loading...</span>
-            </div>
-          </Col>
-        </Row>
-      </React.Fragment>
-    );
+    return (<Loader></Loader>);
   }
 
   return (
@@ -140,7 +133,9 @@ function SolicitudesPostulanteContent(props: {user: any}) {
                 <td className="align-middle" style={{ width: "25%" }}>
                   <div className={myClassName} role="alert">{typeTextSwitch(solicitud.state)}</div>
                 </td>
-                <td className="align-middle" style={{ width: "25%" }}>{isPending(solicitud.state, solicitud.id)}</td>
+                <td className="text-center align-middle" style={{ width: "25%" }}>
+                  <ModalSolicitudesEmpresa match={solicitud} buttonLabel="Ver detalle" className=""></ModalSolicitudesEmpresa>
+                </td>
               </tr>
               )
             })}
@@ -171,7 +166,9 @@ function SolicitudesPostulanteContent(props: {user: any}) {
                 <td className="align-middle" style={{ width: "25%" }}>
                   <div className={myClassName} role="alert">{typeTextSwitch(solicitud.state)}</div>
                 </td>
-                <td className="align-middle" style={{ width: "25%" }}></td>
+                <td className="text-center align-middle" style={{ width: "25%" }}>
+                  <ModalSolicitudesEmpresa match={solicitud} buttonLabel="Ver detalle" className=""></ModalSolicitudesEmpresa>
+                </td>
               </tr>
               )
             })}

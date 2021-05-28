@@ -5,6 +5,8 @@ import { Link, useHistory } from 'react-router-dom';
 import misSolicitudesActivas from '../../testing/misSolicitudesActivas.json';
 import misSolicitudesCerradas from '../../testing/misSolicitudesCerradas.json';
 import { getMatches } from '../../services/matchesService';
+import ModalSolicitudesEmpresa from '../Modals/ModalSolicitudesEmpresa';
+import Loader from '../Loader/Loader';
 
 function typeTextSwitch(param:any) {
   switch(param) {
@@ -13,7 +15,7 @@ function typeTextSwitch(param:any) {
     case 'active':
       return 'En proceso';
     case 'hired':
-      return 'Oferta';
+      return 'Empleo';
     case 'notHired':
       return 'Cerrada';
     case 'declined':
@@ -59,7 +61,6 @@ function SolicitudesEmpresaContent(props: {user: any}) {
         getMatches().then((data:any) => {
           if (data) {
             let _matches = data.matches;
-            console.log(_matches);
             _matches.sort((a:any, b:any) => {
               return b.matchMetadata.createdAt - a.matchMetadata.createdAt;
             });
@@ -72,17 +73,7 @@ function SolicitudesEmpresaContent(props: {user: any}) {
     }, [props.user]);
 
     if (isLoading) {
-      return (
-        <React.Fragment>
-          <Row className="mx-auto">
-            <Col style={{ textAlign: "center" }} md={{size: 12}} sm={{size: 12}}>
-              <div className="spinner-border" role="status">
-                <span className="sr-only">Loading...</span>
-              </div>
-            </Col>
-          </Row>
-        </React.Fragment>
-      );
+      return <Loader></Loader>;
     }
 
     return (
@@ -115,8 +106,8 @@ function SolicitudesEmpresaContent(props: {user: any}) {
                   <td className="align-middle" style={{ width: "25%" }}>
                     <div className={myClassName} role="alert">{typeTextSwitch(solicitud.state)}</div>
                   </td>
-                  <td className="align-middle" style={{ width: "25%" }}>
-                    <Button color="primary" style={{width: "100%"}} className="">Ver detalle</Button>
+                  <td className="text-center align-middle" style={{ width: "25%" }}>
+                    <ModalSolicitudesEmpresa match={solicitud} buttonLabel="Ver detalle" className=""></ModalSolicitudesEmpresa>
                   </td>
                 </tr>
                 )
@@ -148,8 +139,8 @@ function SolicitudesEmpresaContent(props: {user: any}) {
                   <td className="align-middle" style={{ width: "25%" }}>
                     <div className={myClassName} role="alert">{typeTextSwitch(solicitud.state)}</div>
                   </td>
-                  <td className="align-middle" style={{ width: "25%" }}>
-                    <Button color="primary" style={{width: "100%"}} className="">Ver detalle</Button>
+                  <td className="text-center align-middle" style={{ width: "25%" }}>
+                    <ModalSolicitudesEmpresa match={solicitud} buttonLabel="Ver detalle" className=""></ModalSolicitudesEmpresa>
                   </td>
                 </tr>
                 )
@@ -163,9 +154,9 @@ function SolicitudesEmpresaContent(props: {user: any}) {
   }
 
   function SolicitudesEmpresa() {
-  
+
     const { user } = useContext(UserContext);
-  
+
     if(!userHasEnrollmentForm(user)) {
       return (
           <React.Fragment>
@@ -183,7 +174,7 @@ function SolicitudesEmpresaContent(props: {user: any}) {
           </React.Fragment>
         )
     }
-  
+
     if(!isUserActive(user)) {
       return (
           <React.Fragment>
@@ -195,13 +186,13 @@ function SolicitudesEmpresaContent(props: {user: any}) {
           </React.Fragment>
         )
     }
-  
+
     return (
       <React.Fragment>
         <SolicitudesEmpresaContent user={user}/>
       </React.Fragment>
       )
-  
+
   }
 
 export default SolicitudesEmpresa;

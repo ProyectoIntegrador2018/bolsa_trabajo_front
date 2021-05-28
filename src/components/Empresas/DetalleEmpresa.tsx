@@ -2,24 +2,24 @@ import React, {useContext, useState, useCallback, useEffect} from 'react';
 import { Table, Row, Col, Button } from 'reactstrap';
 import { Link, useHistory, useParams } from 'react-router-dom';
 import listaPostulantes from '../../testing/detallesPostulantes.json'
-import { getEmployeeDetail } from '../../services/employeeService';
+import { getCompanyDetail } from '../../services/companyService';
 import { UserContext } from '../Authentication/UserProvider';
 import Loader from '../Loader/Loader';
 
-const DetallePostulante = (props:any) => {
+const DetalleEmpresa = (props:any) => {
   const {
     id,
-    state
   } = props;
 
   //const { id } = useParams<{ id: any }>();
   const { user } = useContext(UserContext);
 
   const [userInfo, setUserInfo] = useState<any | null>(null);
-  const [isLoading, setLoading] = useState(true);
+  const [isLoading, setLoading] = useState(false);
 
   useEffect(() => {
-    getEmployeeDetail(id).then((data:any) => {
+    getCompanyDetail(id).then((data:any) => {
+      console.log(data);
       if (data && data.enrollmentForm) {
         setUserInfo(data.enrollmentForm);
         setLoading(false);
@@ -28,6 +28,7 @@ const DetallePostulante = (props:any) => {
   }, [user]);
 
   if (isLoading) {
+    debugger;
     return <Loader></Loader>;
   }
 
@@ -51,29 +52,25 @@ const DetallePostulante = (props:any) => {
       </Row>
       <Row className="mx-auto">
         <Col md={{size: 12, offset: 0}} sm={{size: 12}}>
-          {(state && state == 'active') &&
-            <React.Fragment>
-              <hr></hr>
-              <h4 className="mb-3">Información de Contacto</h4>
-              <dl className="row">
+          <hr></hr>
+          <h4 className="mb-3">Información General</h4>
+          <dl className="row">
 
-                <dt className="col-sm-5">Dirección actual:</dt>
-                <dd className="col-sm-7">{userInfo.calle + ", " + userInfo.municipio + ", " + userInfo.codigo_postal}</dd>
+            <dt className="col-sm-5">Dirección actual:</dt>
+            <dd className="col-sm-7">{userInfo.calle + ", " + userInfo.municipio + ", " + userInfo.codigo_postal}</dd>
 
-                <dt className="col-sm-5">Fecha de nacimiento:</dt>
-                <dd className="col-sm-7">{userInfo.fecha_de_nacimiento}</dd>
+            <dt className="col-sm-5">Fecha de nacimiento:</dt>
+            <dd className="col-sm-7">{userInfo.fecha_de_nacimiento}</dd>
 
-                <dt className="col-sm-5">Lugar de nacimiento:</dt>
-                <dd className="col-sm-7">{userInfo.lugar_de_nacimiento}</dd>
+            <dt className="col-sm-5">Lugar de nacimiento:</dt>
+            <dd className="col-sm-7">{userInfo.lugar_de_nacimiento}</dd>
 
-                <dt className="col-sm-5">Telefono casa:</dt>
-                <dd className="col-sm-7">{userInfo.telefono_casa}</dd>
+            <dt className="col-sm-5">Telefono casa:</dt>
+            <dd className="col-sm-7">{userInfo.telefono_casa}</dd>
 
-                <dt className="col-sm-5">Telefono celular:</dt>
-                <dd className="col-sm-7">{userInfo.telefono_celular}</dd>
-              </dl>
-            </React.Fragment>
-          }
+            <dt className="col-sm-5">Telefono celular:</dt>
+            <dd className="col-sm-7">{userInfo.telefono_celular}</dd>
+          </dl>
 
           <hr></hr>
           <h4 className="mb-3">Último Empleo o Actividad</h4>
@@ -145,4 +142,4 @@ const DetallePostulante = (props:any) => {
   );
 }
 
-export default DetallePostulante;
+export default DetalleEmpresa;

@@ -20,7 +20,7 @@ export const getMatches = async () => {
   }
 };
 
-export const answerMatch = async (id:string, state:string) => {//, jobId:string) => {
+export const updateMatch = async (id:string, state:string) => {//, jobId:string) => {
   try {
     const token = await auth.currentUser?.getIdToken();
     const res = await axios.put(
