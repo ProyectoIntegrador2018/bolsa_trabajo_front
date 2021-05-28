@@ -4,7 +4,32 @@ import { auth } from '../firebase';
 import { Admin } from '../model/Admins';
 import { User } from '../model/Users';
 
-export const getAdmins = async (): Promise<Admin[]> => {
+export const getAdmins = async () => {
+    const token = await auth.currentUser?.getIdToken();
+
+    try {
+        const res = await axios.get(config.apiUrl + '/api/admin',
+            {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            })
+
+        if (res.status == 200) {
+            console.log(res.data)
+            return res.data.admins;
+        }
+        else {
+            return [];
+        }
+    }
+    catch (error) {
+        console.error("Error fetching enrollment form", error);
+        return [];
+    }
+}
+
+export const getAdminsAndSuperAdmins = async () => {
     const token = await auth.currentUser?.getIdToken();
 
     try {

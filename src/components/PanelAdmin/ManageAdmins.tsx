@@ -3,7 +3,7 @@ import { Button, Col, Container, Jumbotron, Modal, ModalBody, ModalHeader, Row, 
 import { auth } from '../../firebase';
 import { isMinAdmin, isSuperAdmin } from '../../helpers/utils/utility';
 import { Admin, AdminCreate, AdminUpdate, translateToAdminType } from '../../model/Admins';
-import { deleteAdmin, getAdmins } from '../../services/usersService';
+import { deleteAdmin, getAdmins, getAdminsAndSuperAdmins } from '../../services/usersService';
 import { UserContext } from '../Authentication/UserProvider';
 import RegisterAdmins from './RegisterAdmins';
 
@@ -23,7 +23,17 @@ function ManageAdmins() {
 
     useEffect(() => {
         const getAdminsFromAPI = async () => {
-            const adminsAPI = await getAdmins();
+            let adminsAPI;
+
+            if(isSuperAdmin(user)) {
+                adminsAPI = await getAdminsAndSuperAdmins();
+            }
+            else {
+                adminsAPI = await getAdmins();
+            }
+
+            console.log(adminsAPI)
+
             setAdmins(adminsAPI)
         }
         auth.onAuthStateChanged(async user => {
