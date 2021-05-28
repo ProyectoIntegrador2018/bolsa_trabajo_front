@@ -1,45 +1,13 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { Button, Col, Container, Jumbotron, Modal, ModalBody, ModalHeader, Row, Table, UncontrolledCollapse } from 'reactstrap';
+import { Button, Col, Container, Jumbotron, Modal, ModalBody, ModalHeader, Row, Spinner, Table, UncontrolledCollapse } from 'reactstrap';
+import { auth } from '../../firebase';
 import { isMinAdmin, isSuperAdmin } from '../../helpers/utils/utility';
 import { Admin, AdminCreate, AdminUpdate, translateToAdminType } from '../../model/Admins';
-import { getAdmins } from '../../services/usersService';
+import { deleteAdmin, getAdmins } from '../../services/usersService';
 import { UserContext } from '../Authentication/UserProvider';
 import RegisterAdmins from './RegisterAdmins';
 
 function ManageAdmins() {
-
-    
-
-    // const adminsAPI: Admin[] = [
-    //     {
-    //         id: "1",
-    //         username: "ricardo_lozano",
-    //         email: 'ricardo@email.com',
-    //         type: "admin",
-    //         phoneNumber: "+528120005940",
-    //         createdBy: "fko4ikmdor",
-    //         state: "active"
-    //     },
-    //     {
-    //         id: "2",
-    //         username: "david _acevedo",
-    //         email: 'david@email.com',
-    //         type: "admin",
-    //         phoneNumber: "+528120005940",
-    //         createdBy: "fko4ikmdor",
-    //         state: "active"
-    //     },
-    //     {
-    //         id: "3",
-    //         username: "aaron_garcia",
-    //         email: 'aaron@email.com',
-    //         type: "super-admin",
-    //         phoneNumber: "+528120005940",
-    //         createdBy: "fko4ikmdor",
-    //         state: "active"
-    //     },
-    // ]
-
 
     const { user } = useContext(UserContext);
 
@@ -49,26 +17,24 @@ function ManageAdmins() {
     const [deleteConfirmation, setDeleteConfirmation] = useState(false);
     const toggleDeleteConfirmation = () => setDeleteConfirmation(!deleteConfirmation);
 
-    
-    const emptyAdmin: Admin = {
-        id: "",
-        username: "",
-        email: '',
-        type: "",
-        phoneNumber: "",
-        createdBy: "",
-        state: ""
-    }
-
     const [admins, setAdmins] = useState<Admin[]>([]);
 
-    //TODO: fix error on refresh
+    const [isLoading, setLoading] = useState(true);
+
     useEffect(() => {
         const getAdminsFromAPI = async () => {
             const adminsAPI = await getAdmins();
             setAdmins(adminsAPI)
         }
-        getAdminsFromAPI();
+        auth.onAuthStateChanged(async user => {
+            if (user) {
+                await getAdminsFromAPI();
+            }
+            else {
+                console.log("No user")
+            }
+            setLoading(false);
+        });
     }, [])
 
     const [adminEdit, setAdminEdit] = useState(0);
@@ -80,14 +46,28 @@ function ManageAdmins() {
 
         setAdmins(adminArr);
     }
-    
-    const deleteAdmin = () => {
-        //TODO: send delete to API
+
+    const deleteAdministrator = async () => {
+        await deleteAdmin(admins[adminEdit].id)
+        alert("El administrador ha sido eliminado")
 
         const adminArr = [...admins];
         adminArr.splice(adminEdit, 1);
-  
+
         setAdmins(adminArr);
+    }
+
+    if (isLoading) {
+        return (
+            <React.Fragment>
+                <Jumbotron>
+                    <h1>Gestionar Administradores</h1>
+                </Jumbotron>
+                <Container className="text-center">
+                    <Spinner />
+                </Container>
+            </React.Fragment>
+        )
     }
 
     return (
@@ -167,7 +147,7 @@ function ManageAdmins() {
                             </Row>
                             <Row>
                                 <Col md={{ size: 8, offset: 2 }} sm="12">
-                                    <Button className="mr-2" color="danger" onClick={() => {deleteAdmin(); toggle();}}>Sí, eliminar</Button>
+                                    <Button className="mr-2" color="danger" onClick={() => { deleteAdministrator(); toggle(); }}>Sí, eliminar</Button>
                                     <Button onClick={toggleDeleteConfirmation}>No, Cancelar</Button>
                                 </Col>
                             </Row>

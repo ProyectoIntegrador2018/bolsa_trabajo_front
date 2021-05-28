@@ -40,16 +40,22 @@ function typeColorSwitch(param:any) {
   }
 }
 
-function SolicitudesEmpresa() {
+function isUserActive(user: any) {
+  return user.state == "active";
+}
 
-    const { user } = useContext(UserContext);
+function userHasEnrollmentForm(user: any) {
+  return user.hasOwnProperty("enrollmentFormId");
+}
+
+function SolicitudesEmpresaContent(props: {user: any}) {
 
     const [activeMatches, setActiveMatches] = useState<any | null>(null);
     const [pastMatches, setPastMatches] = useState<any | null>(null);
     const [isLoading, setLoading] = useState(true);
 
     useEffect(() => {
-      if (user) {
+      if (props.user) {
         getMatches().then((data:any) => {
           if (data) {
             let _matches = data.matches;
@@ -63,7 +69,7 @@ function SolicitudesEmpresa() {
           }
         });
       }
-    }, [user]);
+    }, [props.user]);
 
     if (isLoading) {
       return (
@@ -154,6 +160,48 @@ function SolicitudesEmpresa() {
         </Row>
       </React.Fragment>
     );
+  }
+
+  function SolicitudesEmpresa() {
+  
+    const { user } = useContext(UserContext);
+  
+    if(!userHasEnrollmentForm(user)) {
+      return (
+          <React.Fragment>
+            <Row className="mx-auto">
+              <Col md={{size: 10, offset: 1}} sm={{size: 12}} style={{ textAlign: "center" }}>
+                <h1>Antes de utilizar los servicios de la bolsa de trabajo debes llenar tus datos en el apartado:</h1>
+                <br/>
+                <Link to="/form-organization">
+                  <Button color="primary">
+                    <h2>Mi Información</h2>
+                  </Button>
+                </Link>
+              </Col>
+            </Row>
+          </React.Fragment>
+        )
+    }
+  
+    if(!isUserActive(user)) {
+      return (
+          <React.Fragment>
+            <Row className="mx-auto">
+              <Col md={{size: 10, offset: 1}} sm={{size: 12}} style={{ textAlign: "center" }}>
+                <h1>Gracias por llenar tu información. Un administrador del IEPAM revisará tus datos y en breve te dará acceso al uso completo de la plataforma.</h1>
+              </Col>
+            </Row>
+          </React.Fragment>
+        )
+    }
+  
+    return (
+      <React.Fragment>
+        <SolicitudesEmpresaContent user={user}/>
+      </React.Fragment>
+      )
+  
   }
 
 export default SolicitudesEmpresa;
