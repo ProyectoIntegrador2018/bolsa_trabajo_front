@@ -20,25 +20,24 @@ function generateOrganizationEnrollmentDocument(values: { jobTitle: any; worktim
   let enrollmentDocument = 
   {
     nombre_puesto: values.jobTitle,
-    secciones: {
-            posicion_vacante: {
-                    jornada_de_trabajo: values.worktime,
-                    funcion: values.jobFunction,
-                    capacitacion_o_entrenamiento: values.desiredActivity?.training,
-                    consultoria: values.desiredActivity?.consulting,
-                    coaching: values.desiredActivity?.coaching
-            },
-            habilidades_necesarias: {
-                    operacion_de_maquinaria: values.abilities?.machineOperationDescription,
-                    conocimientos_tecnicos: values.abilities?.technicalKnowledgeDescription,
-                    manejo_de_equipo_de_computo: values.abilities?.computingEquimentKnowledge,
-                    programacion_u_office: values.abilities?.programmingKnowledge,
-                    analisis_logico: values.abilities?.logicKnowledge,
-                    analisis_numerico: values.abilities?.numericKnowledge
-            },
-            competencias_requeridas: {
-                    competencias: values.competences
-            }
+    posicion_vacante: {
+            jornada_de_trabajo: values.worktime,
+            funcion: values.jobFunction,
+            capacitacion_o_entrenamiento: values.desiredActivity?.training,
+            consultoria: values.desiredActivity?.consulting,
+            coaching: values.desiredActivity?.coaching
+    },
+    habilidades_necesarias: {
+            operacion_de_maquinaria: values.abilities?.machineOperationDescription,
+            conocimientos_tecnicos: values.abilities?.technicalKnowledgeDescription,
+            manejo_de_equipo_de_computo: values.abilities?.computingEquimentKnowledge,
+            programacion_u_office: values.abilities?.programmingKnowledge,
+            analisis_logico: values.abilities?.logicKnowledge,
+            analisis_numerico: values.abilities?.numericKnowledge,
+            titulo_profesional: values.abilities?.professionalTitle
+    },
+    competencias_requeridas: {
+            competencias: values.competences
     }
 }
   return enrollmentDocument;

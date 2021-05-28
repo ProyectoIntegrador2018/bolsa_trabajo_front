@@ -3,7 +3,7 @@ import { config } from '../config';
 import { auth } from '../firebase';
 import { CompanyForm, EmployeeForm } from '../model/Forms';
 
-export const getEnrollmentForm = async (userId: string) => {
+export const getEnrollmentForm = async (userId: any) => {
   if (!userId) return undefined;
 
   const token = await auth.currentUser?.getIdToken();
