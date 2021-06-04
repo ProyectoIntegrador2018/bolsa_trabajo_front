@@ -202,7 +202,7 @@ const FormEmployee = () =>  {
             schoolName: userInfo.secciones!.nivel_de_estudios!.nombre_institucion,
             schoolStartDate: setDateFormat(userInfo.secciones!.nivel_de_estudios!.fecha_inicio),
             schoolEndDate: setDateFormat(userInfo.secciones!.nivel_de_estudios!.fecha_fin),
-            abilities: userInfo.secciones!.tus_habilidades_son!.habilidades,
+            abilities: userInfo.secciones!.tus_habilidades_son!.habilidades!.fecha_fin,
             classification: userInfo.secciones!.clasificacion_puesto!.clasificacion,
             TandA: false
           }
@@ -371,7 +371,6 @@ const FormEmployee = () =>  {
                   <FormGroup check>
                     <Label check>
                       <Input  type="radio" 
-                              id = "partial_worktime_radio"
                               name="worktime" 
                               value='partial' 
                               onChange={handleChange}
@@ -418,8 +417,7 @@ const FormEmployee = () =>  {
                       <Input  type="radio" 
                               name="jobFunction" 
                               value='Administrativa' 
-                              onChange={handleChange}
-                              />{' '}
+                              onChange={handleChange}/>{' '}
                       Administrativa
                     </Label>
                   </FormGroup>
