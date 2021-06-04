@@ -7,6 +7,7 @@ import * as Yup from 'yup';
 import { auth } from '../../firebase';
 import { postEmployeeEnrollmentForm, getEnrollmentForm } from '../../services/formService';
 import { UserContext } from '../Authentication/UserProvider';
+import { debug } from 'node:console';
 
 //Esquema de validación
 const validEmployeeInfoSchema = Yup.object().shape({
@@ -138,8 +139,8 @@ const FormEmployee = () =>  {
         </Row>
       </Container>
       <Formik
-        initialValues={ !userInfo ?
-          //Initialize form with empty values
+        initialValues={ userInfo == undefined ?
+          //Initialize form with empty values if there is no userInfo registered YET
           {
             name: '',
             birthday: '',
@@ -189,7 +190,7 @@ const FormEmployee = () =>  {
             lastOrganizationActivity: userInfo.secciones!.ultimo_ejemplo_o_actividad!.empresa,
             lastPositionActivity: userInfo.secciones!.ultimo_ejemplo_o_actividad!.puesto,
             lastResponsabilityActivity: userInfo.secciones!.ultimo_ejemplo_o_actividad!.responsabilidad,
-            worktime: userInfo.secciones!.actividad_deseada.jornada_de_trabajo,
+            worktime: userInfo.secciones!.actividad_deseada!.jornada_de_trabajo,
             jobFunction: userInfo.secciones!.actividad_deseada!.funcion,
             desiredActivity:{
               training: userInfo.secciones!.actividad_deseada!.capacitacion_o_entrenamiento,
@@ -374,8 +375,7 @@ const FormEmployee = () =>  {
                               name="worktime" 
                               value='partial' 
                               onChange={handleChange}
-                              />{' '}
-                      Parcial (horas)
+                              />{' '}Parcial (horas)
                     </Label>
                   </FormGroup>
                   <FormGroup check>
@@ -384,15 +384,14 @@ const FormEmployee = () =>  {
                               name="worktime" 
                               value='fulltime'  
                               onChange={handleChange}
-                              /> 
-                      Completa
+                              />{' '}Completa
                     </Label>
                   </FormGroup>
-                  {userInfo.secciones!.actividad_deseada.jornada_de_trabajo != '' ? <div>*Ultima opcion registrada: <strong>{userInfo.secciones!.actividad_deseada.jornada_de_trabajo}</strong> (puedes cambiar tu selección y al enviar el formulario se reemplazara por tu nueva seleccion)</div> : null}
-                  {errors.worktime && touched.worktime ? (
-                  <div className="errorMessage">{errors.worktime}</div>) : null}
                 </Col>
               </FormGroup>
+              {userInfo != undefined ? <div>*Ultima opcion registrada: <strong>{userInfo.secciones!.actividad_deseada!.jornada_de_trabajo}</strong> (puedes cambiar tu selección y al enviar el formulario se reemplazara por tu nueva seleccion)</div> : null}
+              {errors.worktime && touched.worktime ? (
+              <div className="errorMessage">{errors.worktime}</div>) : null}
               <FormGroup tag='fieldset'>
                 <Label htmlFor="jobFunction"><strong>Función*</strong></Label>
                 <Col>
@@ -460,7 +459,7 @@ const FormEmployee = () =>  {
                       Oficina
                     </Label>
                   </FormGroup>
-                  {userInfo.secciones!.actividad_deseada.jornada_de_trabajo != '' ? <div>*Ultima opcion registrada: <strong>{userInfo.secciones!.actividad_deseada.funcion}</strong> (puedes cambiar tu selección y al enviar el formulario se reemplazara por tu nueva seleccion)</div> : null}
+                  {userInfo != undefined ? <div>*Ultima opcion registrada: <strong>{userInfo.secciones!.actividad_deseada.funcion}</strong> (puedes cambiar tu selección y al enviar el formulario se reemplazara por tu nueva seleccion)</div> : null}
                   {errors.jobFunction && touched.jobFunction ? (
                   <div className="errorMessage">{errors.jobFunction}</div>) : null}
                 </Col>
@@ -486,7 +485,7 @@ const FormEmployee = () =>  {
                       Ejecutiva
                     </Label>
                   </FormGroup>
-                  {userInfo.secciones!.actividad_deseada.jornada_de_trabajo != '' ? <div>*Ultima opcion registrada: <strong>{userInfo.secciones!.actividad_deseada!.capacitacion_o_entrenamiento}</strong> (puedes cambiar tu selección y al enviar el formulario se reemplazara por tu nueva seleccion)</div> : null}
+                  {userInfo != undefined ? <div>*Ultima opcion registrada: <strong>{userInfo.secciones!.actividad_deseada!.capacitacion_o_entrenamiento}</strong> (puedes cambiar tu selección y al enviar el formulario se reemplazara por tu nueva seleccion)</div> : null}
                   {errors.desiredActivity && touched.desiredActivity ? (
                   <div className="errorMessage">{errors.desiredActivity}</div>) : null}
                 </Col>
@@ -512,7 +511,7 @@ const FormEmployee = () =>  {
                       Ejecutiva
                     </Label>
                   </FormGroup>
-                  {userInfo.secciones!.actividad_deseada.jornada_de_trabajo != '' ? <div>*Ultima opcion registrada: <strong>{userInfo.secciones!.actividad_deseada!.consultoria}</strong> (puedes cambiar tu selección y al enviar el formulario se reemplazara por tu nueva seleccion)</div> : null}
+                  {userInfo != undefined ? <div>*Ultima opcion registrada: <strong>{userInfo.secciones!.actividad_deseada!.consultoria}</strong> (puedes cambiar tu selección y al enviar el formulario se reemplazara por tu nueva seleccion)</div> : null}
                   {errors.desiredActivity && touched.desiredActivity ? (
                   <div className="errorMessage">{errors.desiredActivity}</div>) : null}
                 </Col>
@@ -538,7 +537,7 @@ const FormEmployee = () =>  {
                       Ejecutiva
                     </Label>
                   </FormGroup>
-                  {userInfo.secciones!.actividad_deseada.jornada_de_trabajo != '' ? <div>*Ultima opcion registrada: <strong>{userInfo.secciones!.actividad_deseada!.coaching}</strong> (puedes cambiar tu selección y al enviar el formulario se reemplazara por tu nueva seleccion)</div> : null}
+                  {userInfo != undefined ? <div>*Ultima opcion registrada: <strong>{userInfo.secciones!.actividad_deseada!.coaching}</strong> (puedes cambiar tu selección y al enviar el formulario se reemplazara por tu nueva seleccion)</div> : null}
                   {errors.desiredActivity && touched.desiredActivity ? (
                   <div className="errorMessage">{errors.desiredActivity}</div>) : null}
                 </Col>
