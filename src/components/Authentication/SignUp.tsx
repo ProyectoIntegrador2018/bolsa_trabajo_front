@@ -1,9 +1,18 @@
 import React from 'react';
 import { Form, Row, Col, Button, Input, Jumbotron, Label, FormGroup, CustomInput } from "reactstrap";
-import { useFormik } from "formik";
+import { Formik } from "formik";
 import { Link, useHistory } from 'react-router-dom';
 import { authenticationService, RegisterData } from '../../services/authentication';
 import { UserType } from '../../model/Users';
+import * as Yup from 'yup';
+
+const signUpSchema = Yup.object().shape({
+  name: Yup.string().required('Requerido'),
+  email: Yup.string().required('Requerido').email(),
+  password: Yup.string().required('Requerido'),
+  phoneNumber: Yup.number().required('Requerido').min(11,'Para registrar tu telefono usa el código de area y los 10 digitos (Ejemplo:+521234567891').max(11,'Para registrar tu telefono usa el código de area y los 10 digitos (Ejemplo:+521234567891'),
+  type: Yup.string().required('Requerido')
+})
 
 const SignUp = () => {
 
@@ -20,19 +29,6 @@ const SignUp = () => {
     }
   };
 
-  const formik = useFormik({
-    initialValues: {
-      name: '',
-      email: '',
-      password: '',
-      phoneNumber: '',
-      type: ''
-    },
-    onSubmit: values => {
-      createUserWithEmailAndPasswordHandler(values);
-    },
-  });
-
   return (
     <React.Fragment>
           <Jumbotron className="main-jumbotron">
@@ -41,32 +37,62 @@ const SignUp = () => {
             </Row>
           </Jumbotron>
           <Row className="mx-auto">
-            <Col md={{size: 4, offset: 4}} sm={{size: 12}}>
-              <Form onSubmit={formik.handleSubmit}>
+            <Formik
+              initialValues= {{
+                name: '',
+                email: '',
+                password: '',
+                phoneNumber: '',
+                type: ''
+              }}
+              validationSchema={signUpSchema}
+              onSubmit={createUserWithEmailAndPasswordHandler}
+              >
+              {({ 
+                values,
+                errors,
+                touched,
+                handleChange,
+                handleBlur,
+                handleSubmit,
+                isSubmitting,
+              }) => (
+                <Col md={{size: 4, offset: 4}} sm={{size: 12}}>
+              <Form onSubmit={handleSubmit}>
                 <h2>Registro</h2>
                 <hr></hr>
                 <FormGroup>
                   <Label htmlFor="name" >Nombre</Label>
-                  <Input type="text" id="name" name="name" onChange={formik.handleChange} value={formik.values.name}></Input>
+                  <Input type="text" id="name" name="name" onChange={handleChange} value={values.name}></Input>
+                  {errors.name && touched.name ? (
+                  <div className="errorMessage">{errors.name}</div>) : null}
                 </FormGroup>
                 <FormGroup>
                   <Label htmlFor="email" >Email</Label>
-                  <Input type="text" id="email" name="email" onChange={formik.handleChange} value={formik.values.email}></Input>
+                  <Input type="text" id="email" name="email" onChange={handleChange} value={values.email}></Input>
+                  {errors.email && touched.email ? (
+                  <div className="errorMessage">{errors.email}</div>) : null}
                 </FormGroup>
                 <FormGroup>
                   <Label htmlFor="password" >Contraseña</Label>
-                  <Input type="password" id="password" name="password" onChange={formik.handleChange} value={formik.values.password}></Input>
+                  <Input type="password" id="password" name="password" onChange={handleChange} value={values.password}></Input>
+                  {errors.password && touched.password ? (
+                  <div className="errorMessage">{errors.password}</div>) : null}
                 </FormGroup>
                 <FormGroup>
                   <Label htmlFor="phoneNumber" >Teléfono</Label>
-                  <Input type="text" id="phoneNumber" name="phoneNumber" onChange={formik.handleChange} value={formik.values.phoneNumber}></Input>
+                  <Input type="text" id="phoneNumber" name="phoneNumber" onChange={handleChange} value={values.phoneNumber}></Input>
+                  {errors.phoneNumber && touched.phoneNumber ? (
+                  <div className="errorMessage">{errors.phoneNumber}</div>) : null}
                 </FormGroup>
                 <FormGroup>
                   <Label htmlFor="type" >Tipo de cuenta</Label>
-                  <CustomInput type="select" id="type" name="type" onChange={formik.handleChange} value={formik.values.type}>
+                  <CustomInput type="select" id="type" name="type" onChange={handleChange} value={values.type}>
                     <option value="employee">Empleado</option>
                     <option value="company">Organización</option>
                   </CustomInput>
+                  {errors.type && touched.type ? (
+                  <div className="errorMessage">{errors.type}</div>) : null}
                 </FormGroup>
                 <FormGroup>
                     <Button type="submit" value="submit" color="primary" className="mr-4 signbtn">Crear Usuario</Button>
@@ -76,7 +102,9 @@ const SignUp = () => {
                 </div>
               </Form>
             </Col>
-          </Row>
+            )}
+          </Formik>
+        </Row>
       </React.Fragment>
   );
 };
