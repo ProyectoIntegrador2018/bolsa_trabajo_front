@@ -1,16 +1,19 @@
-import React from 'react';
+import React, {useContext, useState, useCallback, useEffect} from 'react';
 import { Form, Row, Col, Button, Input, Navbar, Label, FormGroup, Container } from "reactstrap";
 import { Formik,Field } from "formik";
 import municipios from "../../shared/municipios";
 import { postOrganizationEnrollmentForm, getOrganizationForm } from '../../services/formService';
 import * as Yup from 'yup';
+import { auth } from '../../firebase';
+import { UserContext } from '../Authentication/UserProvider';
+
 
 //Esquema de validación
 const validPositionInfoSchema = Yup.object().shape({
   organizationName: Yup.string().min(2, 'Muy corto!').max(50, 'Muy largo!').required('Requerido'),
   street: Yup.string().required('Requerido'),
   city: Yup.string().required('Requerido'),
-  zipCode: Yup.number().required('Requerido'),
+  zipCode: Yup.string().required('Requerido'),
   telephone1: Yup.number().required('Requerido'),
   telephone2: Yup.number().required('Requerido'),
   TandA: Yup.bool().isTrue('Debe aceptar la politica de privacidad')
@@ -25,12 +28,41 @@ function generateOrganizationEnrollmentDocument(values: { organizationName: any;
     codigo_postal: values.zipCode,
     telefono_1: values.telephone1,
     telefono_2: values.telephone2,
-    aceptacion_politica : values.TandA
+    aceptacion_politica : {
+      aceptacion: values.TandA
+    }
 }
   return enrollmentDocument;
 }
 
 const FormOrganization = () => {
+  const id = auth.currentUser?.uid
+  const { user } = useContext(UserContext);
+
+  const [userInfo, setUserInfo] = useState<any | null>(null);
+  const [isLoading, setLoading] = useState(true);
+
+  useEffect(() => {
+    getOrganizationForm(id).then((data:any) => {
+      if (data) {
+        setUserInfo(data);
+      }
+    }).finally(() => setLoading(false));
+  }, [user]);
+
+  if (isLoading) {
+    return (
+      <React.Fragment>
+        <Row className="mx-auto">
+          <Col style={{ textAlign: "center" }} md={{size: 12}} sm={{size: 12}}>
+            <div className="spinner-border" role="status">
+              <span className="sr-only">Loading...</span>
+            </div>
+          </Col>
+        </Row>
+      </React.Fragment>
+    );
+  }
       return (
         <React.Fragment>
           <Container>
@@ -39,15 +71,27 @@ const FormOrganization = () => {
             </Row>
           </Container>
           <Formik
-            initialValues={{
-              organizationName: '',
-              street:'',
-              city:'',
-              zipCode:'',
-              telephone1:'',
-              telephone2:'',
-              TandA: false
-            }}
+            initialValues={ userInfo == undefined ?
+              {
+                organizationName: '',
+                street:'',
+                city:'',
+                zipCode:'',
+                telephone1:'',
+                telephone2:'',
+                TandA: false
+              }
+              :
+              {
+                organizationName: userInfo.nombre_empresa,
+                street: userInfo.calle,
+                city: userInfo.municipio,
+                zipCode: userInfo.codigo_postal,
+                telephone1: userInfo.telefono1,
+                telephone2: userInfo.telefono2,
+                TandA: false
+              }
+            }
             validationSchema={validPositionInfoSchema}
             onSubmit={async (values, { setSubmitting }) => {
               setSubmitting(true);
@@ -108,7 +152,7 @@ const FormOrganization = () => {
                           <div className="errorMessage">{errors.city}</div>) : null}
                         </Col>
                         <Col md={4}>
-                          <Input  type='number'
+                          <Input  type='text'
                                   id="zipCode"
                                   name="zipCode"
                                   onChange={handleChange}
