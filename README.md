@@ -82,17 +82,16 @@ $ npm run start
 Control + C
 ```
 
-
 ### Debugging
 
-TBD
+There's no current way of debugging other than modifying the code. (Eg. console.log())
 
 
 ### Running specs
 
-TBD
+We have not yet determined the running specs. All of our computers have been able to run it just fine.
 
 
 ### Checking code for potential issues
 
-TBD
+There's no current way of checking code for potential issues other than using the page.
