@@ -36,6 +36,7 @@ function MainLayout({navExtraInfo = <></>, children,}: any) {
   return (
     <div>
     <Navbar expand="md" className="py-4 px-5 navbar navbar-dark">
+      <img className="pr-2" src="logoIEPAM_Blanco.png" height="55" width="90"/>
       <Link to="/dashboard" style={{ textDecoration: 'none' }}>
         <NavbarBrand href="/">Bolsa de Trabajo</NavbarBrand>
       </Link>

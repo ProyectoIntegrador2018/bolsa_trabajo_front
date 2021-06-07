@@ -45,7 +45,7 @@ function setDateFormat(date : string){
 }
 
 function generateEmployeeEnrollmentDocument(values: { name: any; birthday: any; birthplace: any; street?: string; city?: string; zipCode?: string; phones?: { homePhone: string; personalPhone: string; }; lastActivityPeriod?: string; lastOrganizationActivity?: string; lastPositionActivity?: string; lastResponsabilityActivity?: string; worktime?: string; jobFunction?: string; desiredActivity?: { training: string; consulting: string; coaching: string; }; workingReasons?: string; schoolLevel?: string; schoolName?: string; schoolStartDate?: string; schoolEndDate?: string; abilities?: never[]; classification?: string; resume?: string; TandA?: boolean; ""?: any; }) {
-  let enrollmentDocument = 
+  let enrollmentDocument =
     {
       nombre: values.name,
       fecha_de_nacimiento: values.birthday,
@@ -56,7 +56,7 @@ function generateEmployeeEnrollmentDocument(values: { name: any; birthday: any; 
       telefono_casa: values.phones?.homePhone,
       telefono_celular: values.phones?.personalPhone,
       secciones: {
-        
+
         ultimo_ejemplo_o_actividad: {
           ultimo_periodo: values.lastActivityPeriod,
           empresa: values.lastOrganizationActivity,
@@ -130,9 +130,6 @@ const FormEmployee = () =>  {
 
   return (
     <React.Fragment>
-      <Navbar>
-        <img src="logoIEPAM_Blanco.png" height="55" width="90"/>
-      </Navbar>
       <Container>
         <Row className='my-5'>
           <h1>Formato para registro de postulante</h1>
@@ -217,7 +214,7 @@ const FormEmployee = () =>  {
           }
         }
       >
-        {({ 
+        {({
           values,
           errors,
           touched,
@@ -231,30 +228,30 @@ const FormEmployee = () =>  {
               <h3>Datos Personales</h3>
               <FormGroup>
                   <Label htmlFor="name"><strong>Nombre Completo*</strong></Label>
-                  <Input  type="text" 
-                          id="name" 
-                          name="name" 
-                          onChange={handleChange} 
+                  <Input  type="text"
+                          id="name"
+                          name="name"
+                          onChange={handleChange}
                           value={values.name}/>
                           {errors.name && touched.name ? (
                           <div className="errorMessage">{errors.name}</div>) : null}
               </FormGroup>
               <FormGroup>
                   <Label htmlFor="birthday" ><strong>Fecha de Nacimiento*</strong></Label>
-                  <Input  type="date" 
-                          id="birthday" 
-                          name="birthday" 
-                          onChange={handleChange} 
+                  <Input  type="date"
+                          id="birthday"
+                          name="birthday"
+                          onChange={handleChange}
                           value={values.birthday}/>
                           {errors.birthday && touched.birthday ? (
                           <div className="errorMessage">{errors.birthday}</div>) : null}
               </FormGroup>
               <FormGroup>
                   <Label htmlFor="birthplace" ><strong>Lugar de nacimiento(Ciudad, Estado, Pais)</strong></Label>
-                  <Input  type="text" 
-                          id="birthplace" 
-                          name="birthplace" 
-                          onChange={handleChange} 
+                  <Input  type="text"
+                          id="birthplace"
+                          name="birthplace"
+                          onChange={handleChange}
                           value={values.birthplace}/>
                           {errors.birthplace && touched.birthplace ? (
                           <div className="errorMessage">{errors.birthplace}</div>) : null}
@@ -263,21 +260,21 @@ const FormEmployee = () =>  {
               <Label><strong>Dirección Actual* (Seleccionar municipio como mínimo)</strong></Label>
                 <Row>
                     <Col md={4}>
-                      <Input  type="text" 
-                              id="street" 
-                              name="street" 
-                              onChange={handleChange} 
-                              value={values.street} 
+                      <Input  type="text"
+                              id="street"
+                              name="street"
+                              onChange={handleChange}
+                              value={values.street}
                               placeholder='Calle y número, Colonia'/>
                               {errors.street && touched.street ? (
                               <div className="errorMessage">{errors.street}</div>) : null}
                     </Col>
                     <Col md={4}>
-                      <Input  type="select" 
-                              id="cityDropdown" 
-                              name="city" 
-                              onChange={handleChange} 
-                              value={values.city} 
+                      <Input  type="select"
+                              id="cityDropdown"
+                              name="city"
+                              onChange={handleChange}
+                              value={values.city}
                               placeholder='Municipio'>
                         <option value="" disabled selected>Selecciona tu municipio</option>
                         {municipios.map((municipio) => <option>{municipio}</option>)}
@@ -286,11 +283,11 @@ const FormEmployee = () =>  {
                       <div className="errorMessage">{errors.city}</div>) : null}
                     </Col>
                     <Col md={4}>
-                      <Input  type='number' 
-                              id="zipCode" 
-                              name="zipCode" 
-                              onChange={handleChange} 
-                              value={values.zipCode} 
+                      <Input  type='number'
+                              id="zipCode"
+                              name="zipCode"
+                              onChange={handleChange}
+                              value={values.zipCode}
                               placeholder='Código Postal'/>
                               {errors.zipCode && touched.zipCode ? (
                               <div className="errorMessage">{errors.zipCode}</div>) : null}
@@ -299,20 +296,20 @@ const FormEmployee = () =>  {
               </FormGroup>
               <FormGroup>
                 <Label htmlFor="phones.homePhone"><strong>Teléfono de casa</strong></Label>
-                <Input  type='tel' 
-                        id="phones.homePhone" 
-                        name="phones.homePhone" 
-                        onChange={handleChange} 
+                <Input  type='tel'
+                        id="phones.homePhone"
+                        name="phones.homePhone"
+                        onChange={handleChange}
                         value = {values.phones.homePhone}/>
                         {errors.phones && touched.phones ? (
                         <div className="errorMessage">{errors.phones}</div>) : null}
               </FormGroup>
               <FormGroup>
                 <Label htmlFor="phones.personalPhone"><strong>Teléfono celular</strong></Label>
-                <Input  type='tel' 
-                        id="phones.personalPhone" 
-                        name="phones.personalPhone" 
-                        onChange={handleChange} 
+                <Input  type='tel'
+                        id="phones.personalPhone"
+                        name="phones.personalPhone"
+                        onChange={handleChange}
                         value = {values.phones.personalPhone}/>
                         {errors.phones && touched.phones? (
                         <div className="errorMessage">{errors.phones}</div>) : null}
@@ -322,10 +319,10 @@ const FormEmployee = () =>  {
               <h3>Ultimo Empleo o Actividad</h3>
               <FormGroup>
                 <Label htmlFor="lastActivityPeriod"><strong>Seleccione el periodo de su ultima actividad laboral*</strong></Label>
-                  <Input  type="select" 
-                          id="lastActivityPeriod" 
-                          name="lastActivityPeriod" 
-                          onChange={handleChange} 
+                  <Input  type="select"
+                          id="lastActivityPeriod"
+                          name="lastActivityPeriod"
+                          onChange={handleChange}
                           value={values.lastActivityPeriod}>
                             <option value="" disabled selected>Ultimo periodo de trabajo</option>
                             <option>Ultimo año</option>
@@ -336,30 +333,30 @@ const FormEmployee = () =>  {
               </FormGroup>
               <FormGroup>
                 <Label htmlFor="lastOrganizationActivity"><strong>Ultima Empresa*</strong></Label>
-                <Input  type="textarea" 
-                        id="lastOrganizationActivity" 
-                        name="lastOrganizationActivity" 
-                        onChange={handleChange} 
+                <Input  type="textarea"
+                        id="lastOrganizationActivity"
+                        name="lastOrganizationActivity"
+                        onChange={handleChange}
                         value={values.lastOrganizationActivity}/>
                         {errors.lastOrganizationActivity && touched.lastOrganizationActivity? (
                           <div className="errorMessage">{errors.lastOrganizationActivity}</div>) : null}
               </FormGroup>
               <FormGroup>
                 <Label htmlFor="lastPositionActivity"><strong>Puesto*</strong></Label>
-                <Input  type="textarea" 
-                        id="lastPositionActivity" 
-                        name="lastPositionActivity" 
-                        onChange={handleChange} 
+                <Input  type="textarea"
+                        id="lastPositionActivity"
+                        name="lastPositionActivity"
+                        onChange={handleChange}
                         value={values.lastPositionActivity}/>
                         {errors.lastPositionActivity && touched.lastPositionActivity? (
                         <div className="errorMessage">{errors.lastPositionActivity}</div>) : null}
               </FormGroup>
               <FormGroup>
                 <Label htmlFor="lastResponsabilityActivity"><strong>Responsabilidad</strong></Label>
-                <Input  type="textarea" 
-                        id="lastResponsabilityActivity" 
-                        name="lastResponsabilityActivity" 
-                        onChange={handleChange} 
+                <Input  type="textarea"
+                        id="lastResponsabilityActivity"
+                        name="lastResponsabilityActivity"
+                        onChange={handleChange}
                         value={values.lastResponsabilityActivity}/>
               </FormGroup>
             </Container>
@@ -370,18 +367,18 @@ const FormEmployee = () =>  {
                 <Col>
                   <FormGroup check>
                     <Label check>
-                      <Input  type="radio" 
-                              name="worktime" 
-                              value='partial' 
+                      <Input  type="radio"
+                              name="worktime"
+                              value='partial'
                               onChange={handleChange}
                               />{' '}Parcial (horas)
                     </Label>
                   </FormGroup>
                   <FormGroup check>
                     <Label check>
-                      <Input  type="radio" 
-                              name="worktime" 
-                              value='fulltime'  
+                      <Input  type="radio"
+                              name="worktime"
+                              value='fulltime'
                               onChange={handleChange}
                               />{' '}Completa
                     </Label>
@@ -396,35 +393,35 @@ const FormEmployee = () =>  {
                 <Col>
                   <FormGroup check>
                     <Label check>
-                      <Input  type="radio" 
-                              name="jobFunction" 
-                              value='Operativa' 
+                      <Input  type="radio"
+                              name="jobFunction"
+                              value='Operativa'
                               onChange={handleChange}/>{' '}
                       Operativa
                     </Label>
                   </FormGroup>
                   <FormGroup check>
                     <Label check>
-                      <Input  type="radio" 
-                              name="jobFunction" 
-                              value='Contable' 
+                      <Input  type="radio"
+                              name="jobFunction"
+                              value='Contable'
                               onChange={handleChange}/>{' '}
                       Contable
                     </Label>
                   </FormGroup>
                   <FormGroup check>
                     <Label check>
-                      <Input  type="radio" 
-                              name="jobFunction" 
-                              value='Administrativa' 
+                      <Input  type="radio"
+                              name="jobFunction"
+                              value='Administrativa'
                               onChange={handleChange}/>{' '}
                       Administrativa
                     </Label>
                   </FormGroup>
                   <FormGroup check>
                     <Label check>
-                      <Input  type="radio" 
-                              name="jobFunction" 
+                      <Input  type="radio"
+                              name="jobFunction"
                               value='Gerencial'
                               onChange={handleChange}/>{' '}
                       Gerencial
@@ -432,27 +429,27 @@ const FormEmployee = () =>  {
                   </FormGroup>
                   <FormGroup check>
                     <Label check>
-                      <Input  type="radio" 
-                              name="jobFunction" 
-                              value='A Pie de Maquina' 
+                      <Input  type="radio"
+                              name="jobFunction"
+                              value='A Pie de Maquina'
                               onChange={handleChange}/>{' '}
                       A pie de máquina
                     </Label>
                   </FormGroup>
                   <FormGroup check>
                     <Label check>
-                      <Input  type="radio" 
-                              name="jobFunction" 
-                              value='Supervision' 
+                      <Input  type="radio"
+                              name="jobFunction"
+                              value='Supervision'
                               onChange={handleChange}/>{' '}
                       Supervisión
                     </Label>
                   </FormGroup>
                   <FormGroup check>
                     <Label check>
-                      <Input  type="radio" 
-                              name="jobFunction" 
-                              value='Oficina' 
+                      <Input  type="radio"
+                              name="jobFunction"
+                              value='Oficina'
                               onChange={handleChange}/>{' '}
                       Oficina
                     </Label>
@@ -467,18 +464,18 @@ const FormEmployee = () =>  {
                 <Col>
                   <FormGroup check>
                     <Label check>
-                      <Input  type="radio" 
-                              name="activity.training" 
-                              value='Operativa' 
+                      <Input  type="radio"
+                              name="activity.training"
+                              value='Operativa'
                               onChange={handleChange}/>{' '}
                       Operativa
                     </Label>
                   </FormGroup>
                   <FormGroup check>
                     <Label check>
-                      <Input  type="radio" 
-                              name="desiredActivity.training" 
-                              value='Ejecutiva' 
+                      <Input  type="radio"
+                              name="desiredActivity.training"
+                              value='Ejecutiva'
                               onChange={handleChange}/>{' '}
                       Ejecutiva
                     </Label>
@@ -493,18 +490,18 @@ const FormEmployee = () =>  {
                 <Col>
                   <FormGroup check>
                     <Label check>
-                      <Input  type="radio" 
-                              name="desiredActivity.consulting" 
-                              value='Operativa' 
+                      <Input  type="radio"
+                              name="desiredActivity.consulting"
+                              value='Operativa'
                               onChange={handleChange}/>{' '}
                       Operativa
                     </Label>
                   </FormGroup>
                   <FormGroup check>
                     <Label check>
-                      <Input  type="radio" 
-                              name="desiredActivity.consulting" 
-                              value='Ejecutiva' 
+                      <Input  type="radio"
+                              name="desiredActivity.consulting"
+                              value='Ejecutiva'
                               onChange={handleChange}/>{' '}
                       Ejecutiva
                     </Label>
@@ -519,18 +516,18 @@ const FormEmployee = () =>  {
                 <Col>
                   <FormGroup check>
                     <Label check>
-                      <Input  type="radio" 
-                              name="desiredActivity.coaching" 
-                              value='Operativa' 
+                      <Input  type="radio"
+                              name="desiredActivity.coaching"
+                              value='Operativa'
                               onChange={handleChange}/>{' '}
                       Operativa
                     </Label>
                   </FormGroup>
                   <FormGroup check>
                     <Label check>
-                      <Input  type="radio" 
-                              name="desiredActivity.coaching" 
-                              value='Ejecutiva' 
+                      <Input  type="radio"
+                              name="desiredActivity.coaching"
+                              value='Ejecutiva'
                               onChange={handleChange}/>{' '}
                       Ejecutiva
                     </Label>
@@ -547,11 +544,11 @@ const FormEmployee = () =>  {
                 <Label htmlFor="schoolLevel"><strong>Seleccione su máximo nivel de estudio obtenido*</strong></Label>
                 <Row>
                   <Col md={4}>
-                    <Input  type="select" 
-                            id="schoolLevel" 
-                            name="schoolLevel" 
-                            onChange={handleChange} 
-                            value={values.schoolLevel} 
+                    <Input  type="select"
+                            id="schoolLevel"
+                            name="schoolLevel"
+                            onChange={handleChange}
+                            value={values.schoolLevel}
                             placeholder='Nivel de estudios'>
                               <option value="" disabled selected>Nivel de estudios</option>
                               <option>Primaria</option>
@@ -569,29 +566,29 @@ const FormEmployee = () =>  {
                 <Label htmlFor="schoolInfo"><strong>Ingrese el nombre de la institución, fecha de inicio y fin de sus estudios*</strong></Label>
                 <Row>
                   <Col md={6}>
-                    <Input  type="text" 
-                            id="schoolName" 
-                            name="schoolName" 
-                            onChange={handleChange} 
-                            value={values.schoolName} 
+                    <Input  type="text"
+                            id="schoolName"
+                            name="schoolName"
+                            onChange={handleChange}
+                            value={values.schoolName}
                             placeholder='Institución'/>
                             {errors.schoolName && touched.schoolName ? (
                             <div className="errorMessage">{errors.schoolName}</div>) : null}
                   </Col>
                   <Col md={3}>
-                    <Input  type="date" 
-                            id="schoolStartDate" 
-                            name="schoolStartDate" 
-                            onChange={handleChange} 
+                    <Input  type="date"
+                            id="schoolStartDate"
+                            name="schoolStartDate"
+                            onChange={handleChange}
                             value = {values.schoolStartDate} />
                             {errors.schoolStartDate && touched.schoolStartDate ? (
                             <div className="errorMessage">{errors.schoolStartDate}</div>) : null}
                   </Col>
                   <Col md={3}>
                     <Input  type='date'
-                            id="schoolEndDate" 
-                            name="schoolEndDate" 
-                            onChange={handleChange} 
+                            id="schoolEndDate"
+                            name="schoolEndDate"
+                            onChange={handleChange}
                             value = {values.schoolEndDate}/>
                             {errors.schoolEndDate && touched.schoolEndDate ? (
                             <div className="errorMessage">{errors.schoolEndDate}</div>) : null}
@@ -603,10 +600,10 @@ const FormEmployee = () =>  {
               <h3>Comentarios</h3>
               <FormGroup>
                 <Label htmlFor="workingReasons"><strong>¿Por qué quieres trabajo?*</strong></Label>
-                <Input  type='textarea' 
-                        id="workingReasons" 
-                        name="workingReasons" 
-                        onChange={handleChange} 
+                <Input  type='textarea'
+                        id="workingReasons"
+                        name="workingReasons"
+                        onChange={handleChange}
                         value={values.workingReasons}/>
                         {errors.workingReasons && touched.workingReasons ? (
                           <div className="errorMessage">{errors.workingReasons}</div>) : null}
@@ -617,33 +614,33 @@ const FormEmployee = () =>  {
               <FormGroup>
               <Label htmlFor='abilities'><strong>Mis habilidades son:</strong></Label>
                 <FormGroup>
-                  <Field  type="checkbox" 
-                          name='abilities' 
+                  <Field  type="checkbox"
+                          name='abilities'
                           value='Hacer Equipo'/>{' '}Hacer equipo
                 </FormGroup>
                 <FormGroup>
-                  <Field  type="checkbox" 
-                          name='abilities' 
+                  <Field  type="checkbox"
+                          name='abilities'
                           value='Trabajar en Equipo'/>{' '}Trabajar en equipo
                 </FormGroup>
                 <FormGroup>
-                  <Field  type="checkbox" 
-                          name='abilities' 
+                  <Field  type="checkbox"
+                          name='abilities'
                           value='Conciliador'/>{' '}Conciliador
                 </FormGroup>
                 <FormGroup>
-                  <Field  type="checkbox" 
-                          name='abilities' 
+                  <Field  type="checkbox"
+                          name='abilities'
                           value='Lider'/>{' '}Líder
                 </FormGroup>
                 <FormGroup>
-                  <Field  type="checkbox" 
-                          name='abilities' 
+                  <Field  type="checkbox"
+                          name='abilities'
                           value='Innovador'/>{' '}Innovador
                 </FormGroup>
                 <FormGroup>
-                  <Field  type="checkbox" 
-                          name='abilities' 
+                  <Field  type="checkbox"
+                          name='abilities'
                           value='Trabajar Solo'/>{' '}Trabajar solo
                 </FormGroup>
                 {errors.abilities && touched.abilities ? (
@@ -654,11 +651,11 @@ const FormEmployee = () =>  {
               <FormGroup>
               <h3>Clasificación de puesto</h3>
               <Label htmlFor='classification'><strong>Selecciona la clasificación que mejor describa el puesto de trabajo deseado:*</strong></Label>
-                <Input  type="select" 
-                        id="classificationData" 
-                        name="classification" 
-                        onChange={handleChange} 
-                        value={values.classification} 
+                <Input  type="select"
+                        id="classificationData"
+                        name="classification"
+                        onChange={handleChange}
+                        value={values.classification}
                         placeholder='Clasificación'>
                   <option value="" disabled selected>Clasificación</option>
                           {puestos.map((puesto) => <option>{puesto}</option>)}
@@ -670,9 +667,9 @@ const FormEmployee = () =>  {
             <Container>
               <FormGroup>
                 <Col>
-                <Input  name="TandA" 
-                          id="privacyCheck" 
-                          type="checkbox" 
+                <Input  name="TandA"
+                          id="privacyCheck"
+                          type="checkbox"
                           onChange={handleChange}/>{' '} He leído y acepto la <a href='PrivacidadIEPAM.pdf'>política de privacidad</a>
                           {errors.TandA && touched.TandA ? (
                             <div className="errorMessage">{errors.TandA}</div>) : null}
@@ -688,7 +685,7 @@ const FormEmployee = () =>  {
             </Container>
           </Form>
         )}
-      </Formik> 
+      </Formik>
     </React.Fragment>
       );
   }

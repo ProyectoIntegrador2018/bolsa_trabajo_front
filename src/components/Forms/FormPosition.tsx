@@ -46,9 +46,6 @@ function generateOrganizationEnrollmentDocument(values: { jobTitle: any; worktim
 
 const FormPosition = () => (
         <React.Fragment>
-          <Navbar>
-            <img src="logoIEPAM_Blanco.png" height="55" width="90"/>
-          </Navbar>
           <Container>
             <Row className='my-5'>
               <h1>Formato para registro de puesto</h1>
