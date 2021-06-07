@@ -43,12 +43,12 @@ const SignUp = () => {
                 email: '',
                 password: '',
                 phoneNumber: '',
-                type: ''
+                type: 'employee'
               }}
               validationSchema={signUpSchema}
               onSubmit={createUserWithEmailAndPasswordHandler}
               >
-              {({ 
+              {({
                 values,
                 errors,
                 touched,
