@@ -3,42 +3,42 @@ import { Form, Row, Col, Button, Input, Navbar, Label, FormGroup, Container } fr
 import { Formik,Field } from "formik";
 import municipios from "../../shared/municipios";
 import * as Yup from 'yup';
+import { postJob } from '../../services/jobService';
 
 //Esquema de validación
 const validPositionInfoSchema = Yup.object().shape({
-  jobTitle: Yup.string().required('Requerido'),  
+  jobTitle: Yup.string().required('Requerido'),
   worktime: Yup.string().required('Requerido'),
   jobFunction: Yup.string().required('Requerido'),
   desiredActivity: Yup.object().test('at-least-one-activity', "Marcar al menos un valor en capacitación, consultoría, o coaching", value =>
   !!(value.training || value.consulting || value.coaching)),
   abilities: Yup.object().test('at-least-one-activity', "Llenar al menos un recuadro de descripcion de habilidades", value =>
   !!(value.machineOperationDescription || value.technicalKnowledgeDescription || value.computingEquimentKnowledge || value.programmingKnowledge || value.logicKnowledge || value.numericKnowledge)),
-  competences: Yup.array().length(1,'Eligir al menos una de las competencias en la lista'),
+  competences: Yup.array().min(1,'Eligir al menos una de las competencias en la lista'),
 });
 
 function generateOrganizationEnrollmentDocument(values: { jobTitle: any; worktime: any; jobFunction: any; desiredActivity: any; abilities?: { machineOperationDescription: string; technicalKnowledgeDescription: string; computingEquimentKnowledge: string; programmingKnowledge: string; logicKnowledge: string; numericKnowledge: string; professionalTitle: string; }; competences: any; technicalKnowledgeDescription?: any; computingEquimentKnowledge?: any; programmingKnowledge?: any; logicKnowledge?: any; numericKnowledge?: any; }) {
-  let enrollmentDocument = 
+  let enrollmentDocument =
   {
     nombre_puesto: values.jobTitle,
-    secciones: {
-            posicion_vacante: {
-                    jornada_de_trabajo: values.worktime,
-                    funcion: values.jobFunction,
-                    capacitacion_o_entrenamiento: values.desiredActivity?.training,
-                    consultoria: values.desiredActivity?.consulting,
-                    coaching: values.desiredActivity?.coaching
-            },
-            habilidades_necesarias: {
-                    operacion_de_maquinaria: values.abilities?.machineOperationDescription,
-                    conocimientos_tecnicos: values.abilities?.technicalKnowledgeDescription,
-                    manejo_de_equipo_de_computo: values.abilities?.computingEquimentKnowledge,
-                    programacion_u_office: values.abilities?.programmingKnowledge,
-                    analisis_logico: values.abilities?.logicKnowledge,
-                    analisis_numerico: values.abilities?.numericKnowledge
-            },
-            competencias_requeridas: {
-                    competencias: values.competences
-            }
+    posicion_vacante: {
+            jornada_de_trabajo: values.worktime,
+            funcion: values.jobFunction,
+            capacitacion_o_entrenamiento: values.desiredActivity?.training,
+            consultoria: values.desiredActivity?.consulting,
+            coaching: values.desiredActivity?.coaching
+    },
+    habilidades_necesarias: {
+            operacion_de_maquinaria: values.abilities?.machineOperationDescription,
+            conocimientos_tecnicos: values.abilities?.technicalKnowledgeDescription,
+            manejo_de_equipo_de_computo: values.abilities?.computingEquimentKnowledge,
+            programacion_u_office: values.abilities?.programmingKnowledge,
+            analisis_logico: values.abilities?.logicKnowledge,
+            analisis_numerico: values.abilities?.numericKnowledge,
+            titulo_profesional: values.abilities?.professionalTitle
+    },
+    competencias_requeridas: {
+            competencias: values.competences
     }
 }
   return enrollmentDocument;
@@ -46,9 +46,6 @@ function generateOrganizationEnrollmentDocument(values: { jobTitle: any; worktim
 
 const FormPosition = () => (
         <React.Fragment>
-          <Navbar>
-            <img src="logoIEPAM_Blanco.png" height="55" width="90"/>
-          </Navbar>
           <Container>
             <Row className='my-5'>
               <h1>Formato para registro de puesto</h1>
@@ -56,7 +53,7 @@ const FormPosition = () => (
           </Container>
           <Formik
             initialValues={{
-              jobTitle: '',  
+              jobTitle: '',
               worktime:'',
               jobFunction:'',
               desiredActivity:{
@@ -78,15 +75,18 @@ const FormPosition = () => (
             validationSchema={validPositionInfoSchema}
             onSubmit={(values, { setSubmitting }) => {
               setTimeout(() => {
+                setSubmitting(true);
                 //console.log(JSON.stringify(values, null, 2))
                 //alert(JSON.stringify(values, null, 2));
                 let enrollmentDocument = generateOrganizationEnrollmentDocument(values)
-                console.log(JSON.stringify(enrollmentDocument))
-                setSubmitting(false);
+                console.log(JSON.stringify(enrollmentDocument));
+                postJob(enrollmentDocument).then(() => {
+                  setSubmitting(false);
+                });
               }, 400);
             }}
           >
-            {({ 
+            {({
               values,
               errors,
               touched,
@@ -111,19 +111,19 @@ const FormPosition = () => (
                     <Col>
                       <FormGroup check>
                         <Label check>
-                          <Input  type="radio" 
-                                  name="worktime" 
-                                  value='partial' 
+                          <Input  type="radio"
+                                  name="worktime"
+                                  value='partial'
                                   onChange={handleChange}/>{' '}
                           Parcial (horas)
                         </Label>
                       </FormGroup>
                       <FormGroup check>
                         <Label check>
-                          <Input  type="radio" 
-                                  name="worktime" 
-                                  value='fulltime' 
-                                  onChange={handleChange}/> 
+                          <Input  type="radio"
+                                  name="worktime"
+                                  value='fulltime'
+                                  onChange={handleChange}/>
                           Completa
                         </Label>
                       </FormGroup>
@@ -136,35 +136,35 @@ const FormPosition = () => (
                     <Col>
                       <FormGroup check>
                         <Label check>
-                          <Input  type="radio" 
-                                  name="jobFunction" 
-                                  value='Operativa' 
+                          <Input  type="radio"
+                                  name="jobFunction"
+                                  value='Operativa'
                                   onChange={handleChange}/>{' '}
                           Operativa
                         </Label>
                       </FormGroup>
                       <FormGroup check>
                         <Label check>
-                          <Input  type="radio" 
-                                  name="jobFunction" 
-                                  value='Contable' 
+                          <Input  type="radio"
+                                  name="jobFunction"
+                                  value='Contable'
                                   onChange={handleChange}/>{' '}
                           Contable
                         </Label>
                       </FormGroup>
                       <FormGroup check>
                         <Label check>
-                          <Input  type="radio" 
-                                  name="jobFunction" 
-                                  value='Administrativa' 
+                          <Input  type="radio"
+                                  name="jobFunction"
+                                  value='Administrativa'
                                   onChange={handleChange}/>{' '}
                           Administrativa
                         </Label>
                       </FormGroup>
                       <FormGroup check>
                         <Label check>
-                          <Input  type="radio" 
-                                  name="jobFunction" 
+                          <Input  type="radio"
+                                  name="jobFunction"
                                   value='Gerencial'
                                   onChange={handleChange}/>{' '}
                           Gerencial
@@ -172,27 +172,27 @@ const FormPosition = () => (
                       </FormGroup>
                       <FormGroup check>
                         <Label check>
-                          <Input  type="radio" 
-                                  name="jobFunction" 
-                                  value='A Pie de Maquina' 
+                          <Input  type="radio"
+                                  name="jobFunction"
+                                  value='A Pie de Maquina'
                                   onChange={handleChange}/>{' '}
                           A pie de máquina
                         </Label>
                       </FormGroup>
                       <FormGroup check>
                         <Label check>
-                          <Input  type="radio" 
-                                  name="jobFunction" 
-                                  value='Supervision' 
+                          <Input  type="radio"
+                                  name="jobFunction"
+                                  value='Supervision'
                                   onChange={handleChange}/>{' '}
                           Supervisión
                         </Label>
                       </FormGroup>
                       <FormGroup check>
                         <Label check>
-                          <Input  type="radio" 
-                                  name="jobFunction" 
-                                  value='Oficina' 
+                          <Input  type="radio"
+                                  name="jobFunction"
+                                  value='Oficina'
                                   onChange={handleChange}/>{' '}
                           Oficina
                         </Label>
@@ -206,18 +206,18 @@ const FormPosition = () => (
                     <Col>
                       <FormGroup check>
                         <Label check>
-                          <Input  type="radio" 
-                                  name="desiredActivity.training" 
-                                  value='Operativa' 
+                          <Input  type="radio"
+                                  name="desiredActivity.training"
+                                  value='Operativa'
                                   onChange={handleChange}/>{' '}
                           Operativa
                         </Label>
                       </FormGroup>
                       <FormGroup check>
                         <Label check>
-                          <Input  type="radio" 
-                                  name="desiredActivity.training" 
-                                  value='Ejecutiva' 
+                          <Input  type="radio"
+                                  name="desiredActivity.training"
+                                  value='Ejecutiva'
                                   onChange={handleChange}/>{' '}
                           Ejecutiva
                         </Label>
@@ -231,18 +231,18 @@ const FormPosition = () => (
                     <Col>
                       <FormGroup check>
                         <Label check>
-                          <Input  type="radio" 
-                                  name="desiredActivity.consulting" 
-                                  value='Operativa' 
+                          <Input  type="radio"
+                                  name="desiredActivity.consulting"
+                                  value='Operativa'
                                   onChange={handleChange}/>{' '}
                           Operativa
                         </Label>
                       </FormGroup>
                       <FormGroup check>
                         <Label check>
-                          <Input  type="radio" 
-                                  name="desiredActivity.consulting" 
-                                  value='Ejecutiva' 
+                          <Input  type="radio"
+                                  name="desiredActivity.consulting"
+                                  value='Ejecutiva'
                                   onChange={handleChange}/>{' '}
                           Ejecutiva
                         </Label>
@@ -256,18 +256,18 @@ const FormPosition = () => (
                     <Col>
                       <FormGroup check>
                         <Label check>
-                          <Input  type="radio" 
-                                  name="desiredActivity.coaching" 
-                                  value='Operativa' 
+                          <Input  type="radio"
+                                  name="desiredActivity.coaching"
+                                  value='Operativa'
                                   onChange={handleChange}/>{' '}
                           Operativa
                         </Label>
                       </FormGroup>
                       <FormGroup check>
                         <Label check>
-                          <Input  type="radio" 
-                                  name="desiredActivity.coaching" 
-                                  value='Ejecutiva' 
+                          <Input  type="radio"
+                                  name="desiredActivity.coaching"
+                                  value='Ejecutiva'
                                   onChange={handleChange}/>{' '}
                           Ejecutiva
                         </Label>
@@ -283,26 +283,26 @@ const FormPosition = () => (
                   <Label htmlFor='abilities'><strong>Habilidades necesarias:</strong></Label>
                     <FormGroup>
                     <Label htmlFor='abilities.machineOperationDescription'>Operación de maquinaria (especificar que tipo)</Label>
-                      <Input  type="textarea" 
+                      <Input  type="textarea"
                               name='abilities.machineOperationDescription'
-                              onChange={handleChange} 
+                              onChange={handleChange}
                               value={values.abilities.machineOperationDescription} />
                     </FormGroup>
                     {errors.abilities && touched.abilities ? (
                       <div className="errorMessage">{errors.abilities}</div>) : null}
                     <FormGroup>
                     <Label htmlFor='abilities.technicalKnowledgeDescription'>Conocimientos Técnicos (especificar)</Label>
-                    <Input  type="textarea" 
-                            name='abilities.technicalKnowledgeDescription' 
+                    <Input  type="textarea"
+                            name='abilities.technicalKnowledgeDescription'
                             onChange={handleChange}
-                            value={values.abilities.technicalKnowledgeDescription} />       
+                            value={values.abilities.technicalKnowledgeDescription} />
                     </FormGroup>
                     {errors.abilities && touched.abilities ? (
                       <div className="errorMessage">{errors.abilities}</div>) : null}
                     <FormGroup>
                     <Label htmlFor='abilities.computingEquimentKnowledge'>Manejo de equipo de cómputo</Label>
-                    <Input  type="textarea" 
-                            name='abilities.computingEquimentKnowledge' 
+                    <Input  type="textarea"
+                            name='abilities.computingEquimentKnowledge'
                             onChange={handleChange}
                             value={values.abilities.computingEquimentKnowledge} />
                     </FormGroup>
@@ -310,8 +310,8 @@ const FormPosition = () => (
                       <div className="errorMessage">{errors.abilities}</div>) : null}
                     <FormGroup>
                     <Label htmlFor='abilities.programmingKnowledge'>Programación u Office</Label>
-                    <Input  type="textarea" 
-                            name='abilities.programmingKnowledge' 
+                    <Input  type="textarea"
+                            name='abilities.programmingKnowledge'
                             onChange={handleChange}
                             value={values.abilities.programmingKnowledge} />
                     </FormGroup>
@@ -319,8 +319,8 @@ const FormPosition = () => (
                       <div className="errorMessage">{errors.abilities}</div>) : null}
                     <FormGroup>
                     <Label htmlFor='abilities.logicKnowledge'>Análisis Lógico</Label>
-                    <Input  type="textarea" 
-                            name='abilities.logicKnowledge' 
+                    <Input  type="textarea"
+                            name='abilities.logicKnowledge'
                             onChange={handleChange}
                             value={values.abilities.logicKnowledge} />
                     </FormGroup>
@@ -328,8 +328,8 @@ const FormPosition = () => (
                       <div className="errorMessage">{errors.abilities}</div>) : null}
                     <FormGroup>
                     <Label htmlFor='abilities.numericKnowledge'>Análisis Numérico</Label>
-                    <Input  type="textarea" 
-                            name='abilities.numericKnowledge' 
+                    <Input  type="textarea"
+                            name='abilities.numericKnowledge'
                             onChange={handleChange}
                             value={values.abilities.numericKnowledge} />
                     </FormGroup>
@@ -338,7 +338,7 @@ const FormPosition = () => (
                     <FormGroup>
                     <Label htmlFor='abilities.professionalTitle'>Titulo Profesional en:</Label>
                     <Input  type='text'
-                            name='abilities.professionalTitle' 
+                            name='abilities.professionalTitle'
                             onChange={handleChange}
                             value={values.abilities.professionalTitle} />
                     </FormGroup>
@@ -351,43 +351,43 @@ const FormPosition = () => (
                   <FormGroup>
                   <Label htmlFor='competences'><strong>Competencias requeridas:</strong></Label>
                     <FormGroup>
-                      <Field  type="checkbox" 
-                              name='competences' 
+                      <Field  type="checkbox"
+                              name='competences'
                               value='Liderazgo'/>{' '}Liderazgo
                     </FormGroup>
                     <FormGroup>
-                      <Field  type="checkbox" 
-                              name='competences' 
+                      <Field  type="checkbox"
+                              name='competences'
                               value='Conciliador'/>{' '}Conciliador
                     </FormGroup>
                     <FormGroup>
-                      <Field  type="checkbox" 
-                              name='competences' 
+                      <Field  type="checkbox"
+                              name='competences'
                               value='Negociador'/>{' '}Negociador
                     </FormGroup>
                     <FormGroup>
-                      <Field  type="checkbox" 
-                              name='competences' 
+                      <Field  type="checkbox"
+                              name='competences'
                               value='Trabajo en Equipo'/>{' '}Trabajo en Equipo
                     </FormGroup>
                     <FormGroup>
-                      <Field  type="checkbox" 
-                              name='competences' 
+                      <Field  type="checkbox"
+                              name='competences'
                               value='Certificación en capacitación'/>{' '}Certificación en capacitación
                     </FormGroup>
                     <FormGroup>
-                      <Field  type="checkbox" 
-                              name='competences' 
+                      <Field  type="checkbox"
+                              name='competences'
                               value='Certificación como consejero'/>{' '}Certificación como consejero
                     </FormGroup>
                     <FormGroup>
-                      <Field  type="checkbox" 
-                              name='competences' 
+                      <Field  type="checkbox"
+                              name='competences'
                               value='Capacidad gerencial'/>{' '}Capacidad gerencial
                     </FormGroup>
                     <FormGroup>
-                      <Field  type="checkbox" 
-                              name='competences' 
+                      <Field  type="checkbox"
+                              name='competences'
                               value='Capacidad directiva'/>{' '}Capacidad directiva
                     </FormGroup>
                     {errors.competences && touched.competences ? (
@@ -403,7 +403,7 @@ const FormPosition = () => (
                 </Container>
               </Form>
             )}
-          </Formik> 
+          </Formik>
         </React.Fragment>
     );
 

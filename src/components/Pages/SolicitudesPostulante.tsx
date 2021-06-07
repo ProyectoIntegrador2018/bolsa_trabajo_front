@@ -4,7 +4,10 @@ import { Link, useHistory } from 'react-router-dom';
 //import misSolicitudesActivas from '../../testing/misSolicitudesActivas.json';
 import misSolicitudesCerradas from '../../testing/misSolicitudesCerradas.json';
 import { UserContext } from '../Authentication/UserProvider';
-import { getMatches, answerMatch } from '../../services/matchesService';
+import { getMatches } from '../../services/matchesService';
+import ModalSolicitudesEmpresa from '../Modals/ModalSolicitudesPostulante';
+import Loader from '../Loader/Loader';
+
 interface User {
   enrollmentFormId?: string;
 };
@@ -43,10 +46,15 @@ function typeColorSwitch(param:any) {
   }
 }
 
+function isUserActive(user: any) {
+  return user.state == "active";
+}
 
-function SolicitudesPostulante() {
+function userHasEnrollmentForm(user: any) {
+  return user.hasOwnProperty("enrollmentFormId");
+}
 
-  const { user } = useContext(UserContext);
+function SolicitudesPostulanteContent(props: {user: any}) {
 
   const [activeMatches, setActiveMatches] = useState<any | null>(null);
   const [pastMatches, setPastMatches] = useState<any | null>(null);
@@ -76,7 +84,7 @@ function SolicitudesPostulante() {
   }
 
   useEffect(() => {
-    if (user) {
+    if (props.user) {
       getMatches().then((data:any) => {
         if (data) {
           let _matches = data.matches;
@@ -89,54 +97,11 @@ function SolicitudesPostulante() {
         }
       });
     }
-  }, [user]);
+  }, [props.user]);
 
   if (isLoading) {
-    return (
-      <React.Fragment>
-        <Row className="mx-auto">
-          <Col style={{ textAlign: "center" }} md={{size: 12}} sm={{size: 12}}>
-            <div className="spinner-border" role="status">
-              <span className="sr-only">Loading...</span>
-            </div>
-          </Col>
-        </Row>
-      </React.Fragment>
-    );
+    return (<Loader></Loader>);
   }
-
-  // ToDo: Checar que esto funcione bien
-  /*
-  if (!user.enrollmentFormId) {
-    return (
-      <React.Fragment>
-        <Row className="mx-auto">
-          <Col md={{size: 10, offset: 1}} sm={{size: 12}} style={{ textAlign: "center" }}>
-            <h1>Antes de utilizar los servicios de la bolsa de trabajo debes llenar tus datos en el apartado:</h1>
-            <br/>
-            <Link to="/form-employee">
-              <Button color="primary">
-                <h2>Mi Información</h2>
-              </Button>
-            </Link>
-          </Col>
-        </Row>
-      </React.Fragment>
-    )
-  }
-
-  if (user.state == 'inactive') {//.state == 'inactive') {
-    return (
-      <React.Fragment>
-        <Row className="mx-auto">
-          <Col md={{size: 10, offset: 1}} sm={{size: 12}} style={{ textAlign: "center" }}>
-            <h1>Gracias por llenar tu información. Un administrador del IEPAM revisará tus datos y en breve te dará acceso al uso completo de la plataforma.</h1>
-          </Col>
-        </Row>
-      </React.Fragment>
-    )
-  }
-  */
 
   return (
     <React.Fragment>
@@ -168,7 +133,9 @@ function SolicitudesPostulante() {
                 <td className="align-middle" style={{ width: "25%" }}>
                   <div className={myClassName} role="alert">{typeTextSwitch(solicitud.state)}</div>
                 </td>
-                <td className="align-middle" style={{ width: "25%" }}>{isPending(solicitud.state, solicitud.id)}</td>
+                <td className="text-center align-middle" style={{ width: "25%" }}>
+                  <ModalSolicitudesEmpresa match={solicitud} buttonLabel="Ver detalle" className=""></ModalSolicitudesEmpresa>
+                </td>
               </tr>
               )
             })}
@@ -199,7 +166,9 @@ function SolicitudesPostulante() {
                 <td className="align-middle" style={{ width: "25%" }}>
                   <div className={myClassName} role="alert">{typeTextSwitch(solicitud.state)}</div>
                 </td>
-                <td className="align-middle" style={{ width: "25%" }}></td>
+                <td className="text-center align-middle" style={{ width: "25%" }}>
+                  <ModalSolicitudesEmpresa match={solicitud} buttonLabel="Ver detalle" className=""></ModalSolicitudesEmpresa>
+                </td>
               </tr>
               )
             })}
@@ -209,6 +178,48 @@ function SolicitudesPostulante() {
       </Row>
     </React.Fragment>
   );
+}
+
+function SolicitudesPostulante() {
+  
+  const { user } = useContext(UserContext);
+
+  if(!userHasEnrollmentForm(user)) {
+    return (
+        <React.Fragment>
+          <Row className="mx-auto">
+            <Col md={{size: 10, offset: 1}} sm={{size: 12}} style={{ textAlign: "center" }}>
+              <h1>Antes de utilizar los servicios de la bolsa de trabajo debes llenar tus datos en el apartado:</h1>
+              <br/>
+              <Link to="/form-employee">
+                <Button color="primary">
+                  <h2>Mi Información</h2>
+                </Button>
+              </Link>
+            </Col>
+          </Row>
+        </React.Fragment>
+      )
+  }
+
+  if(!isUserActive(user)) {
+    return (
+        <React.Fragment>
+          <Row className="mx-auto">
+            <Col md={{size: 10, offset: 1}} sm={{size: 12}} style={{ textAlign: "center" }}>
+              <h1>Gracias por llenar tu información. Un administrador del IEPAM revisará tus datos y en breve te dará acceso al uso completo de la plataforma.</h1>
+            </Col>
+          </Row>
+        </React.Fragment>
+      )
+  }
+
+  return (
+    <React.Fragment>
+      <SolicitudesPostulanteContent user={user}/>
+    </React.Fragment>
+    )
+
 }
 
 export default SolicitudesPostulante;

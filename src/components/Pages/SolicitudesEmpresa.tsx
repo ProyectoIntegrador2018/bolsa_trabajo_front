@@ -5,6 +5,8 @@ import { Link, useHistory } from 'react-router-dom';
 import misSolicitudesActivas from '../../testing/misSolicitudesActivas.json';
 import misSolicitudesCerradas from '../../testing/misSolicitudesCerradas.json';
 import { getMatches } from '../../services/matchesService';
+import ModalSolicitudesEmpresa from '../Modals/ModalSolicitudesEmpresa';
+import Loader from '../Loader/Loader';
 
 function typeTextSwitch(param:any) {
   switch(param) {
@@ -13,7 +15,7 @@ function typeTextSwitch(param:any) {
     case 'active':
       return 'En proceso';
     case 'hired':
-      return 'Oferta';
+      return 'Empleo';
     case 'notHired':
       return 'Cerrada';
     case 'declined':
@@ -40,20 +42,25 @@ function typeColorSwitch(param:any) {
   }
 }
 
-function SolicitudesEmpresa() {
+function isUserActive(user: any) {
+  return user.state == "active";
+}
 
-    const { user } = useContext(UserContext);
+function userHasEnrollmentForm(user: any) {
+  return user.hasOwnProperty("enrollmentFormId");
+}
+
+function SolicitudesEmpresaContent(props: {user: any}) {
 
     const [activeMatches, setActiveMatches] = useState<any | null>(null);
     const [pastMatches, setPastMatches] = useState<any | null>(null);
     const [isLoading, setLoading] = useState(true);
 
     useEffect(() => {
-      if (user) {
+      if (props.user) {
         getMatches().then((data:any) => {
           if (data) {
             let _matches = data.matches;
-            console.log(_matches);
             _matches.sort((a:any, b:any) => {
               return b.matchMetadata.createdAt - a.matchMetadata.createdAt;
             });
@@ -63,20 +70,10 @@ function SolicitudesEmpresa() {
           }
         });
       }
-    }, [user]);
+    }, [props.user]);
 
     if (isLoading) {
-      return (
-        <React.Fragment>
-          <Row className="mx-auto">
-            <Col style={{ textAlign: "center" }} md={{size: 12}} sm={{size: 12}}>
-              <div className="spinner-border" role="status">
-                <span className="sr-only">Loading...</span>
-              </div>
-            </Col>
-          </Row>
-        </React.Fragment>
-      );
+      return <Loader></Loader>;
     }
 
     return (
@@ -109,8 +106,8 @@ function SolicitudesEmpresa() {
                   <td className="align-middle" style={{ width: "25%" }}>
                     <div className={myClassName} role="alert">{typeTextSwitch(solicitud.state)}</div>
                   </td>
-                  <td className="align-middle" style={{ width: "25%" }}>
-                    <Button color="primary" style={{width: "100%"}} className="">Ver detalle</Button>
+                  <td className="text-center align-middle" style={{ width: "25%" }}>
+                    <ModalSolicitudesEmpresa match={solicitud} buttonLabel="Ver detalle" className=""></ModalSolicitudesEmpresa>
                   </td>
                 </tr>
                 )
@@ -142,8 +139,8 @@ function SolicitudesEmpresa() {
                   <td className="align-middle" style={{ width: "25%" }}>
                     <div className={myClassName} role="alert">{typeTextSwitch(solicitud.state)}</div>
                   </td>
-                  <td className="align-middle" style={{ width: "25%" }}>
-                    <Button color="primary" style={{width: "100%"}} className="">Ver detalle</Button>
+                  <td className="text-center align-middle" style={{ width: "25%" }}>
+                    <ModalSolicitudesEmpresa match={solicitud} buttonLabel="Ver detalle" className=""></ModalSolicitudesEmpresa>
                   </td>
                 </tr>
                 )
@@ -154,6 +151,48 @@ function SolicitudesEmpresa() {
         </Row>
       </React.Fragment>
     );
+  }
+
+  function SolicitudesEmpresa() {
+
+    const { user } = useContext(UserContext);
+
+    if(!userHasEnrollmentForm(user)) {
+      return (
+          <React.Fragment>
+            <Row className="mx-auto">
+              <Col md={{size: 10, offset: 1}} sm={{size: 12}} style={{ textAlign: "center" }}>
+                <h1>Antes de utilizar los servicios de la bolsa de trabajo debes llenar tus datos en el apartado:</h1>
+                <br/>
+                <Link to="/form-organization">
+                  <Button color="primary">
+                    <h2>Mi Información</h2>
+                  </Button>
+                </Link>
+              </Col>
+            </Row>
+          </React.Fragment>
+        )
+    }
+
+    if(!isUserActive(user)) {
+      return (
+          <React.Fragment>
+            <Row className="mx-auto">
+              <Col md={{size: 10, offset: 1}} sm={{size: 12}} style={{ textAlign: "center" }}>
+                <h1>Gracias por llenar tu información. Un administrador del IEPAM revisará tus datos y en breve te dará acceso al uso completo de la plataforma.</h1>
+              </Col>
+            </Row>
+          </React.Fragment>
+        )
+    }
+
+    return (
+      <React.Fragment>
+        <SolicitudesEmpresaContent user={user}/>
+      </React.Fragment>
+      )
+
   }
 
 export default SolicitudesEmpresa;

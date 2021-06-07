@@ -2,11 +2,11 @@ import axios from 'axios'
 import { config } from '../config';
 import { auth } from '../firebase';
 
-export const getMatches = async () => {
+export const getJobs = async () => {
   try {
     const token = await auth.currentUser?.getIdToken();
     const res = await axios.get(
-      config.apiUrl + '/api/match',
+      config.apiUrl + '/api/job',
       {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -20,15 +20,11 @@ export const getMatches = async () => {
   }
 };
 
-export const updateMatch = async (id:string, state:string) => {//, jobId:string) => {
+export const findOneJob = async (id:string) => {
   try {
     const token = await auth.currentUser?.getIdToken();
-    const res = await axios.put(
-      config.apiUrl + '/api/match/' + id,
-      {
-        state,
-        //jobId
-      },
+    const res = await axios.get(
+      config.apiUrl + '/api/job/' + id,
       {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -38,29 +34,25 @@ export const updateMatch = async (id:string, state:string) => {//, jobId:string)
     );
     return res.data;
   } catch (error) {
-    console.error("Error answering match", error);
+    console.error("Error getting matches", error);
   }
 };
 
-export const postMatch = async (employeeId:string, jobId:string, description:string) => {//, jobId:string) => {
+export const postJob = async (job: any) => {
+  if (!job) return null;
+  const token = await auth.currentUser?.getIdToken();
+  debugger;
   try {
-    const token = await auth.currentUser?.getIdToken();
     const res = await axios.post(
-      config.apiUrl + '/api/match/',
-      {
-        employeeId,
-        jobId,
-        description
+      config.apiUrl + '/api/job', job, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json'
       },
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          'Content-Type': 'application/json'
-        },
-      }
+    }
     );
     return res.data;
   } catch (error) {
-    console.error("Error creating match", error);
+    console.error("Error posting job", error);
   }
 };

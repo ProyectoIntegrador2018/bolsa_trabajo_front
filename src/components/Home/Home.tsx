@@ -9,7 +9,7 @@ function Home() {
   if (isEmployee(user)) {
     return <Redirect to="/missolicitudes" />;
   } else if (isCompany(user)) {
-    return <Redirect to="/dashboard" />;
+    return <Redirect to="/postulantes" />;
   } else if (isMinAdmin(user)) {
     return <Redirect to="/admin" />;
   } else {
