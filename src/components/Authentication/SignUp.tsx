@@ -10,7 +10,7 @@ const signUpSchema = Yup.object().shape({
   name: Yup.string().required('Requerido'),
   email: Yup.string().required('Requerido').email(),
   password: Yup.string().required('Requerido'),
-  phoneNumber: Yup.number().required('Requerido').min(11,'Para registrar tu telefono usa el código de area y los 10 digitos (Ejemplo:+521234567891').max(11,'Para registrar tu telefono usa el código de area y los 10 digitos (Ejemplo:+521234567891'),
+  phoneNumber: Yup.number().required('Requerido. Para registrar tu telefono usa el código de area y los 10 digitos (Ejemplo:+521234567891'),
   type: Yup.string().required('Requerido')
 })
 

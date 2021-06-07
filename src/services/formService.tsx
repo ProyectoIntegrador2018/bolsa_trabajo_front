@@ -31,7 +31,6 @@ export const getEnrollmentForm = async (userId: any) => {
 export const postEmployeeEnrollmentForm = async (enrollmentForm: any) => {
   if (!enrollmentForm) return null;
   const token = await auth.currentUser?.getIdToken();
-  debugger;
   try {
     const res = await axios.post(
       config.apiUrl + '/api/user/enrollment-form', enrollmentForm, {
@@ -75,7 +74,6 @@ export const getOrganizationForm = async (userId: any) => {
 export const postOrganizationEnrollmentForm = async (enrollmentForm: any) => {
   if (!enrollmentForm) return null;
   const token = await auth.currentUser?.getIdToken();
-  debugger;
   try {
     const res = await axios.post(
       config.apiUrl + '/api/user/enrollment-form', enrollmentForm, {

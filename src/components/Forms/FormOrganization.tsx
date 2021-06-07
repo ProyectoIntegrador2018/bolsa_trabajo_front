@@ -10,10 +10,9 @@ const validPositionInfoSchema = Yup.object().shape({
   organizationName: Yup.string().min(2, 'Muy corto!').max(50, 'Muy largo!').required('Requerido'),
   street: Yup.string().required('Requerido'),
   city: Yup.string().required('Requerido'),
-  zipCode: Yup.number().min(5).max(5).required('Requerido'),
+  zipCode: Yup.number().required('Requerido'),
   telephone1: Yup.number().required('Requerido'),
   telephone2: Yup.number().required('Requerido'),
-  worktime: Yup.string().required('Requerido'),
   TandA: Yup.bool().isTrue('Debe aceptar la politica de privacidad')
 });
 
@@ -26,14 +25,13 @@ function generateOrganizationEnrollmentDocument(values: { organizationName: any;
     codigo_postal: values.zipCode,
     telefono_1: values.telephone1,
     telefono_2: values.telephone2,
-    aceptacion_politica : {
-      aceptacion : values.TandA
-    }
+    aceptacion_politica : values.TandA
 }
   return enrollmentDocument;
 }
 
-const FormOrganization = () => (
+const FormOrganization = () => {
+      return (
         <React.Fragment>
           <Container>
             <Row className='my-5'>
@@ -52,7 +50,8 @@ const FormOrganization = () => (
             }}
             validationSchema={validPositionInfoSchema}
             onSubmit={async (values, { setSubmitting }) => {
-              debugger;
+              setSubmitting(true);
+              console.log("entro submit")
               let enrollmentDocument = generateOrganizationEnrollmentDocument(values)
               await postOrganizationEnrollmentForm(enrollmentDocument)
               alert('Formulario enviado!')
@@ -115,8 +114,8 @@ const FormOrganization = () => (
                                   onChange={handleChange}
                                   value={values.zipCode}
                                   placeholder='Código Postal'/>
-                                  {errors.city && touched.city ? (
-                                  <div className="errorMessage">{errors.city}</div>) : null}
+                                  {errors.zipCode && touched.zipCode ? (
+                                  <div className="errorMessage">{errors.zipCode}</div>) : null}
                         </Col>
                     </Row>
                   </FormGroup>
@@ -165,5 +164,6 @@ const FormOrganization = () => (
           </Formik>
         </React.Fragment>
     );
+  }
 
 export default FormOrganization ;
