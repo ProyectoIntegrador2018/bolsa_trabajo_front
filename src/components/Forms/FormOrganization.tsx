@@ -2,6 +2,7 @@ import React from 'react';
 import { Form, Row, Col, Button, Input, Navbar, Label, FormGroup, Container } from "reactstrap";
 import { Formik,Field } from "formik";
 import municipios from "../../shared/municipios";
+import { postOrganizationEnrollmentForm, getOrganizationForm } from '../../services/formService';
 import * as Yup from 'yup';
 
 //Esquema de validación
@@ -50,15 +51,14 @@ const FormOrganization = () => (
               TandA: false
             }}
             validationSchema={validPositionInfoSchema}
-            onSubmit={(values, { setSubmitting }) => {
-              setTimeout(() => {
-                //console.log(JSON.stringify(values, null, 2))
-                //alert(JSON.stringify(values, null, 2));
-                let enrollmentDocument = generateOrganizationEnrollmentDocument(values)
-                console.log(JSON.stringify(enrollmentDocument))
-                setSubmitting(false);
-              }, 400);
-            }}
+            onSubmit={async (values, { setSubmitting }) => {
+              debugger;
+              let enrollmentDocument = generateOrganizationEnrollmentDocument(values)
+              await postOrganizationEnrollmentForm(enrollmentDocument)
+              alert('Formulario enviado!')
+              setSubmitting(false);
+            }
+          }
           >
             {({
               values,
