@@ -30,19 +30,19 @@ function EmployeeDetail(props: { enrollmentForm: EmployeeForm }) {
                         <dl className="row">
 
                             <dt className="col-sm-4">Dirección actual:</dt>
-                            <dd className="col-sm-8">{(props.enrollmentForm.calle + ", " || "") + props.enrollmentForm.municipio + ", " + (props.enrollmentForm.codigo_postal || "")}</dd>
+                            <dd className="col-sm-8">{(props.enrollmentForm.calle ? props.enrollmentForm.calle + ", " : "" ) + props.enrollmentForm.municipio + (props.enrollmentForm.codigo_postal ? ", " + props.enrollmentForm.codigo_postal : "")}</dd>
 
                             <dt className="col-sm-4">Fecha de nacimiento:</dt>
                             <dd className="col-sm-8">{props.enrollmentForm.fecha_de_nacimiento}</dd>
 
                             <dt className="col-sm-4">Lugar de nacimiento:</dt>
-                            <dd className="col-sm-8">{props.enrollmentForm.lugar_de_nacimiento || "Información No Disponible"}</dd>
+                            <dd className="col-sm-8">{props.enrollmentForm.lugar_de_nacimiento || "Información No Proporcionada"}</dd>
 
                             <dt className="col-sm-4">Telefono casa:</dt>
-                            <dd className="col-sm-8">{props.enrollmentForm.telefono_casa || "Información No Disponible"}</dd>
+                            <dd className="col-sm-8">{props.enrollmentForm.telefono_casa || "Información No Proporcionada"}</dd>
 
                             <dt className="col-sm-4">Telefono celular:</dt>
-                            <dd className="col-sm-8">{props.enrollmentForm.telefono_celular || "Información No Disponible"}</dd>
+                            <dd className="col-sm-8">{props.enrollmentForm.telefono_celular || "Información No Proporcionada"}</dd>
                         </dl>
 
                         <hr></hr>
@@ -59,7 +59,7 @@ function EmployeeDetail(props: { enrollmentForm: EmployeeForm }) {
                             <dd className="col-sm-8">{props.enrollmentForm.secciones!.ultimo_ejemplo_o_actividad!.puesto}</dd>
 
                             <dt className="col-sm-4">Responsabilidad:</dt>
-                            <dd className="col-sm-8">{props.enrollmentForm.secciones!.ultimo_ejemplo_o_actividad!.responsabilidad || "Información No Disponible"}</dd>
+                            <dd className="col-sm-8">{props.enrollmentForm.secciones!.ultimo_ejemplo_o_actividad!.responsabilidad || "Información No Proporcionada"}</dd>
                         </dl>
 
                         <hr></hr>
@@ -67,19 +67,19 @@ function EmployeeDetail(props: { enrollmentForm: EmployeeForm }) {
                         <dl className="row">
 
                             <dt className="col-sm-4">Jornada de trabajo:</dt>
-                            <dd className="col-sm-8">{props.enrollmentForm.secciones!.actividad_deseada!.jornada_de_trabajo}</dd>
+                            <dd className="col-sm-8">{props.enrollmentForm.secciones!.actividad_deseada!.jornada_de_trabajo == "fulltime" ? "Tiempo Completo" : "Parcial"}</dd>
 
                             <dt className="col-sm-4">Función:</dt>
                             <dd className="col-sm-8">{props.enrollmentForm.secciones!.actividad_deseada!.funcion}</dd>
 
                             <dt className="col-sm-4">Capacitación o entrenamiento:</dt>
-                            <dd className="col-sm-8">{props.enrollmentForm.secciones!.actividad_deseada!.capacitacion_o_entrenamiento || "Información No Disponible"}</dd>
+                            <dd className="col-sm-8">{props.enrollmentForm.secciones!.actividad_deseada!.capacitacion_o_entrenamiento || "Información No Proporcionada"}</dd>
 
                             <dt className="col-sm-4">Consultoría:</dt>
-                            <dd className="col-sm-8">{props.enrollmentForm.secciones!.actividad_deseada!.consultoria || "Información No Disponible"}</dd>
+                            <dd className="col-sm-8">{props.enrollmentForm.secciones!.actividad_deseada!.consultoria || "Información No Proporcionada"}</dd>
 
                             <dt className="col-sm-4">Coaching:</dt>
-                            <dd className="col-sm-8">{props.enrollmentForm.secciones!.actividad_deseada!.coaching || "Información No Disponible"}</dd>
+                            <dd className="col-sm-8">{props.enrollmentForm.secciones!.actividad_deseada!.coaching || "Información No Proporcionada"}</dd>
                         </dl>
 
                         <hr></hr>
@@ -136,16 +136,16 @@ function CompanyDetail(props: { enrollmentForm: CompanyForm }) {
                         <dl className="row">
 
                             <dt className="col-sm-4">Dirección actual:</dt>
-                            <dd className="col-sm-8">{props.enrollmentForm.direccion_actual}</dd>
+                            <dd className="col-sm-8">{props.enrollmentForm.calle}</dd>
+                            
+                            <dt className="col-sm-4">Código Postal:</dt>
+                            <dd className="col-sm-8">{props.enrollmentForm.codigo_postal}</dd>
 
                             <dt className="col-sm-4">Municipio:</dt>
                             <dd className="col-sm-8">{props.enrollmentForm.municipio}</dd>
 
-                            <dt className="col-sm-4">Estado:</dt>
-                            <dd className="col-sm-8">{props.enrollmentForm.estado}</dd>
-
                             <dt className="col-sm-4">Telefono 1:</dt>
-                            <dd className="col-sm-8">{props.enrollmentForm.telefono_1 || "Información No Disponible"}</dd>
+                            <dd className="col-sm-8">{props.enrollmentForm.telefono_1 || "Información No Proporcionada"}</dd>
 
                             <dt className="col-sm-4">Telefono 2:</dt>
                             <dd className="col-sm-8">{props.enrollmentForm.telefono_2}</dd>

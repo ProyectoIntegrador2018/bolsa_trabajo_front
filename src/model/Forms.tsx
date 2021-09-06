@@ -51,11 +51,11 @@ export interface EmployeeForm {
 
 export interface CompanyForm {
     nombre_empresa: string,
-    direccion_actual: string,
+    calle: string,
+    codigo_postal: string,
     municipio: string,
-    estado: string,
     telefono_1?: string,
-    telefono_2: string,
+    telefono_2?: string,
     aceptacion_politica : {
         aceptacion : boolean
       }

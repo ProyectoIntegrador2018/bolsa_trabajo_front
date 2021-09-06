@@ -1,7 +1,6 @@
 import axios from 'axios'
 import { config } from '../config';
 import { auth } from '../firebase';
-import { CompanyForm, EmployeeForm } from '../model/Forms';
 
 export const getEnrollmentForm = async (userId: any) => {
   if (!userId) return undefined;

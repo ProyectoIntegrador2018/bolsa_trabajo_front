@@ -6,6 +6,7 @@ import { isMinAdmin, isSuperAdmin } from '../../helpers/utils/utility';
 import { UserContext } from '../Authentication/UserProvider';
 import { Admin, AdminCreate, AdminType, AdminUpdate, translateToAdminType } from '../../model/Admins';
 import { registerAdmin, updateUser } from '../../services/usersService';
+import { useHistory } from 'react-router-dom';
 
 const StyledErrorMessage = styled.div`
   color: red;
@@ -47,8 +48,6 @@ const validateUsername = (value: string) => {
 
     if (!value) {
         error = 'Campo requerido';
-    } else if (!/^[A-Z\-\_]+$/i.test(value)) {
-        error = 'Formato del nombre incorrecto (solo letras sin acento, ni espacios y/o guiones';
     }
 
     return error;
@@ -112,6 +111,8 @@ function RegisterAdmins(props: RegisterAdminProps) {
     console.log(initialValues)
 
     const { user } = useContext(UserContext);
+
+    const history = useHistory();
 
     const [adminTipo, setAdminTipo] = useState(initialValues.type || AdminType.admin)
 
@@ -210,6 +211,7 @@ function RegisterAdmins(props: RegisterAdminProps) {
                                         
                                         await registerAdmin(createAdmin);
                                         alert("Se ha registrado el administrador");
+                                        history.push('/admin/manage-admins');
                                     }
 
                                     console.log(values)
