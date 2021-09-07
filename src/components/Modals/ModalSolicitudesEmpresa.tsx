@@ -3,6 +3,7 @@ import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import DetallePostulante from '../Postulantes/DetallePostulante';
 import { updateMatch } from '../../services/matchesService';
 import { Form, Row, Col, Input, Jumbotron, Label, FormGroup, CustomInput, ButtonGroup } from 'reactstrap';
+import DetallePuesto from '../Puestos/DetallePuesto';
 
 const ModalSolicitudesEmpresa = (props:any) => {
   const {
@@ -14,6 +15,8 @@ const ModalSolicitudesEmpresa = (props:any) => {
   const state = match.state;
   const employeeId = match.employee.id;
   const matchId = match.id;
+  const companyName = match.company.username;
+  const jobId = match.jobId;
 
   const [modal, setModal] = useState(false);
   const [showingEmployee, setShowingEmployee] = useState(true);
@@ -55,7 +58,7 @@ const ModalSolicitudesEmpresa = (props:any) => {
           {(showingEmployee) ?
            <DetallePostulante state={state} id={employeeId}></DetallePostulante>
            :
-           <h1>Puesto</h1>
+           <DetallePuesto company={companyName} id={jobId}></DetallePuesto>
           }
         </ModalBody>
         <ModalFooter>

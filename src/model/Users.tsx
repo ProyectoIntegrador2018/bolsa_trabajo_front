@@ -22,4 +22,5 @@ export interface User {
   type: string,
   username: string,
   state: string,
+  enrollmentFormId?: string
 }

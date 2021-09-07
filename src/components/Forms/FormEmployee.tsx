@@ -8,6 +8,7 @@ import { auth } from '../../firebase';
 import { postEmployeeEnrollmentForm, getEnrollmentForm } from '../../services/formService';
 import { UserContext } from '../Authentication/UserProvider';
 import { debug } from 'node:console';
+import { useHistory } from 'react-router-dom';
 
 //Esquema de validación
 const validEmployeeInfoSchema = Yup.object().shape({
@@ -36,9 +37,9 @@ const validEmployeeInfoSchema = Yup.object().shape({
 });
 
 function setDateFormat(date : string){
-  const day = date.slice(0,2)
-  const month = date.slice(3,5)
-  const year = date.slice(6,10)
+  const day = date.slice(8,10)
+  const month = date.slice(5,7)
+  const year = date.slice(0,4)
 
   const dateFormat = year + '-' + month + '-' + day
   return dateFormat
@@ -49,27 +50,27 @@ function generateEmployeeEnrollmentDocument(values: { name: any; birthday: any; 
     {
       nombre: values.name,
       fecha_de_nacimiento: values.birthday,
-      lugar_de_nacimiento: values.birthplace,
-      calle: values.street,
+      lugar_de_nacimiento: values.birthplace  == '' ? undefined : values.birthplace,
+      calle: values.street  == '' ? undefined : values.street,
       municipio: values.city,
-      codigo_postal: values.zipCode,
-      telefono_casa: values.phones?.homePhone,
-      telefono_celular: values.phones?.personalPhone,
+      codigo_postal: values.zipCode == '' ? undefined : values.zipCode,
+      telefono_casa: values.phones?.homePhone == '' ? undefined : values.phones?.homePhone,
+      telefono_celular: values.phones?.personalPhone == '' ? undefined : values.phones?.personalPhone,
       secciones: {
 
         ultimo_ejemplo_o_actividad: {
           ultimo_periodo: values.lastActivityPeriod,
           empresa: values.lastOrganizationActivity,
           puesto: values.lastPositionActivity,
-          responsabilidad: values.lastResponsabilityActivity
+          responsabilidad: values.lastResponsabilityActivity == '' ? undefined : values.lastResponsabilityActivity
         },
 
         actividad_deseada: {
           jornada_de_trabajo: values.worktime,
           funcion: values.jobFunction,
-          capacitacion_o_entrenamiento: values.desiredActivity?.training,
-          consultoria: values.desiredActivity?.consulting,
-          coaching: values.desiredActivity?.coaching
+          capacitacion_o_entrenamiento: values.desiredActivity?.training == '' ? undefined : values.desiredActivity?.training,
+          consultoria: values.desiredActivity?.consulting == '' ? undefined : values.desiredActivity?.consulting,
+          coaching: values.desiredActivity?.coaching == '' ? undefined : values.desiredActivity?.coaching
         },
 
         nivel_de_estudios: {
@@ -105,6 +106,8 @@ const FormEmployee = () =>  {
 
   const [userInfo, setUserInfo] = useState<any | null>(null);
   const [isLoading, setLoading] = useState(true);
+
+  const history = useHistory();
 
   useEffect(() => {
     getEnrollmentForm(id).then((data:any) => {
@@ -174,7 +177,7 @@ const FormEmployee = () =>  {
           //Initialize form with preloaded forms
           {
             name: userInfo.nombre,
-            birthday:  setDateFormat(userInfo.fecha_de_nacimiento),
+            birthday: setDateFormat(userInfo.fecha_de_nacimiento),
             birthplace: userInfo.lugar_de_nacimiento,
             street: userInfo.calle,
             city: userInfo.municipio,
@@ -209,7 +212,8 @@ const FormEmployee = () =>  {
             debugger;
             let enrollmentDocument = generateEmployeeEnrollmentDocument(values)
             await postEmployeeEnrollmentForm(enrollmentDocument)
-            alert('Formulario enviado!')
+            alert('Formulario enviado!');
+            history.push('/');
             setSubmitting(false);
           }
         }
@@ -283,7 +287,7 @@ const FormEmployee = () =>  {
                       <div className="errorMessage">{errors.city}</div>) : null}
                     </Col>
                     <Col md={4}>
-                      <Input  type='number'
+                      <Input  type='text'
                               id="zipCode"
                               name="zipCode"
                               onChange={handleChange}
@@ -465,7 +469,7 @@ const FormEmployee = () =>  {
                   <FormGroup check>
                     <Label check>
                       <Input  type="radio"
-                              name="activity.training"
+                              name="desiredActivity.training"
                               value='Operativa'
                               onChange={handleChange}/>{' '}
                       Operativa

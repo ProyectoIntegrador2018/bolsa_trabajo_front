@@ -6,6 +6,7 @@ import { postOrganizationEnrollmentForm, getOrganizationForm } from '../../servi
 import * as Yup from 'yup';
 import { auth } from '../../firebase';
 import { UserContext } from '../Authentication/UserProvider';
+import { useHistory } from 'react-router-dom';
 
 
 //Esquema de validación
@@ -41,6 +42,8 @@ const FormOrganization = () => {
 
   const [userInfo, setUserInfo] = useState<any | null>(null);
   const [isLoading, setLoading] = useState(true);
+
+  const history = useHistory();
 
   useEffect(() => {
     getOrganizationForm(id).then((data:any) => {
@@ -99,6 +102,7 @@ const FormOrganization = () => {
               let enrollmentDocument = generateOrganizationEnrollmentDocument(values)
               await postOrganizationEnrollmentForm(enrollmentDocument)
               alert('Formulario enviado!')
+              history.push('/');
               setSubmitting(false);
             }
           }

@@ -20,11 +20,13 @@ function UserAccept() {
             let inactiveUsersAPI: User[] = [];
 
             users.forEach(u => {
-                if (u.state === "active") {
-                    activeUsersAPI.push(u);
-                }
-                else {
-                    inactiveUsersAPI.push(u)
+                if (u.enrollmentFormId) {
+                    if (u.state === "active") {
+                        activeUsersAPI.push(u);
+                    }
+                    else {
+                        inactiveUsersAPI.push(u)
+                    }
                 }
             })
 

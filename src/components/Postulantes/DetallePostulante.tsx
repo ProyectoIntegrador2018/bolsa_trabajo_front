@@ -97,7 +97,7 @@ const DetallePostulante = (props:any) => {
           <dl className="row">
 
             <dt className="col-sm-5">Jornada de trabajo:</dt>
-            <dd className="col-sm-7">{userInfo.secciones!.actividad_deseada!.jornada_de_trabajo}</dd>
+            <dd className="col-sm-7">{userInfo.secciones!.actividad_deseada!.jornada_de_trabajo == "fulltime" ? "Tiempo Completo" : "Parcial"}</dd>
 
             <dt className="col-sm-5">Función:</dt>
             <dd className="col-sm-7">{userInfo.secciones!.actividad_deseada!.funcion}</dd>
